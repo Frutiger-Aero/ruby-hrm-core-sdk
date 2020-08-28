@@ -1,0 +1,74 @@
+---
+app-template:
+  app:
+    name: hrm-core-svs
+    component: backend
+    project: platform
+    version: latest
+    env: stage
+  vaultTemplate:
+    vaultSync:
+      enabled: true
+  replicasCount: 1
+
+  service:
+    headless: false
+    ports:
+      - name: grpc
+        port: 5000
+      - name: http
+        port: 4000
+
+  metrics:
+    enabled: false
+
+    serviceMonitor:
+      enabled: true
+      path: /metrics
+      port: http
+
+  probes:
+    readinessProbe:
+      tcpSocket:
+        port: 5000
+      initialDelaySeconds: 120
+      periodSeconds: 10
+    livenessProbe:
+      tcpSocket:
+        port: 5000
+      initialDelaySeconds: 120
+      periodSeconds: 15
+
+  extraEnv:
+    BRANCH: master
+    REWRITE_TYPEORM_HOST: ${BRANCH}-postgresql
+
+  ingress:
+    data:
+      keep-alive: 0
+    domain:
+      suffix: stage.cloud.qlean.ru
+    http:
+      name: http
+      path: /(admin|api)
+      annotations:
+        nginx.ingress.kubernetes.io/use-regex: "true"
+      enabled: true
+      tls:
+        secretName: stage-cloud-qlean-ru-tls
+    grpc:
+      name: grpc
+      path: /
+      enabled: true
+      tls:
+        secretName: stage-cloud-qlean-ru-tls
+
+
+postgresql:
+  enabled: true
+  postgresqlPassword: staging
+  persistence:
+    enabled: true
+  initdbScripts:
+    init_schema.sql: |
+      CREATE SCHEMA hrm_core;

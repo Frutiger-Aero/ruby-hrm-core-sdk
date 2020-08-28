@@ -1,0 +1,120 @@
+syntax = "proto3";
+
+package hrm.core;
+
+service HRMExecutorService {
+  rpc Create(CreateExecutorRequest) returns (CreateExecutorResponse) {}
+  rpc Get(GetExecutorRequest) returns (GetExecutorResponse) {}
+  rpc Update(UpdateExecutorRequest) returns (UpdateExecutorResponse) {}
+  rpc Disable(DisableExecutorRequest) returns (DisableExecutorResponse) {}
+  rpc GetHistoryProfile(GetHistoryProfileRequest) returns (GetHistoryProfileResponse) {}
+}
+
+enum Status {
+  CREATED = 0;
+  ENABLED = 1;
+  DISABLED = 2;
+}
+
+message TimeRange {
+  string start = 1;
+  string end = 2;
+}
+
+message Tariff {
+  string name = 1;
+  TimeRange timeRange = 2;
+  repeated int32 workingDays = 3;
+  int32 maxOrderCount = 4;
+}
+
+message Passport {
+  string serial = 1;
+  string number = 2;
+  string dateStart = 3;
+  string issuePlace = 4;
+  string birthPlace = 5;
+  string registrationAddress = 6;
+  repeated string lastFullName = 7;
+}
+
+message ExecutorProfileHistoryItem {
+  string date = 1;
+  string name = 2;
+  string oldValue = 3;
+  string newValue = 4;
+}
+
+message GetExecutorRequest {
+  string id = 1;
+}
+
+message GetExecutorResponse {
+   string fullName = 1;
+   string birthDate = 2;
+   string address = 3;
+   string phone = 4;
+   string photo = 5;
+   float rating = 6;
+   string acceptedUseTerms = 7;
+   string citizenship = 8;
+   Passport passport = 9;
+   string status = 10;
+   string statusReason = 11;
+   string statusDate = 12;
+   repeated string specialization = 13;
+   Tariff tariff = 14;
+}
+
+message CreateExecutorRequest {
+  string address = 1;
+  string photo = 2;
+  Status status =  3;
+  string citizenshipId = 4;
+  Passport passport = 5;
+}
+
+message CreateExecutorResponse {
+  string id = 1;
+}
+
+message UpdateExecutorRequest {
+  string id = 1;
+  string fullName = 2;
+  string birthDate = 3;
+  string address = 4;
+  string phone = 5;
+  string photo = 6;
+  float rating = 7;
+  string acceptedUseTerms = 8;
+  string citizenship = 9;
+  Passport passport = 10;
+  string status = 11;
+  string statusReason = 12;
+  string statusDate = 13;
+  repeated string specialization = 14;
+  string tariff = 15;
+}
+
+message UpdateExecutorResponse {}
+
+message DisableExecutorRequest {
+  string id = 1;
+  string statusReason = 2;
+}
+
+message DisableExecutorResponse {}
+
+message GetHistoryProfileRequest {
+  string id = 1;
+  string name = 2;
+  string oldValue = 3;
+  string newValue = 4;
+  string dateFrom = 5;
+  string dateTo = 6;
+  int32 limit = 7;
+}
+
+message GetHistoryProfileResponse {
+  repeated ExecutorProfileHistoryItem history = 1;
+}

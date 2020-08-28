@@ -1,0 +1,7 @@
+name: hrm-core-svs
+version: 0.0.1
+description: HRM-core
+maintainers:
+  - name: Stets Dmitriy
+    email: d.stets@qlean.ru
+apiVersion: 1.0

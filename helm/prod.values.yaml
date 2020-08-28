@@ -1,0 +1,81 @@
+---
+app-template:
+  app:
+    name: hrm-core-svs
+    component: backend
+    project: platform
+    env: prod
+
+  service:
+    headless: true
+    ports:
+      - name: grpc
+        port: 5000
+      - name: http
+        port: 4000
+
+  metrics:
+    enabled: false
+
+    serviceMonitor:
+      enabled: true
+      path: /metrics
+      port: http
+
+
+  probes:
+    readinessProbe:
+      tcpSocket:
+        port: 5000
+      initialDelaySeconds: 120
+      periodSeconds: 10
+    livenessProbe:
+      tcpSocket:
+        port: 5000
+      initialDelaySeconds: 120
+      periodSeconds: 15
+
+  ingress:
+    domain:
+      suffix: cloud.qlean.ru
+      name: hrm-core-svs
+    tls:
+      issueCert: false
+    grpc:
+      name: grpc
+      path: /
+      enabled: true
+      tls:
+        secretName: cloud-qlean-ru-tls
+    http:
+      name: http
+      path: /api
+      enabled: true
+      tls:
+        secretName: cloud-qlean-ru-tls
+    grpc_web:
+      name: grpc-web
+      path: /
+      enabled: false
+      tls:
+        secretName: cloud-qlean-ru-tls
+
+postgresql:
+  enabled: false
+  postgresqlPassword: secretpassword
+  postgresqlDatabase: my-database
+  persistence:
+    enabled: false
+
+redis:
+  enabled: false
+  cluster:
+    enabled: false
+
+rabbitmq:
+  enabled: false
+  rabbitmq:
+    username: user
+    password: password
+  persistence:
+    enabled: false

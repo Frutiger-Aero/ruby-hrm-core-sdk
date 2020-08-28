@@ -1,0 +1,141 @@
+image: alpine:latest
+
+stages:
+  - build
+  - testing
+  - release
+  - staging
+  - production
+  - notification
+
+variables:
+  STAGE_URL: https://${CI_COMMIT_REF_SLUG}-${CI_PROJECT_NAME}.stage.cloud.qlean.ru/
+  PROD_URL: https://sso.cloud.qlean.ru/
+
+  DOCKER_DRIVER: overlay2
+  DOCKER_HOST: tcp://localhost:2375/
+  DOCKER_TLS_CERTDIR: ''
+  GIT_STRATEGY: none
+  KUBECONFIG: ""
+
+  REGISTRY_ADDR: registry.manage.cloud.qlean.ru
+  REGISTRY_USER: gitlab
+  REGISTRY_IMAGE: $REGISTRY_ADDR/gitlab/$CI_PROJECT_PATH/$CI_COMMIT_REF_SLUG
+  REGISTRY_TAG: $CI_COMMIT_SHA
+  RELEASE_REGISTRY_IMAGE: $REGISTRY_ADDR/gitlab/$CI_PROJECT_PATH
+  RELEASE_REGISTRY_TAG: $CI_COMMIT_REF_SLUG
+
+  CM_REPO_URL: https://registry.manage.cloud.qlean.ru/chartrepo/gitlab
+
+# задачи на стадии production
+# можно выполнять только на ветке master
+.prod-only: &prod-only
+  when: manual
+  only:
+    refs:
+      - master
+
+build:
+  stage: build
+  image: docker:latest
+  tags:
+    - staging
+    - platform
+  services:
+    - docker:dind
+  variables:
+    GIT_STRATEGY: clone
+  script:
+    - build
+
+test unit:
+  stage: testing
+  image: $REGISTRY_IMAGE:$REGISTRY_TAG
+  tags:
+    - staging
+    - platform
+  script:
+    - cd /opt/app; npm run test
+
+release:
+  stage: release
+  image: docker
+  tags:
+    - staging
+    - platform
+  only:
+    - tags
+  services:
+    - docker:dind
+  script:
+    - release
+
+deploy to staging:
+  tags:
+    - staging
+    - platform
+  stage: staging
+  variables:
+    GIT_STRATEGY: clone
+    KUBE_NAMESPACE: app-${CI_PROJECT_NAME}
+    HELM_RELEASE_NAME: ${CI_COMMIT_REF_SLUG}
+  environment:
+    name: stage/$CI_COMMIT_REF_SLUG
+    url: $STAGE_URL
+    on_stop: stop_stage
+  image: registry.manage.cloud.qlean.ru/gitlab/platform/utils/k8s-client
+  script:
+    - ensure_namespace
+    - ensure_rbac
+    - ensure_shared_files
+    - install_tiller
+    - deployToK8s && send_changelog || send_changelog
+
+stop_stage:
+  tags:
+    - staging
+    - platform
+  stage: staging
+  variables:
+    GIT_STRATEGY: none
+    KUBE_NAMESPACE: app-${CI_PROJECT_NAME}
+    HELM_RELEASE_NAME: ${CI_COMMIT_REF_SLUG}
+    VAULT_ADDR: https://vault.stage.cloud.qlean.ru
+    VAULT_KEYPATH: secret/platform/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}
+  image: registry.manage.cloud.qlean.ru/gitlab/platform/utils/k8s-client
+  script:
+    - test "${CI_COMMIT_REF_SLUG}" = "master" || clean_vault
+    - stop_stage
+  environment:
+    name: stage/$CI_COMMIT_REF_SLUG
+    action: stop
+  when: manual
+
+deploy to production:
+  stage: production
+  <<: *prod-only
+  when: manual
+  tags:
+    - production
+    - platform
+  variables:
+    GIT_STRATEGY: clone
+    KUBE_NAMESPACE: app-${CI_PROJECT_NAME}
+    HELM_RELEASE_NAME: master
+  environment:
+    name: prod
+    url: $PROD_URL
+  image: registry.manage.cloud.qlean.ru/gitlab/platform/utils/k8s-client
+  script:
+    - ensure_namespace
+    - ensure_rbac
+    - ensure_shared_files
+    - install_tiller
+    - deployToK8s && send_changelog || send_changelog
+
+# ---------------------------------------------------------------------------
+# this will include global before_script definition
+include:
+  - project: 'platform/libraries/app-boilerplate'
+    ref: master
+    file: '/before-script.yml'
