@@ -1,18 +1,17 @@
-import { Entity, Column } from 'typeorm';
+import {Entity, Column, ManyToMany} from 'typeorm';
 import { BaseModel } from '@qlean/nestjs-typeorm-persistence-search';
 import { Type } from 'class-transformer';
 import {
   IsNumber,
-  IsBoolean,
   IsEnum,
   ValidateNested,
   IsString,
   IsObject,
   IsArray,
-  IsUUID,
+  IsUUID, IsDateString,
 } from 'class-validator';
-import { IBookablePerson, WorkingDays, DebtLevel } from '../../core/interfaces';
-import { TimeRange } from './executor.partial';
+import {Passport} from './executor.partial';
+import {IExecutor, Status} from "../../core/interfaces";
 
 export const weekDaysTransformer = {
   to: (days: number[]): string => `{${days.join(',')}}`,
@@ -24,49 +23,61 @@ export const weekDaysTransformer = {
 };
 
 @Entity({
-  name: 'bookable_person',
+  name: 'executor',
 })
-export class ExecutorModel extends BaseModel<IBookablePerson>
-  implements IBookablePerson {
+export class ExecutorModel extends BaseModel<IExecutor>
+  implements IExecutor {
+
+  // TODO: добавить в ТР
+  // TODO: проверить в букинге верную подстановку ссоИД
   @IsUUID('4')
   @Column({ nullable: false, name: 'sso_id' })
   ssoId: string;
 
   @IsString()
   @Column({ nullable: false })
-  name: string;
+  address: string;
 
-  @IsNumber()
-  @Column({ name: 'region_id', nullable: false })
-  regionId: number;
+  @IsString()
+  @Column()
+  photo: string;
 
-  @IsArray()
-  @Column({ type: 'text', array: true, name: 'working_days' })
-  workingDays?: WorkingDays;
+  @IsDateString()
+  @Column({name: 'accepted_use_terms'})
+  acceptedUseTerms: string;
+
+  @IsString()
+  @Column()
+  citizenship: string;
 
   @IsObject()
   @ValidateNested()
-  @Type(() => TimeRange)
-  @Column('simple-json', { name: 'time_range', nullable: false })
-  timeRange: TimeRange;
+  @Type(() => Passport)
+  @Column('simple-json')
+  passport: Passport;
 
-  @IsBoolean()
-  @Column({ default: false, name: 'is_active' })
-  isActive: boolean;
 
-  @IsNumber()
-  @Column('integer', { default: 0, name: 'max_blocked_intervals_per_day' })
-  maxBlockedIntervalsPerDay: number;
+  @IsEnum(Status)
+  @Column()
+  status: string;
 
-  @IsEnum(DebtLevel)
-  @Column('smallint', { default: DebtLevel.FREE, name: 'debt_level' })
-  debtLevel: DebtLevel;
+  @IsString()
+  @Column({name: 'status_reason'})
+  statusReason: string;
+
+  @IsDateString()
+  @Column({name: 'status_date'})
+  statusDate: string;
+
+  @IsArray()
+  @Column()
+  specialization: string[];
+
+  @IsUUID('4')
+  @Column({name: 'tariff_id'})
+  tariff: string;
 
   @IsNumber()
   @Column('double precision', { default: 0 })
   rating: number;
-
-  @IsNumber()
-  @Column({ default: 0, name: 'completed_orders_count' })
-  completedOrdersCount: number;
 }

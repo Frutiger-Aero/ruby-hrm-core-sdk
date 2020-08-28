@@ -80,20 +80,17 @@ message CreateExecutorResponse {
 
 message UpdateExecutorRequest {
   string id = 1;
-  string fullName = 2;
-  string birthDate = 3;
-  string address = 4;
-  string phone = 5;
-  string photo = 6;
-  float rating = 7;
-  string acceptedUseTerms = 8;
-  string citizenship = 9;
-  Passport passport = 10;
-  string status = 11;
-  string statusReason = 12;
-  string statusDate = 13;
-  repeated string specialization = 14;
-  string tariff = 15;
+  string address = 2;
+  string photo = 3;
+  float rating = 4;
+  string acceptedUseTerms = 5;
+  string citizenship = 6;
+  Passport passport = 7;
+  string status = 8;
+  string statusReason = 9;
+  string statusDate = 10;
+  repeated string specialization = 11;
+  string tariff = 12;
 }
 
 message UpdateExecutorResponse {}

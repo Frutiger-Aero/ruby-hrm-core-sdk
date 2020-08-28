@@ -1,8 +1,7 @@
-export enum DebtLevel {
-  FREE = 0,
-  LOW = 1,
-  MIDDLE = 2,
-  HIGHT = 3,
+export enum Status {
+  CREATED = 0,
+  ENABLED = 1,
+  DISABLED = 2,
 }
 
 export type DayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
@@ -14,62 +13,41 @@ export interface ITimeRange {
   end?: Date;
 }
 
-export interface IBookablePersonWithId
-  extends IBookablePersonId,
-    IBookablePerson {}
-
-export interface IBookablePersonId {
-  id: string;
+export interface ITariff {
+  name?: string;
+  timeRange?: ITimeRange;
+  workingDays?: WorkingDays[];
+  maxOrderCount?: number;
 }
 
-export interface IBookablePerson {
-  /**
-   * Идентификатор исполнителя в SSO
-   * */
+export interface IPassport {
+  serial?: string;
+  number?: string;
+  dateStart?: string;
+  issuePlace?: string;
+  birthPlace?: string;
+  registrationAddress?: string;
+  lastFullName?: string;
+}
+
+export interface IExecutorProfileHistoryItem {
+  date?: string;
+  name?: string;
+  oldValue?: string;
+  newValue?: string;
+}
+
+export interface IExecutor {
   ssoId: string;
-
-  /**
-   * Имя исполнителя
-   * */
-  name: string;
-
-  /**
-   * Идентификатор региона
-   * */
-  regionId: number;
-
-  /**
-   * Рабочие дни
-   * */
-  workingDays?: WorkingDays;
-
-  /**
-   * Время начала\конца рабочего дня
-   * */
-  timeRange: ITimeRange;
-
-  /**
-   * Состояние, что исполнитель доступен
-   * */
-  isActive: boolean;
-
-  /**
-   * Максимальное количество заблокированых интервалов
-   * */
-  maxBlockedIntervalsPerDay: number;
-
-  /**
-   * Градация долга исполнителя перед системой
-   * */
-  debtLevel: DebtLevel;
-
-  /**
-   * Рейтинг исполнителя в системе
-   * */
+  address: string;
+  photo: string;
   rating: number;
-
-  /**
-   * Количество завершенных заказов
-   * */
-  completedOrdersCount: number;
+  acceptedUseTerms: string;
+  citizenship: string;
+  passport: IPassport;
+  status: string;
+  statusReason: string;
+  statusDate: string;
+  specialization: string[];
+  tariff: string;
 }

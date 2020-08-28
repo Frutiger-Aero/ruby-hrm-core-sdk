@@ -8,10 +8,10 @@ import {
   TransactionRepository,
 } from 'typeorm';
 import {
-  IBookablePerson,
-  IBookablePersonId,
-  IBookablePersonWithId,
-  IGetBookablePersonResponse,
+  IExecutor,
+  IExecutorId,
+  IExecutorWithId,
+  IGetExecutorResponse,
   ITimeRange,
   IWorkingDayInterval,
   WorkingDays,
@@ -33,35 +33,13 @@ export class ExecutorService {
     .getRepository(WorkingDayIntervalModel);
 
   constructor(
-    private bookablePersonStore: ExecutorStore,
+    private executorStore: ExecutorStore,
     private workingDayIntervalStore: WorkingDayIntervalStore,
   ) {}
 
-  private async planingWDI(
-    id: string,
-    timeRange: ITimeRange,
-    workingDays: WorkingDays,
-  ): Promise<null> {
-    const availableFutureWorkDays: IWorkingDayInterval[] = this.workingDayIntervalStore.planingWDI(
-      id,
-      timeRange,
-      workingDays,
-    );
-
-    const WDIRepo = getRepository(WorkingDayIntervalModel);
-
-    await WDIRepo.createQueryBuilder()
-      .insert()
-      .into(WorkingDayIntervalModel)
-      .values(availableFutureWorkDays)
-      .execute();
-
-    return;
-  }
-
-  async createBookablePerson(
-    element: IBookablePerson,
-  ): Promise<IBookablePersonId> {
+  async createExecutor(
+    element: IExecutor,
+  ): Promise<IExecutorId> {
     const roundUpTimeRange = {
       start: moment(element.timeRange.start)
         .startOf('minutes')
@@ -74,7 +52,7 @@ export class ExecutorService {
       id,
       timeRange,
       workingDays,
-    } = await this.bookablePersonStore.create({
+    } = await this.executorStore.create({
       ...element,
       timeRange: roundUpTimeRange,
     });
@@ -84,81 +62,24 @@ export class ExecutorService {
     return { id };
   }
 
-  async getBookablePerson({
+  async getExecutor({
     id,
-  }: IBookablePersonId): Promise<IGetBookablePersonResponse> {
-    const [model] = await this.bookablePersonStore.findByCriteria({
-      where: [
-        {
-          isDeleted: false,
-          id,
-        },
-      ],
-    });
+  }: IExecutorId): Promise<IGetExecutorResponse> {
 
-    if (!model) {
-      throw new NotFoundException(ERRORS.BOOKABLE_PERSON_NOT_FOUND);
-    }
-
-    return model;
   }
 
-  async updateBookablePerson({
+  async updateExecutor({
     id,
     ...newPersonData
-  }: IBookablePersonWithId): Promise<IBookablePersonWithId> {
-    const model = await this.bookablePersonStore.findById(id);
-    const mergedData = { ...model, ...newPersonData };
-    await this.bookablePersonStore.update({ id }, mergedData);
+  }: IExecutorWithId): Promise<IExecutorWithId> {
 
-    if (newPersonData.workingDays || newPersonData.timeRange) {
-      await this.rePlaningWDI(
-        id,
-        mergedData.timeRange,
-        mergedData.workingDays,
-        this.wdiRepo,
-      );
-    }
-
-    return { id, ...mergedData };
   }
 
-  async removeBookablePerson({ id }: IBookablePersonId) {
-    await this.bookablePersonStore.logicRemove(id);
-    const relatedWdi = await this.workingDayIntervalStore.findByCriteria({
-      where: [{ bookablePersonId: id }],
-    });
-    const wdiIds = relatedWdi.map(wdi => wdi.id);
-    await Promise.all(
-      wdiIds.map(async id => this.workingDayIntervalStore.remove(id)),
-    );
+  async disableExecutor({ id }: IExecutorId) {
+
   }
 
-  @Transaction({ isolation: 'SERIALIZABLE' })
-  private async rePlaningWDI(
-    id: string,
-    timeRange: ITimeRange,
-    workingDays: WorkingDays,
-    @TransactionRepository(WorkingDayIntervalModel)
-    WDIRepo: Repository<WorkingDayIntervalModel>,
-  ): Promise<null> {
-    await WDIRepo.createQueryBuilder()
-      .delete()
-      .where('bookable_person_id = :id', { id })
-      .execute();
+  async getHistoryProfile({ id }: IExecutorId) {
 
-    const availableFutureWorkDays: IWorkingDayInterval[] = this.workingDayIntervalStore.planingWDI(
-      id,
-      timeRange,
-      workingDays,
-    );
-
-    await WDIRepo.createQueryBuilder()
-      .insert()
-      .into(WorkingDayIntervalModel)
-      .values(availableFutureWorkDays)
-      .execute();
-
-    return;
   }
 }
