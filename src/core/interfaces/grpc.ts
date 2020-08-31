@@ -15,6 +15,7 @@ export interface IGetExecutorResponse {
   photo?: string;
   rating?: number;
   acceptedUseTerms?: string;
+  // TODO: это обычное перечисление заменить на unique name
   citizenship?: string;
   passport?: IPassport;
   status?: string;

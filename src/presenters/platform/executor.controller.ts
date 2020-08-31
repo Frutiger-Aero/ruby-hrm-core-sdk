@@ -13,6 +13,7 @@ import {
   IHRMExecutorService,
   IUpdateExecutorResponse
 } from "../../core/interfaces";
+import {DisableExecutor, ExecutorDto, GetExecutor, GetHistoryProfileDto, UpdateExecutor} from "../dto/executor.dto";
 
 const GRPC_SERVICE_NAME = 'HRMExecutorService';
 
@@ -37,7 +38,7 @@ export class ExecutorController implements IHRMExecutorService {
       executor,
     );
 
-    return result;
+    return null;
   }
 
   @GrpcMethod(GRPC_SERVICE_NAME, 'Get')
@@ -45,7 +46,7 @@ export class ExecutorController implements IHRMExecutorService {
   @UsePipes(new ValidationPipe({ beforeLogLevel: 'debug' }))
   @PermissionKey(GRANTS.EXECUTOR_GET)
   async get(
-    id: ExecutorIdDto,
+    id: GetExecutor,
     metadata?: Metadata,
     authBodyToken?: ITokenBody,
   ): Promise<IGetExecutorResponse> {
@@ -60,7 +61,7 @@ export class ExecutorController implements IHRMExecutorService {
   @UsePipes(new ValidationPipe({ beforeLogLevel: 'debug' }))
   @PermissionKey(GRANTS.EXECUTOR_UPDATE)
   async update(
-    executor: ExecutorWithOwnIdDto,
+    executor: UpdateExecutor,
     metadata?: Metadata,
     authBodyToken?: ITokenBody,
   ): Promise<IUpdateExecutorResponse> {
@@ -77,7 +78,7 @@ export class ExecutorController implements IHRMExecutorService {
   @UsePipes(new ValidationPipe({ beforeLogLevel: 'debug' }))
   @PermissionKey(GRANTS.EXECUTOR_DISABLE)
   async disable(
-    id: ExecutorIdDto,
+    id: DisableExecutor,
     metadata?: Metadata,
     authBodyToken?: ITokenBody,
   ): Promise<IDisableExecutorResponse> {
@@ -92,7 +93,7 @@ export class ExecutorController implements IHRMExecutorService {
   @UsePipes(new ValidationPipe({ beforeLogLevel: 'debug' }))
   @PermissionKey(GRANTS.EXECUTOR_DISABLE)
   async getHistoryProfile(
-    id: ExecutorIdDto,
+    id: GetHistoryProfileDto,
     metadata?: Metadata,
     authBodyToken?: ITokenBody,
   ): Promise<IDisableExecutorResponse> {
