@@ -21,6 +21,7 @@ export interface ITariff {
 }
 
 export interface IPassport {
+  // TODO: все поля как строки
   serial?: string;
   number?: string;
   dateStart?: string;

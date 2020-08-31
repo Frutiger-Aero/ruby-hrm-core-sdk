@@ -28,6 +28,7 @@ export interface IGetExecutorResponse {
 export interface ICreateExecutorRequest {
   address?: string;
   photo?: string;
+  // TODO: статус не нужен, это зона ответственности бэка
   status?: Status;
   citizenshipId?: string;
   passport?: IPassport;
