@@ -8,9 +8,14 @@ import {
   TransactionRepository,
 } from 'typeorm';
 import {
-  ICreateExecutorRequest, IDisableExecutorRequest,
+  ICreateExecutorRequest,
+  IDisableExecutorRequest,
   IGetExecutorRequest,
-  IGetExecutorResponse, IGetHistoryProfileRequest, IGetHistoryProfileResponse, IUpdateExecutorRequest,
+  IGetExecutorResponse,
+  IGetHistoryProfileRequest,
+  IGetHistoryProfileResponse,
+  IUpdateExecutorRequest,
+  Status,
 } from '../interfaces';
 import { NotFoundException } from '@qlean/nestjs-exceptions';
 import { ERRORS } from '../../const';
@@ -21,16 +26,15 @@ import * as typeorm from 'typeorm';
 export class ExecutorService {
   protected readonly logger = new Logger(ExecutorService.name);
 
-  constructor(
-    private executorStore: ExecutorStore,
-  ) {}
+  constructor(private executorStore: ExecutorStore) {}
 
-  async createExecutor(
-    element: ICreateExecutorRequest,
-  ): Promise<string> {
+  async createExecutor(element: ICreateExecutorRequest): Promise<string> {
+    const { id } = await this.executorStore.create({
+      ...element,
+      status: Status.CREATED,
+    });
 
-
-    return null;
+    return id;
   }
 
   async getExecutor({
@@ -50,7 +54,9 @@ export class ExecutorService {
     return null;
   }
 
-  async getHistoryProfile({ id }: IGetHistoryProfileRequest): Promise<IGetHistoryProfileResponse> {
+  async getHistoryProfile({
+    id,
+  }: IGetHistoryProfileRequest): Promise<IGetHistoryProfileResponse> {
     return null;
   }
 }

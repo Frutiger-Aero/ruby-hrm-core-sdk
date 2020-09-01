@@ -20,6 +20,14 @@ export interface ITariff {
   maxOrderCount?: number;
 }
 
+export interface ISpecialization {
+  name: string;
+}
+
+export interface ICitizenship {
+  name: string;
+}
+
 export interface IPassport {
   // TODO: все поля как строки
   serial?: string;
@@ -28,7 +36,7 @@ export interface IPassport {
   issuePlace?: string;
   birthPlace?: string;
   registrationAddress?: string;
-  lastFullName?: string;
+  lastFullName?: string[];
 }
 
 export interface IExecutorProfileHistoryItem {
@@ -46,9 +54,9 @@ export interface IExecutor {
   acceptedUseTerms: string;
   citizenship: string;
   passport: IPassport;
-  status: string;
+  status: Status;
   statusReason: string;
   statusDate: string;
-  specialization: string[];
+  specialization: ISpecialization[];
   tariff: string;
 }

@@ -34,11 +34,13 @@ export class ExecutorController implements IHRMExecutorService {
     metadata?: Metadata,
     authTokenBody?: ITokenBody,
   ): Promise<ICreateExecutorResponse> {
-    const result = await this.executorService.createExecutor(
-      executor,
+    // TODO:question уточнить sso_id === tenantId , почему у них разный нейминг ?
+    // Почему в тек реализации он назвывается iss, что означает это ?
+    const id = await this.executorService.createExecutor(
+      {...executor, ssoId: authTokenBody.iss},
     );
 
-    return null;
+    return { id };
   }
 
   @GrpcMethod(GRPC_SERVICE_NAME, 'Get')
@@ -54,6 +56,7 @@ export class ExecutorController implements IHRMExecutorService {
     this.logger.info('method get work time in sec', {
     });
     return result;
+    return null
   }
 
   @GrpcMethod(GRPC_SERVICE_NAME, 'Update')
@@ -71,6 +74,7 @@ export class ExecutorController implements IHRMExecutorService {
     this.logger.info('method update work time in sec', {
     });
     return result;
+    return null;
   }
 
   @GrpcMethod(GRPC_SERVICE_NAME, 'Disable')
@@ -88,7 +92,7 @@ export class ExecutorController implements IHRMExecutorService {
     return null;
   }
 
-  @GrpcMethod(GRPC_SERVICE_NAME, 'DetHistoryProfile')
+  @GrpcMethod(GRPC_SERVICE_NAME, 'GetHistoryProfile')
   @UseFilters(RpcExceptionFilter.for(`${GRPC_SERVICE_NAME}::getHistoryProfile`))
   @UsePipes(new ValidationPipe({ beforeLogLevel: 'debug' }))
   @PermissionKey(GRANTS.EXECUTOR_DISABLE)
@@ -98,7 +102,7 @@ export class ExecutorController implements IHRMExecutorService {
     authBodyToken?: ITokenBody,
   ): Promise<IDisableExecutorResponse> {
     await this.executorService.getHistoryProfile(id);
-    // this.logger.info('method disable work time in sec', {});
+    this.logger.info('method disable work time in sec', {});
     return null;
   }
 

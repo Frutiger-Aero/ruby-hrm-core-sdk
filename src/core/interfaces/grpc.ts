@@ -1,10 +1,5 @@
 import { Metadata } from 'grpc';
-import {
-  IPassport,
-  ITariff,
-  Status,
-  IExecutorProfileHistoryItem,
-} from './executor';
+import { IPassport, ITariff, IExecutorProfileHistoryItem } from './executor';
 
 export interface IGetExecutorRequest {
   id?: string;
@@ -26,10 +21,11 @@ export interface IGetExecutorResponse {
 }
 
 export interface ICreateExecutorRequest {
+  // TODO: добавить ssoId
+  ssoId?: string;
   address?: string;
   photo?: string;
   // TODO: статус не нужен, это зона ответственности бэка
-  status?: Status;
   citizenshipId?: string;
   passport?: IPassport;
 }

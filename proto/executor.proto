@@ -67,9 +67,9 @@ message GetExecutorResponse {
 }
 
 message CreateExecutorRequest {
-  string address = 1;
-  string photo = 2;
-  Status status =  3;
+  string ssoId = 1;
+  string address = 2;
+  string photo = 3;
   string citizenshipId = 4;
   Passport passport = 5;
 }

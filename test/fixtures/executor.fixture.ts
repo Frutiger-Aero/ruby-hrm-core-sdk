@@ -9,6 +9,6 @@ export const executorFixture = {
     issuePlace: 'УФМС №777 России',
     birthPlace: 'Воркута',
     registrationAddress: 'Воркута, ул. Сульфидная',
-    lastFullName: 'Boris Britva',
+    lastFullName: ['Boris Britva'],
   },
 }

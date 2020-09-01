@@ -1,4 +1,4 @@
-import {Entity, Column, ManyToMany} from 'typeorm';
+import {Entity, Column, ManyToMany, JoinTable, OneToMany, ManyToOne} from 'typeorm';
 import { BaseModel } from '@qlean/nestjs-typeorm-persistence-search';
 import { Type } from 'class-transformer';
 import {
@@ -8,10 +8,13 @@ import {
   IsString,
   IsObject,
   IsArray,
-  IsUUID, IsDateString,
+  IsUUID,
+  IsDateString,
 } from 'class-validator';
-import {Passport} from './executor.partial';
-import {IExecutor, Status} from "../../core/interfaces";
+import { Passport } from './executor.partial';
+import { IExecutor, Status } from '../../core/interfaces';
+import { SpecializationModel } from '../specialization/specialization.model';
+import {TariffModel} from "../tariff/tariff.model";
 
 export const weekDaysTransformer = {
   to: (days: number[]): string => `{${days.join(',')}}`,
@@ -25,13 +28,11 @@ export const weekDaysTransformer = {
 @Entity({
   name: 'executor',
 })
-export class ExecutorModel extends BaseModel<IExecutor>
-  implements IExecutor {
-
+export class ExecutorModel extends BaseModel<IExecutor> implements IExecutor {
   // TODO: добавить в ТР
   // TODO: проверить в букинге верную подстановку ссоИД
   @IsUUID('4')
-  @Column({ nullable: false, name: 'sso_id' })
+  @Column({ nullable: false, name: 'sso_id', unique: true })
   ssoId: string;
 
   @IsString()
@@ -39,42 +40,44 @@ export class ExecutorModel extends BaseModel<IExecutor>
   address: string;
 
   @IsString()
-  @Column()
+  @Column({nullable: true})
   photo: string;
 
   @IsDateString()
-  @Column({name: 'accepted_use_terms'})
+  @Column({ name: 'accepted_use_terms', nullable: true })
   acceptedUseTerms: string;
 
   @IsString()
-  @Column()
+  @Column({nullable: true})
   citizenship: string;
 
   @IsObject()
   @ValidateNested()
   @Type(() => Passport)
-  @Column('simple-json')
+  @Column('simple-json', { nullable: false })
   passport: Passport;
 
-
   @IsEnum(Status)
-  @Column()
-  status: string;
+  @Column('smallint', {nullable: false})
+  status: Status;
 
   @IsString()
-  @Column({name: 'status_reason'})
+  @Column({ name: 'status_reason', nullable: true })
   statusReason: string;
 
   @IsDateString()
-  @Column({name: 'status_date'})
+  @Column({ name: 'status_date', nullable: true })
   statusDate: string;
 
-  @IsArray()
-  @Column()
-  specialization: string[];
+  @ManyToMany(_ => SpecializationModel)
+  @JoinTable()
+  specialization: SpecializationModel[];
 
-  @IsUUID('4')
-  @Column({name: 'tariff_id'})
+  @ManyToOne(_ => TariffModel, {
+    eager: true,
+    cascade: true,
+  })
+  @Column({ name: 'tariff_id', nullable: true })
   tariff: string;
 
   @IsNumber()

@@ -1,5 +1,5 @@
 import {IPassport, ITimeRange} from '../../core/interfaces';
-import {IsDateString, IsString} from 'class-validator';
+import {IsArray, IsDateString, IsString} from 'class-validator';
 
 export class TimeRange implements ITimeRange {
   @IsDateString()
@@ -28,6 +28,6 @@ export class Passport implements IPassport {
   @IsString()
   registrationAddress: string;
 
-  @IsString()
-  lastFullName: string;
+  @IsArray()
+  lastFullName: string[];
 }

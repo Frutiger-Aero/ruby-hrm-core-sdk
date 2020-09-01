@@ -1,12 +1,15 @@
 import {
-  ICreateExecutorRequest, IDisableExecutorRequest,
-  IGetExecutorRequest, IGetHistoryProfileRequest,
+  ICreateExecutorRequest,
+  IDisableExecutorRequest,
+  IGetExecutorRequest,
+  IGetHistoryProfileRequest,
   IPassport,
   IUpdateExecutorRequest,
-  Status
-} from "../../core/interfaces";
+  Status,
+} from '../../core/interfaces';
 import {
-  IsArray, IsDate,
+  IsArray,
+  IsDate,
   IsDateString,
   IsEnum,
   IsNumber,
@@ -14,11 +17,10 @@ import {
   IsString,
   IsUUID,
   Min,
-  ValidateNested
-} from "class-validator";
-import {Passport} from "../../infrastructure/executor/executor.partial";
-import {Type} from "class-transformer";
-import {Column} from "typeorm";
+  ValidateNested,
+} from 'class-validator';
+import { Passport } from '../../infrastructure/executor/executor.partial';
+import { Type } from 'class-transformer';
 
 export class ExecutorDto implements ICreateExecutorRequest {
   @IsString()
@@ -27,15 +29,12 @@ export class ExecutorDto implements ICreateExecutorRequest {
   @IsString()
   photo: string;
 
-  @IsEnum(Status)
-  status: Status;
-
   @IsString()
   citizenshipId: string;
 
   @ValidateNested()
   @Type(() => Passport)
-  passport?: IPassport;
+  passport?: Passport;
 }
 
 export class GetExecutor implements IGetExecutorRequest {
@@ -48,36 +47,37 @@ export class UpdateExecutor implements IUpdateExecutorRequest {
   id: string;
 
   @IsString()
-  photo: string;
+  photo?: string;
 
   @IsString()
-  citizenshipId: string;
+  citizenshipId?: string;
 
   @ValidateNested()
   @Type(() => Passport)
-  passport?: IPassport;
+  passport?: Passport;
 
   @IsNumber()
   @Min(0)
-  rating: number;
+  rating?: number;
 
   @IsDateString()
-  acceptedUseTerms: string;
+  acceptedUseTerms?: string;
 
   @IsString()
-  citizenship: string;
+  citizenship?: string;
 
+  // TODO не должно быть при обновлении
   @IsString()
-  statusReason: string;
+  statusReason?: string;
 
   @IsDateString()
-  statusDate: string;
+  statusDate?: string;
 
   @IsArray()
-  specialization: string[];
+  specialization?: string[];
 
   @IsUUID('4')
-  tariff: string;
+  tariff?: string;
 }
 
 export class DisableExecutor implements IDisableExecutorRequest {
