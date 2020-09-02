@@ -1,11 +1,12 @@
 import { Metadata } from 'grpc';
-import { IPassport, ITariff, IExecutorProfileHistoryItem } from './executor';
+import {IPassport, ITariff, IExecutorProfileHistoryItem, Status, ISpecialization} from './executor';
 
 export interface IGetExecutorRequest {
-  id?: string;
+  // TODO: не должно быть парамметров, берём из аутентификации юзера
 }
 
 export interface IGetExecutorResponse {
+  // TODO: прокидывать внутренний ид
   address?: string;
   photo?: string;
   rating?: number;
@@ -13,16 +14,14 @@ export interface IGetExecutorResponse {
   // TODO: это обычное перечисление заменить на unique name
   citizenship?: string;
   passport?: IPassport;
-  status?: string;
+  status?: Status;
   statusReason?: string;
   statusDate?: string;
-  specialization?: string[];
+  specialization?: ISpecialization[];
   tariff?: ITariff;
 }
 
 export interface ICreateExecutorRequest {
-  // TODO: добавить ssoId
-  ssoId?: string;
   address?: string;
   photo?: string;
   // TODO: статус не нужен, это зона ответственности бэка
@@ -43,7 +42,6 @@ export interface IUpdateExecutorRequest {
   acceptedUseTerms?: string;
   citizenship?: string;
   passport?: IPassport;
-  status?: string;
   statusReason?: string;
   statusDate?: string;
   specialization?: string[];

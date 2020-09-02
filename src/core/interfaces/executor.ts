@@ -16,7 +16,7 @@ export interface ITimeRange {
 export interface ITariff {
   name?: string;
   timeRange?: ITimeRange;
-  workingDays?: WorkingDays[];
+  workingDays?: WorkingDays;
   maxOrderCount?: number;
 }
 
@@ -58,5 +58,5 @@ export interface IExecutor {
   statusReason: string;
   statusDate: string;
   specialization: ISpecialization[];
-  tariff: string;
+  tariff: ITariff;
 }

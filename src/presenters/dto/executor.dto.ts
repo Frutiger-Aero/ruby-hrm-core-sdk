@@ -13,7 +13,7 @@ import {
   IsDateString,
   IsEnum,
   IsNumber,
-  IsObject,
+  IsObject, IsOptional,
   IsString,
   IsUUID,
   Min,
@@ -37,46 +37,54 @@ export class ExecutorDto implements ICreateExecutorRequest {
   passport?: Passport;
 }
 
-export class GetExecutor implements IGetExecutorRequest {
-  @IsString()
-  id: string;
-}
+export class GetExecutor implements IGetExecutorRequest {}
 
 export class UpdateExecutor implements IUpdateExecutorRequest {
   @IsString()
   id: string;
 
   @IsString()
+  @IsOptional()
   photo?: string;
 
   @IsString()
+  @IsOptional()
   citizenshipId?: string;
 
   @ValidateNested()
   @Type(() => Passport)
+  @IsOptional()
   passport?: Passport;
 
   @IsNumber()
+  @IsOptional()
   @Min(0)
   rating?: number;
 
   @IsDateString()
+  @IsOptional()
   acceptedUseTerms?: string;
 
   @IsString()
+  @IsOptional()
   citizenship?: string;
 
   // TODO не должно быть при обновлении
   @IsString()
+  @IsOptional()
   statusReason?: string;
 
   @IsDateString()
+  @IsOptional()
   statusDate?: string;
 
   @IsArray()
+  @IsOptional()
   specialization?: string[];
 
+  // TODO: чекнуть по какому полю будет привязка, после накатывания статики
   @IsUUID('4')
+  @IsOptional()
   tariff?: string;
 }
 
@@ -93,20 +101,26 @@ export class GetHistoryProfileDto implements IGetHistoryProfileRequest {
   id: string;
 
   @IsString()
+  @IsOptional()
   name?: string;
 
   @IsString()
+  @IsOptional()
   oldValue?: string;
 
   @IsString()
+  @IsOptional()
   newValue?: string;
 
   @IsDateString()
+  @IsOptional()
   dateFrom?: string;
 
   @IsDateString()
+  @IsOptional()
   dateTo?: string;
 
   @IsNumber()
+  @IsOptional()
   limit?: number;
 }

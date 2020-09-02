@@ -45,9 +45,7 @@ message ExecutorProfileHistoryItem {
   string newValue = 4;
 }
 
-message GetExecutorRequest {
-  string id = 1;
-}
+message GetExecutorRequest {}
 
 message GetExecutorResponse {
    string fullName = 1;
@@ -67,11 +65,10 @@ message GetExecutorResponse {
 }
 
 message CreateExecutorRequest {
-  string ssoId = 1;
-  string address = 2;
-  string photo = 3;
-  string citizenshipId = 4;
-  Passport passport = 5;
+  string address = 1;
+  string photo = 2;
+  string citizenshipId = 3;
+  Passport passport = 4;
 }
 
 message CreateExecutorResponse {

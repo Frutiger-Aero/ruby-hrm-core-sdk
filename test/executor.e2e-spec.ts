@@ -6,7 +6,6 @@ import { AuthService, TestTokensource } from './auth.stubs';
 import { cleanup } from './utils';
 import { getConnection } from 'typeorm';
 import { executorFixture } from './fixtures';
-import moment from "moment";
 
 describe('Executor (e2e)', () => {
   let executorApi: HrmExecutorApi;
@@ -60,44 +59,38 @@ describe('Executor (e2e)', () => {
     });
   });
 
-  // describe('GET executor', () => {
-  //   it('Должен вернуть исполнителя', async () => {
-  //     const result = await executorApi.get({ id: '' });
-  //     console.log('GET result', result)
-  //     // expect(result.workingDays).toEqual(executorFixture.workingDays)
-  //   });
-  // });
-  //
-  // describe('UPDATE executor', () => {
-  //   it('Должен обновить данные исполнителя', async () => {
-  //     const newExecutorData = {
-  //       workingDays: null,
-  //       timeRange: null,
-  //       ...executorFixture };
-  //     newExecutorData.workingDays = [5,6];
-  //     newExecutorData.timeRange = {
-  //       start: moment().set({ hour: 12, minute: 0}).toISOString(),
-  //       end: moment().set({ hour: 19, minute: 0}).toISOString(),
-  //     }
-  //
-  //
-  //
-  //     const result = await executorApi.update({ id, ...newExecutorData});
-  //     console.log('UPDATE result', result)
-  //   });
-  // });
-  //
-  // describe('Disable executor', () => {
-  //   it('Должен удалить исполнителя', async () => {
-  //     await executorApi.disable({ id, statusReason: 'nevermore!' });
-  //     let isExists = undefined;
-  //     try {
-  //       isExists = await executorApi.get({ id });
-  //     } catch (error) {
-  //       expect(error.code).toEqual(404)
-  //     }
-  //     expect(isExists).toBeUndefined();
-  //   });
-  // });
+  describe('GET executor', () => {
+    it('Должен вернуть исполнителя', async () => {
+      const result = await executorApi.get({});
+      expect(result.address).toEqual(executorFixture.address)
+    });
+  });
+
+  describe('UPDATE executor', () => {
+    it('Должен обновить данные исполнителя', async () => {
+      const newExecutorData = {
+        address: 'New Mega Address, 44',
+      };
+
+      await executorApi.update({ id, ...newExecutorData});
+      const updatedExecutor = await executorApi.get({ id });
+      expect(newExecutorData.address).toEqual(updatedExecutor.address);
+    });
+  });
+
+  describe('Disable executor', () => {
+    it('Должен удалить исполнителя', async () => {
+      await executorApi.disable({ id, statusReason: 'nevermore!' });
+      let isExists = undefined;
+      try {
+        isExists = await executorApi.get({ id });
+      } catch (error) {
+        expect(error.code).toEqual(404)
+      }
+      expect(isExists).toBeUndefined();
+    });
+  });
 
 });
+
+// TODO:wrk накатывание фикстур гражданство, специализации, тарифы

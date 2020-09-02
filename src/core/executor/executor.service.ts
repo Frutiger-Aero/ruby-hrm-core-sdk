@@ -28,35 +28,70 @@ export class ExecutorService {
 
   constructor(private executorStore: ExecutorStore) {}
 
-  async createExecutor(element: ICreateExecutorRequest): Promise<string> {
+  async createExecutor({
+    executor,
+    ssoId,
+  }: {
+    executor: ICreateExecutorRequest;
+    ssoId: string;
+  }): Promise<string> {
     const { id } = await this.executorStore.create({
-      ...element,
+      ...executor,
+      ssoId,
       status: Status.CREATED,
     });
 
     return id;
   }
 
-  async getExecutor({
-    id,
-  }: IGetExecutorRequest): Promise<IGetExecutorResponse> {
-    return null;
+  async getExecutor({ ssoId }): Promise<IGetExecutorResponse> {
+    const executor = await this.executorStore.findOneByCriteria({
+      where: [{ ssoId, isDeleted: false }],
+    });
+
+    if (!executor) {
+      throw new NotFoundException(ERRORS.EXECUTOR_NOT_FOUND);
+    }
+
+    if (executor.specialization && executor.specialization.length) {
+      executor.specialization.map(spec => spec.name);
+    }
+
+    return executor;
   }
 
   async updateExecutor({
     id,
-    ...newPersonData
+    ...newExecutorData
   }: IUpdateExecutorRequest): Promise<{}> {
+    const model = await this.executorStore.findById(id);
+    if (!model) {
+      throw new NotFoundException(ERRORS.EXECUTOR_NOT_FOUND);
+    }
+
+    // TODO: history update model
+
+    await this.executorStore.update({ id }, { ...model, ...newExecutorData });
     return null;
   }
 
   async disableExecutor({ id, statusReason }: IDisableExecutorRequest) {
+    const model = await this.executorStore.findById(id);
+    if (!model) {
+      throw new NotFoundException(ERRORS.EXECUTOR_NOT_FOUND);
+    }
+
+    // TODO: history update model
+
+    await this.executorStore.update({ id }, { ...model, statusReason, status: Status.DISABLED });
+    await this.executorStore.logicRemove(id);
     return null;
   }
 
   async getHistoryProfile({
     id,
   }: IGetHistoryProfileRequest): Promise<IGetHistoryProfileResponse> {
+
     return null;
   }
 }

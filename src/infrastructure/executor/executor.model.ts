@@ -1,4 +1,4 @@
-import {Entity, Column, ManyToMany, JoinTable, OneToMany, ManyToOne} from 'typeorm';
+import {Entity, Column, ManyToMany, JoinTable, OneToMany, ManyToOne, JoinColumn} from 'typeorm';
 import { BaseModel } from '@qlean/nestjs-typeorm-persistence-search';
 import { Type } from 'class-transformer';
 import {
@@ -73,12 +73,9 @@ export class ExecutorModel extends BaseModel<IExecutor> implements IExecutor {
   @JoinTable()
   specialization: SpecializationModel[];
 
-  @ManyToOne(_ => TariffModel, {
-    eager: true,
-    cascade: true,
-  })
-  @Column({ name: 'tariff_id', nullable: true })
-  tariff: string;
+  @ManyToOne(_ => TariffModel, tariff => tariff.name, {nullable: true})
+  @JoinColumn({ name: 'tariff_id' })
+  tariff: TariffModel;
 
   @IsNumber()
   @Column('double precision', { default: 0 })

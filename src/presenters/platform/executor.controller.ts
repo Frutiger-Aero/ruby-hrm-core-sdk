@@ -30,14 +30,14 @@ export class ExecutorController implements IHRMExecutorService {
   @UsePipes(new ValidationPipe({ beforeLogLevel: 'debug' }))
   @PermissionKey(GRANTS.EXECUTOR_CREATE)
   async create(
-    executor: ExecutorDto,
+    data: ExecutorDto,
     metadata?: Metadata,
     authTokenBody?: ITokenBody,
   ): Promise<ICreateExecutorResponse> {
     // TODO:question уточнить sso_id === tenantId , почему у них разный нейминг ?
     // Почему в тек реализации он назвывается iss, что означает это ?
     const id = await this.executorService.createExecutor(
-      {...executor, ssoId: authTokenBody.iss},
+      {executor: data, ssoId: authTokenBody.iss},
     );
 
     return { id };
@@ -48,15 +48,13 @@ export class ExecutorController implements IHRMExecutorService {
   @UsePipes(new ValidationPipe({ beforeLogLevel: 'debug' }))
   @PermissionKey(GRANTS.EXECUTOR_GET)
   async get(
-    id: GetExecutor,
+    _: GetExecutor,
     metadata?: Metadata,
     authBodyToken?: ITokenBody,
   ): Promise<IGetExecutorResponse> {
-    const result = await this.executorService.getExecutor(id);
-    this.logger.info('method get work time in sec', {
+    return this.executorService.getExecutor({
+      ssoId: authBodyToken.iss
     });
-    return result;
-    return null
   }
 
   @GrpcMethod(GRPC_SERVICE_NAME, 'Update')
@@ -64,16 +62,13 @@ export class ExecutorController implements IHRMExecutorService {
   @UsePipes(new ValidationPipe({ beforeLogLevel: 'debug' }))
   @PermissionKey(GRANTS.EXECUTOR_UPDATE)
   async update(
-    executor: UpdateExecutor,
+    data: UpdateExecutor,
     metadata?: Metadata,
     authBodyToken?: ITokenBody,
   ): Promise<IUpdateExecutorResponse> {
-    const result = await this.executorService.updateExecutor(
-      executor,
+    await this.executorService.updateExecutor(
+      data,
     );
-    this.logger.info('method update work time in sec', {
-    });
-    return result;
     return null;
   }
 
@@ -97,12 +92,11 @@ export class ExecutorController implements IHRMExecutorService {
   @UsePipes(new ValidationPipe({ beforeLogLevel: 'debug' }))
   @PermissionKey(GRANTS.EXECUTOR_DISABLE)
   async getHistoryProfile(
-    id: GetHistoryProfileDto,
+    data: GetHistoryProfileDto,
     metadata?: Metadata,
     authBodyToken?: ITokenBody,
   ): Promise<IDisableExecutorResponse> {
-    await this.executorService.getHistoryProfile(id);
-    this.logger.info('method disable work time in sec', {});
+    await this.executorService.getHistoryProfile(data);
     return null;
   }
 
