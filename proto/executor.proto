@@ -67,7 +67,7 @@ message GetExecutorResponse {
 message CreateExecutorRequest {
   string address = 1;
   string photo = 2;
-  string citizenshipId = 3;
+  string citizenship = 3;
   Passport passport = 4;
 }
 
@@ -80,14 +80,10 @@ message UpdateExecutorRequest {
   string address = 2;
   string photo = 3;
   float rating = 4;
-  string acceptedUseTerms = 5;
-  string citizenship = 6;
-  Passport passport = 7;
-  string status = 8;
-  string statusReason = 9;
-  string statusDate = 10;
-  repeated string specialization = 11;
-  string tariff = 12;
+  string citizenship = 5;
+  Passport passport = 6;
+  repeated string specialization = 7;
+  string tariff = 8;
 }
 
 message UpdateExecutorResponse {}

@@ -29,7 +29,6 @@ export interface ICitizenship {
 }
 
 export interface IPassport {
-  // TODO: все поля как строки
   serial?: string;
   number?: string;
   dateStart?: string;
@@ -52,7 +51,7 @@ export interface IExecutor {
   photo: string;
   rating: number;
   acceptedUseTerms: string;
-  citizenship: string;
+  citizenship: ICitizenship;
   passport: IPassport;
   status: Status;
   statusReason: string;

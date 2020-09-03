@@ -15,8 +15,16 @@ import {
 import { NotFoundException } from '@qlean/nestjs-exceptions';
 import { ERRORS } from '../../const';
 import { SpecializationModel } from '../../infrastructure/specialization/specialization.model';
+import { TariffModel } from '../../infrastructure/tariff/tariff.model';
+import { CitizenshipModel } from '../../infrastructure/citizenship/citizenship.model';
+import { TariffStore } from '../../infrastructure/tariff/tariff.store';
+import { SpecializationStore } from '../../infrastructure/specialization/specialization.store';
+import {CitizenshipStore} from "../../infrastructure/citizenship/citizenship.store";
 
-type PreparedExecutor = Omit<IUpdateExecutorRequest, 'specialization'>;
+type PreparedExecutor = Omit<
+  IUpdateExecutorRequest,
+  'specialization' | 'tariff' | 'citizenship'
+>;
 
 @Injectable()
 export class ExecutorService {
@@ -25,7 +33,12 @@ export class ExecutorService {
     .getManager()
     .getRepository(SpecializationModel);
 
-  constructor(private executorStore: ExecutorStore) {}
+  constructor(
+    private executorStore: ExecutorStore,
+    private tariffStore: TariffStore,
+    private specializationStore: SpecializationStore,
+    private citizenshipStore: CitizenshipStore,
+  ) {}
 
   async createExecutor({
     executor,
@@ -34,8 +47,30 @@ export class ExecutorService {
     executor: ICreateExecutorRequest;
     ssoId: string;
   }): Promise<string> {
+
+    // TODO: вынести эту сборку в отдельный приват метод
+    let { citizenship, ...others } = executor;
+
+    const preparedData: PreparedExecutor & {
+      specialization?: SpecializationModel[];
+      tariff?: TariffModel;
+      citizenship?: CitizenshipModel;
+    } = { ...others };
+
+    if (citizenship) {
+      const citizenshipInDb = await this.citizenshipStore.findOneByCriteria({
+        where: [
+          {name: citizenship}
+        ]
+      });
+
+      if (citizenshipInDb) {
+        preparedData.citizenship = citizenshipInDb;
+      }
+    }
+
     const { id } = await this.executorStore.create({
-      ...executor,
+      ...preparedData,
       ssoId,
       status: Status.CREATED,
     });
@@ -52,11 +87,19 @@ export class ExecutorService {
       throw new NotFoundException(ERRORS.EXECUTOR_NOT_FOUND);
     }
 
-    if (executor.specialization && executor.specialization.length) {
-      executor.specialization.map(spec => spec.name);
+    const {specialization, citizenship, ...others} = executor;
+
+    const preparedResponse: IGetExecutorResponse = {...others};
+
+    if (specialization && specialization.length) {
+      preparedResponse.specialization = specialization.map(spec => spec.name);
     }
 
-    return executor;
+    if (citizenship) {
+      preparedResponse.citizenship = executor.citizenship.name;
+    }
+
+    return preparedResponse;
   }
 
   async updateExecutor({
@@ -68,26 +111,55 @@ export class ExecutorService {
       throw new NotFoundException(ERRORS.EXECUTOR_NOT_FOUND);
     }
 
-    let { specialization, ...others } = newExecutorData;
+    let { specialization, tariff, citizenship, ...others } = newExecutorData;
 
     const preparedData: PreparedExecutor & {
       specialization?: SpecializationModel[];
+      tariff?: TariffModel;
+      citizenship?: CitizenshipModel;
     } = { ...others };
 
+    // TODO: запихнуть всё это в параллель
+    // TODO: проверка в dto о пустых специализациях
     if (specialization && specialization.length) {
-      specialization = await this.specializationRepo
-        .createQueryBuilder()
-        .select('name')
-        .where('name IN (:...names)', { names: specialization })
-        .execute();
+      const specWhere: ISpecialization[] = specialization.map(
+        name => <ISpecialization>{ name },
+      );
+      const specializationInDb = await this.specializationStore.findByCriteria({
+        where: specWhere,
+      });
 
-      if (specialization.length)
-        preparedData.specialization = specialization.map(
-          spec => new SpecializationModel({ name: spec }),
-        );
+      if (specializationInDb.length)
+        preparedData.specialization = [ ...specializationInDb ];
+
+      // TODO: валидация на не существующие специализации
     }
 
-    console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', newExecutorData);
+    if (tariff) {
+      // TODO: depend injections
+      const tariffInDb = await this.tariffStore.findOneByCriteria({
+        where: [{ name: tariff }],
+      });
+
+      // TODO: validation if tariff does not exists
+      if (tariffInDb) {
+        preparedData.tariff = tariffInDb;
+      }
+    }
+
+    if (citizenship) {
+      const citizenshipInDb = await this.citizenshipStore.findOneByCriteria({
+        where: [
+          {name: citizenship}
+        ]
+      });
+
+      if (citizenshipInDb) {
+        preparedData.citizenship = citizenshipInDb;
+      }
+    }
+
+    console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', preparedData);
 
     // TODO: history update model
 

@@ -30,7 +30,7 @@ export class ExecutorDto implements ICreateExecutorRequest {
   photo: string;
 
   @IsString()
-  citizenshipId: string;
+  citizenship: string;
 
   @ValidateNested()
   @Type(() => Passport)
@@ -49,7 +49,7 @@ export class UpdateExecutor implements IUpdateExecutorRequest {
 
   @IsString()
   @IsOptional()
-  citizenshipId?: string;
+  citizenship?: string;
 
   @ValidateNested()
   @Type(() => Passport)
@@ -65,15 +65,6 @@ export class UpdateExecutor implements IUpdateExecutorRequest {
   @IsOptional()
   acceptedUseTerms?: string;
 
-  @IsString()
-  @IsOptional()
-  citizenship?: string;
-
-  // TODO не должно быть при обновлении
-  @IsString()
-  @IsOptional()
-  statusReason?: string;
-
   @IsDateString()
   @IsOptional()
   statusDate?: string;
@@ -83,7 +74,7 @@ export class UpdateExecutor implements IUpdateExecutorRequest {
   specialization?: string[];
 
   // TODO: чекнуть по какому полю будет привязка, после накатывания статики
-  @IsUUID('4')
+  @IsString()
   @IsOptional()
   tariff?: string;
 }

@@ -71,11 +71,18 @@ describe('Executor (e2e)', () => {
       const newExecutorData = {
         address: 'New Mega Address, 44',
         specialization: ['окна', 'квартиры'],
+        tariff: 'Пятидневка',
+        citizenship: 'Беларусь',
       };
 
       await executorApi.update({ id, ...newExecutorData});
       const updatedExecutor = await executorApi.get({ id });
       expect(newExecutorData.address).toEqual(updatedExecutor.address);
+
+
+      await executorApi.update({ id, ...{
+          specialization: ['придомовая территория'],
+        }});
     });
   });
 
@@ -93,5 +100,3 @@ describe('Executor (e2e)', () => {
   });
 
 });
-
-// TODO:wrk накатывание фикстур гражданство, специализации, тарифы

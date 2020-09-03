@@ -1,7 +1,7 @@
 export const executorFixture = {
   address: 'Normalize Address String, 22',
   photo: 'https://bucket.s3.aws.com/path.jpg',
-  citizenshipId: 'Afghanistan',
+  citizenship: 'Киргизия',
   passport: {
     serial: '1122',
     number: '908978',
