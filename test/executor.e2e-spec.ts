@@ -70,6 +70,7 @@ describe('Executor (e2e)', () => {
     it('Должен обновить данные исполнителя', async () => {
       const newExecutorData = {
         address: 'New Mega Address, 44',
+        specialization: ['окна', 'квартиры'],
       };
 
       await executorApi.update({ id, ...newExecutorData});
