@@ -4,6 +4,10 @@ export enum Status {
   DISABLED = 2,
 }
 
+export enum LogEntity {
+  EXECUTOR = 0,
+}
+
 export type DayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
 export type WorkingDays = DayOfWeek[];
@@ -12,6 +16,8 @@ export interface ITimeRange {
   start?: Date;
   end?: Date;
 }
+
+// TODO: разделить интерфейсы по файлам-моделям
 
 export interface ITariff {
   name?: string;
@@ -36,6 +42,14 @@ export interface IPassport {
   birthPlace?: string;
   registrationAddress?: string;
   lastFullName?: string[];
+}
+
+export interface ILog {
+  type: LogEntity;
+  name: string;
+  oldValue: string;
+  newValue: string;
+  entityId: string;
 }
 
 export interface IExecutorProfileHistoryItem {

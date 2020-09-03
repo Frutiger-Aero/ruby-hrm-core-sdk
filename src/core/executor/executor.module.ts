@@ -4,6 +4,7 @@ import { ExecutorModuleInfra } from '../../infrastructure/executor';
 import { TariffModule } from '../../infrastructure/tariff/tariff.module';
 import { SpecializationModule } from '../../infrastructure/specialization/specialization.module';
 import { CitizenshipModule } from '../../infrastructure/citizenship/citizenship.module';
+import {LogModule} from "../../infrastructure/log/log.module";
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { CitizenshipModule } from '../../infrastructure/citizenship/citizenship.
     TariffModule,
     SpecializationModule,
     CitizenshipModule,
+    LogModule,
   ],
   providers: [ExecutorService],
   exports: [ExecutorService],

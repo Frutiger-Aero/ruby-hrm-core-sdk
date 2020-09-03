@@ -96,9 +96,7 @@ export class ExecutorController implements IHRMExecutorService {
     metadata?: Metadata,
     authBodyToken?: ITokenBody,
   ): Promise<IDisableExecutorResponse> {
-    await this.executorService.getHistoryProfile(data);
-    return null;
+    return this.executorService.getHistoryProfile(data);
   }
-
 
 }

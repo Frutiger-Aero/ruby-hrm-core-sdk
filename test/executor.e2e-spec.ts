@@ -78,11 +78,7 @@ describe('Executor (e2e)', () => {
       await executorApi.update({ id, ...newExecutorData});
       const updatedExecutor = await executorApi.get({ id });
       expect(newExecutorData.address).toEqual(updatedExecutor.address);
-
-
-      await executorApi.update({ id, ...{
-          specialization: ['придомовая территория'],
-        }});
+      await executorApi.update({ id, ...{citizenship: 'Киргизия',}});
     });
   });
 
@@ -98,5 +94,20 @@ describe('Executor (e2e)', () => {
       expect(isExists).toBeUndefined();
     });
   });
+
+  // describe('Get History Profile of Executor', () => {
+  //   it('Должен вернуть историю изменений профиля исполнителя', async () => {
+  //     // id
+  //     // name
+  //     // oldValue
+  //     // newValue
+  //     // dateFrom
+  //     // dateTo
+  //     // limit
+  //     const historyById = await executorApi.getHistoryProfile({id});
+  //
+  //     console.log('AAAAAAAAAAAAAAAAAAAAAAAA', historyById);
+  //   });
+  // });
 
 });

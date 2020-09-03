@@ -10,6 +10,7 @@ import {
   IGetHistoryProfileResponse,
   ISpecialization,
   IUpdateExecutorRequest,
+  LogEntity,
   Status,
 } from '../interfaces';
 import { NotFoundException } from '@qlean/nestjs-exceptions';
@@ -19,7 +20,8 @@ import { TariffModel } from '../../infrastructure/tariff/tariff.model';
 import { CitizenshipModel } from '../../infrastructure/citizenship/citizenship.model';
 import { TariffStore } from '../../infrastructure/tariff/tariff.store';
 import { SpecializationStore } from '../../infrastructure/specialization/specialization.store';
-import {CitizenshipStore} from "../../infrastructure/citizenship/citizenship.store";
+import { CitizenshipStore } from '../../infrastructure/citizenship/citizenship.store';
+import { LogStore } from '../../infrastructure/log/log.store';
 
 type PreparedExecutor = Omit<
   IUpdateExecutorRequest,
@@ -38,6 +40,7 @@ export class ExecutorService {
     private tariffStore: TariffStore,
     private specializationStore: SpecializationStore,
     private citizenshipStore: CitizenshipStore,
+    private logStore: LogStore,
   ) {}
 
   async createExecutor({
@@ -47,7 +50,6 @@ export class ExecutorService {
     executor: ICreateExecutorRequest;
     ssoId: string;
   }): Promise<string> {
-
     // TODO: вынести эту сборку в отдельный приват метод
     let { citizenship, ...others } = executor;
 
@@ -59,9 +61,7 @@ export class ExecutorService {
 
     if (citizenship) {
       const citizenshipInDb = await this.citizenshipStore.findOneByCriteria({
-        where: [
-          {name: citizenship}
-        ]
+        where: [{ name: citizenship }],
       });
 
       if (citizenshipInDb) {
@@ -87,9 +87,9 @@ export class ExecutorService {
       throw new NotFoundException(ERRORS.EXECUTOR_NOT_FOUND);
     }
 
-    const {specialization, citizenship, ...others} = executor;
+    const { specialization, citizenship, ...others } = executor;
 
-    const preparedResponse: IGetExecutorResponse = {...others};
+    const preparedResponse: IGetExecutorResponse = { ...others };
 
     if (specialization && specialization.length) {
       preparedResponse.specialization = specialization.map(spec => spec.name);
@@ -106,7 +106,10 @@ export class ExecutorService {
     id,
     ...newExecutorData
   }: IUpdateExecutorRequest): Promise<{}> {
-    const model = await this.executorStore.findById(id);
+    const model = await this.executorStore.findOneByCriteria({
+      relations: ['specialization', 'citizenship', 'tariff'],
+      where: [{id}],
+    });
     if (!model) {
       throw new NotFoundException(ERRORS.EXECUTOR_NOT_FOUND);
     }
@@ -130,7 +133,7 @@ export class ExecutorService {
       });
 
       if (specializationInDb.length)
-        preparedData.specialization = [ ...specializationInDb ];
+        preparedData.specialization = [...specializationInDb];
 
       // TODO: валидация на не существующие специализации
     }
@@ -149,9 +152,7 @@ export class ExecutorService {
 
     if (citizenship) {
       const citizenshipInDb = await this.citizenshipStore.findOneByCriteria({
-        where: [
-          {name: citizenship}
-        ]
+        where: [{ name: citizenship }],
       });
 
       if (citizenshipInDb) {
@@ -159,9 +160,27 @@ export class ExecutorService {
       }
     }
 
-    console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', preparedData);
-
     // TODO: history update model
+console.log({model, preparedData})
+    await Promise.all(
+      Object.keys(preparedData).map(field => {
+        console.log({
+          entityId: id,
+          name: field,
+          oldValue: model[field],
+          newValue: preparedData[field],
+          type: LogEntity.EXECUTOR,
+        })
+          return this.logStore.create({
+            entityId: id,
+            name: field,
+            oldValue: model[field],
+            newValue: preparedData[field],
+            type: LogEntity.EXECUTOR,
+          }) 
+      },
+      ),
+    );
 
     await this.executorStore.update({ id }, { ...model, ...preparedData });
     return null;
@@ -185,6 +204,12 @@ export class ExecutorService {
 
   async getHistoryProfile({
     id,
+    name,
+    oldValue,
+    newValue,
+    dateFrom,
+    dateTo,
+    limit,
   }: IGetHistoryProfileRequest): Promise<IGetHistoryProfileResponse> {
     return null;
   }
