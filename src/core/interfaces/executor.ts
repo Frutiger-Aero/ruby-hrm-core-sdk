@@ -47,7 +47,7 @@ export interface IPassport {
 export interface ILog {
   type: LogEntity;
   name: string;
-  oldValue: string;
+  oldValue: string | null
   newValue: string;
   entityId: string;
 }

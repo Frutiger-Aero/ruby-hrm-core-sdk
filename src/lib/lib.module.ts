@@ -1,4 +1,5 @@
 import { DynamicModule, Module } from '@nestjs/common';
+import {LogFieldsPickerUtil} from "./log-fields-picker.util";
 
 @Module({})
 export class LibModule {
@@ -6,9 +7,9 @@ export class LibModule {
     return {
       module: LibModule,
       providers: [
-
+        LogFieldsPickerUtil,
       ],
-      exports: [],
+      exports: [LogFieldsPickerUtil],
     };
   }
 }

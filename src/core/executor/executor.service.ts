@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Logger } from '@qlean/nestjs-logger';
-import { ExecutorStore } from '../../infrastructure/executor';
+import { ExecutorModel, ExecutorStore } from '../../infrastructure/executor';
 import * as typeorm from 'typeorm';
+import _ from 'lodash';
 import {
   ICreateExecutorRequest,
   IDisableExecutorRequest,
@@ -22,6 +23,7 @@ import { TariffStore } from '../../infrastructure/tariff/tariff.store';
 import { SpecializationStore } from '../../infrastructure/specialization/specialization.store';
 import { CitizenshipStore } from '../../infrastructure/citizenship/citizenship.store';
 import { LogStore } from '../../infrastructure/log/log.store';
+import { LogFieldsPickerUtil } from '../../lib/log-fields-picker.util';
 
 type PreparedExecutor = Omit<
   IUpdateExecutorRequest,
@@ -41,6 +43,7 @@ export class ExecutorService {
     private specializationStore: SpecializationStore,
     private citizenshipStore: CitizenshipStore,
     private logStore: LogStore,
+    private logFieldsPickerUtil: LogFieldsPickerUtil,
   ) {}
 
   async createExecutor({
@@ -108,7 +111,7 @@ export class ExecutorService {
   }: IUpdateExecutorRequest): Promise<{}> {
     const model = await this.executorStore.findOneByCriteria({
       relations: ['specialization', 'citizenship', 'tariff'],
-      where: [{id}],
+      where: [{ id }],
     });
     if (!model) {
       throw new NotFoundException(ERRORS.EXECUTOR_NOT_FOUND);
@@ -124,7 +127,9 @@ export class ExecutorService {
 
     // TODO: запихнуть всё это в параллель
     // TODO: проверка в dto о пустых специализациях
-    if (specialization && specialization.length) {
+    const oldSpecNames = model.specialization.map(spec => spec.name);
+
+    if (specialization && _.difference(specialization, oldSpecNames).length) {
       const specWhere: ISpecialization[] = specialization.map(
         name => <ISpecialization>{ name },
       );
@@ -137,8 +142,7 @@ export class ExecutorService {
 
       // TODO: валидация на не существующие специализации
     }
-
-    if (tariff) {
+    if (tariff && tariff !== _.get(model, 'tariff.name', '')) {
       // TODO: depend injections
       const tariffInDb = await this.tariffStore.findOneByCriteria({
         where: [{ name: tariff }],
@@ -150,7 +154,7 @@ export class ExecutorService {
       }
     }
 
-    if (citizenship) {
+    if (citizenship && citizenship !== _.get(model, 'citizenship.name', '')) {
       const citizenshipInDb = await this.citizenshipStore.findOneByCriteria({
         where: [{ name: citizenship }],
       });
@@ -161,25 +165,17 @@ export class ExecutorService {
     }
 
     // TODO: history update model
-console.log({model, preparedData})
+
+    const preparedLogs = this.logFieldsPickerUtil.prepareLogCollection(
+      ExecutorModel.name,
+      id,
+      LogEntity.EXECUTOR,
+      model,
+      preparedData,
+    );
+
     await Promise.all(
-      Object.keys(preparedData).map(field => {
-        console.log({
-          entityId: id,
-          name: field,
-          oldValue: model[field],
-          newValue: preparedData[field],
-          type: LogEntity.EXECUTOR,
-        })
-          return this.logStore.create({
-            entityId: id,
-            name: field,
-            oldValue: model[field],
-            newValue: preparedData[field],
-            type: LogEntity.EXECUTOR,
-          }) 
-      },
-      ),
+      preparedLogs.map(log => this.logStore.create(log))
     );
 
     await this.executorStore.update({ id }, { ...model, ...preparedData });

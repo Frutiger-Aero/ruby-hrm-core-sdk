@@ -79,6 +79,15 @@ describe('Executor (e2e)', () => {
       const updatedExecutor = await executorApi.get({ id });
       expect(newExecutorData.address).toEqual(updatedExecutor.address);
       await executorApi.update({ id, ...{citizenship: 'Киргизия',}});
+      await executorApi.update({ id, ...{passport: {
+            serial: '6666',
+            number: '908978',
+            dateStart: '2020-08-31T07:00:46.047Z',
+            issuePlace: 'УФМС №666 России',
+            birthPlace: 'Воркута',
+            registrationAddress: 'Воркута, ул. Сульфидная',
+            lastFullName: ['Boris Britva'],
+          }}});
     });
   });
 
