@@ -9,6 +9,7 @@ import {
   IGetExecutorResponse,
   IGetHistoryProfileRequest,
   IGetHistoryProfileResponse,
+  ILog,
   ISpecialization,
   IUpdateExecutorRequest,
   LogEntity,
@@ -24,6 +25,9 @@ import { SpecializationStore } from '../../infrastructure/specialization/special
 import { CitizenshipStore } from '../../infrastructure/citizenship/citizenship.store';
 import { LogStore } from '../../infrastructure/log/log.store';
 import { LogFieldsPickerUtil } from '../../lib/log-fields-picker.util';
+import { LogModule } from '../../infrastructure/log/log.module';
+import { LogModel } from '../../infrastructure/log/log.model';
+import {Between, FindOperator, LessThanOrEqual, MoreThanOrEqual} from "typeorm";
 
 type PreparedExecutor = Omit<
   IUpdateExecutorRequest,
@@ -33,9 +37,7 @@ type PreparedExecutor = Omit<
 @Injectable()
 export class ExecutorService {
   protected readonly logger = new Logger(ExecutorService.name);
-  protected readonly specializationRepo = typeorm
-    .getManager()
-    .getRepository(SpecializationModel);
+  protected readonly logRepo = typeorm.getManager().getRepository(LogModel);
 
   constructor(
     private executorStore: ExecutorStore,
@@ -174,9 +176,7 @@ export class ExecutorService {
       preparedData,
     );
 
-    await Promise.all(
-      preparedLogs.map(log => this.logStore.create(log))
-    );
+    await Promise.all(preparedLogs.map(log => this.logStore.create(log)));
 
     await this.executorStore.update({ id }, { ...model, ...preparedData });
     return null;
@@ -199,14 +199,44 @@ export class ExecutorService {
   }
 
   async getHistoryProfile({
-    id,
+    id: entityId,
     name,
     oldValue,
     newValue,
     dateFrom,
     dateTo,
     limit,
-  }: IGetHistoryProfileRequest): Promise<IGetHistoryProfileResponse> {
-    return null;
+  }: IGetHistoryProfileRequest): Promise<{history: LogModel[]}> {
+    const query: {
+      where: Partial<ILog> & {
+        createdAt?: FindOperator<string>;
+      },
+      take?: number,
+    } = {
+      where: {},
+    }
+
+    const logModelFields = { entityId, name, oldValue, newValue };
+
+    for (const key in logModelFields) {
+      if (logModelFields[key]) {
+        query.where[key] = logModelFields[key]
+      }
+    }
+
+    if (dateFrom && dateTo) {
+      query.where.createdAt = Between(dateFrom, dateTo);
+    } else if (dateFrom) {
+      query.where.createdAt = MoreThanOrEqual(dateFrom);
+    } else if (dateTo) {
+      query.where.createdAt = LessThanOrEqual(dateTo);
+    }
+
+    if (limit) {
+      query.take = limit;
+    }
+
+    const history = await this.logRepo.find(query);
+    return {history};
   }
 }

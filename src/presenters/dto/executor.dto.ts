@@ -89,6 +89,7 @@ export class DisableExecutor implements IDisableExecutorRequest {
 
 export class GetHistoryProfileDto implements IGetHistoryProfileRequest {
   @IsString()
+  @IsOptional()
   id: string;
 
   @IsString()

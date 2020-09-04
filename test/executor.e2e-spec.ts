@@ -6,6 +6,7 @@ import { AuthService, TestTokensource } from './auth.stubs';
 import { cleanup } from './utils';
 import { getConnection } from 'typeorm';
 import { executorFixture } from './fixtures';
+import moment from "moment";
 
 describe('Executor (e2e)', () => {
   let executorApi: HrmExecutorApi;
@@ -23,10 +24,13 @@ describe('Executor (e2e)', () => {
       permissions: [],
     });
 
-    const moduleFixture = await AuthService.inject(Test.createTestingModule({
-      imports: [ AppModule, HrmCoreModule ],
-    }))
-      .overrideProvider('TOKEN_SOURCE').useValue(tokenSource)
+    const moduleFixture = await AuthService.inject(
+      Test.createTestingModule({
+        imports: [AppModule, HrmCoreModule],
+      }),
+    )
+      .overrideProvider('TOKEN_SOURCE')
+      .useValue(tokenSource)
       .compile();
 
     app = moduleFixture.createNestApplication();
@@ -40,14 +44,12 @@ describe('Executor (e2e)', () => {
       tenantId: 'test',
       clientId: 'testApp',
     });
-
-
   });
 
   afterAll(async () => {
     await app.close();
     await cleanup(getConnection());
-  })
+  });
 
   describe('CREATE executor', () => {
     it('Должен создать исполнителя', async () => {
@@ -62,7 +64,7 @@ describe('Executor (e2e)', () => {
   describe('GET executor', () => {
     it('Должен вернуть исполнителя', async () => {
       const result = await executorApi.get({});
-      expect(result.address).toEqual(executorFixture.address)
+      expect(result.address).toEqual(executorFixture.address);
     });
   });
 
@@ -75,19 +77,9 @@ describe('Executor (e2e)', () => {
         citizenship: 'Беларусь',
       };
 
-      await executorApi.update({ id, ...newExecutorData});
+      await executorApi.update({ id, ...newExecutorData });
       const updatedExecutor = await executorApi.get({ id });
       expect(newExecutorData.address).toEqual(updatedExecutor.address);
-      await executorApi.update({ id, ...{citizenship: 'Киргизия',}});
-      await executorApi.update({ id, ...{passport: {
-            serial: '6666',
-            number: '908978',
-            dateStart: '2020-08-31T07:00:46.047Z',
-            issuePlace: 'УФМС №666 России',
-            birthPlace: 'Воркута',
-            registrationAddress: 'Воркута, ул. Сульфидная',
-            lastFullName: ['Boris Britva'],
-          }}});
     });
   });
 
@@ -98,25 +90,46 @@ describe('Executor (e2e)', () => {
       try {
         isExists = await executorApi.get({ id });
       } catch (error) {
-        expect(error.code).toEqual(404)
+        expect(error.code).toEqual(404);
       }
       expect(isExists).toBeUndefined();
     });
   });
 
-  // describe('Get History Profile of Executor', () => {
-  //   it('Должен вернуть историю изменений профиля исполнителя', async () => {
-  //     // id
-  //     // name
-  //     // oldValue
-  //     // newValue
-  //     // dateFrom
-  //     // dateTo
-  //     // limit
-  //     const historyById = await executorApi.getHistoryProfile({id});
-  //
-  //     console.log('AAAAAAAAAAAAAAAAAAAAAAAA', historyById);
-  //   });
-  // });
+  describe('Get History Profile of Executor', () => {
+    it('Должен вернуть историю изменений профиля исполнителя', async () => {
+      const issuePlace = 'УФМС №666 России';
+      // Тестируем по связанной модели
+      await executorApi.update({ id, ...{ citizenship: 'Киргизия' } });
+      // Тестируем по вложенной структуре (отличаются два поля)
+      await executorApi.update({
+        id,
+        ...{
+          passport: {
+            ...executorFixture.passport,
+            serial: '6666',
+            issuePlace,
+          },
+        },
+      });
+      // Тестируем по одиночному полю
+      await executorApi.update({ id, ...{ citizenship: 'Киргизия' } });
 
+      // Получаем логи по id
+      const historyById = await executorApi.getHistoryProfile({ id });
+      expect(historyById.history.length > 4).toBe(true);
+
+      // Получаем логи по временному диапазону
+      const historyByDate = await executorApi.getHistoryProfile({ dateFrom: moment().subtract(1, 'hour').toISOString(),
+        dateTo: moment().toISOString(),
+        limit: 2, });
+      expect(historyByDate.history.length === 2).toBe(true);
+
+      const historyByField = await executorApi.getHistoryProfile({
+        name: 'passport.issuePlace',
+      });
+      expect(historyByField.history.length === 1).toBe(true);
+      expect(historyByField.history[0].newValue === issuePlace).toBe(true);
+    });
+  });
 });
