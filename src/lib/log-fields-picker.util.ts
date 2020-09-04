@@ -122,6 +122,12 @@ export class LogFieldsPickerUtil {
     const cleanOldData: {} = this.deleteServeFields(JSON.parse(JSON.stringify(oldData)));
     const cleanNewData: {} = this.deleteServeFields(JSON.parse(JSON.stringify(newData)));
 
+    for (const key in cleanNewData) {
+      if (!cleanNewData[key]) {
+        delete cleanNewData[key];
+      }
+    }
+
     Object.keys(cleanNewData).forEach(key => {
       let logs: ILog[] = this.logMap[model](key, cleanOldData, cleanNewData);
       logs = logs.map(log => ({ ...log, entityId, type }));

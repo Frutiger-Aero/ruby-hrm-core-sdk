@@ -15,7 +15,10 @@ import {
   LogEntity,
   Status,
 } from '../interfaces';
-import { NotFoundException } from '@qlean/nestjs-exceptions';
+import {
+  InvalidArgumentException,
+  NotFoundException,
+} from '@qlean/nestjs-exceptions';
 import { ERRORS } from '../../const';
 import { SpecializationModel } from '../../infrastructure/specialization/specialization.model';
 import { TariffModel } from '../../infrastructure/tariff/tariff.model';
@@ -25,9 +28,13 @@ import { SpecializationStore } from '../../infrastructure/specialization/special
 import { CitizenshipStore } from '../../infrastructure/citizenship/citizenship.store';
 import { LogStore } from '../../infrastructure/log/log.store';
 import { LogFieldsPickerUtil } from '../../lib/log-fields-picker.util';
-import { LogModule } from '../../infrastructure/log/log.module';
 import { LogModel } from '../../infrastructure/log/log.model';
-import {Between, FindOperator, LessThanOrEqual, MoreThanOrEqual} from "typeorm";
+import {
+  Between,
+  FindOperator,
+  LessThanOrEqual,
+  MoreThanOrEqual,
+} from 'typeorm';
 
 type PreparedExecutor = Omit<
   IUpdateExecutorRequest,
@@ -64,15 +71,7 @@ export class ExecutorService {
       citizenship?: CitizenshipModel;
     } = { ...others };
 
-    if (citizenship) {
-      const citizenshipInDb = await this.citizenshipStore.findOneByCriteria({
-        where: [{ name: citizenship }],
-      });
-
-      if (citizenshipInDb) {
-        preparedData.citizenship = citizenshipInDb;
-      }
-    }
+    preparedData.citizenship = await this.getCitizenship(citizenship, '');
 
     const { id } = await this.executorStore.create({
       ...preparedData,
@@ -127,58 +126,21 @@ export class ExecutorService {
       citizenship?: CitizenshipModel;
     } = { ...others };
 
-    // TODO: запихнуть всё это в параллель
-    // TODO: проверка в dto о пустых специализациях
-    const oldSpecNames = model.specialization.map(spec => spec.name);
-
-    if (specialization && _.difference(specialization, oldSpecNames).length) {
-      const specWhere: ISpecialization[] = specialization.map(
-        name => <ISpecialization>{ name },
-      );
-      const specializationInDb = await this.specializationStore.findByCriteria({
-        where: specWhere,
-      });
-
-      if (specializationInDb.length)
-        preparedData.specialization = [...specializationInDb];
-
-      // TODO: валидация на не существующие специализации
-    }
-    if (tariff && tariff !== _.get(model, 'tariff.name', '')) {
-      // TODO: depend injections
-      const tariffInDb = await this.tariffStore.findOneByCriteria({
-        where: [{ name: tariff }],
-      });
-
-      // TODO: validation if tariff does not exists
-      if (tariffInDb) {
-        preparedData.tariff = tariffInDb;
-      }
-    }
-
-    if (citizenship && citizenship !== _.get(model, 'citizenship.name', '')) {
-      const citizenshipInDb = await this.citizenshipStore.findOneByCriteria({
-        where: [{ name: citizenship }],
-      });
-
-      if (citizenshipInDb) {
-        preparedData.citizenship = citizenshipInDb;
-      }
-    }
-
-    // TODO: history update model
-
-    const preparedLogs = this.logFieldsPickerUtil.prepareLogCollection(
-      ExecutorModel.name,
-      id,
-      LogEntity.EXECUTOR,
-      model,
-      preparedData,
+    preparedData.specialization = await this.getSpecialization(
+      specialization,
+      model.specialization.map(spec => spec.name),
+    );
+    preparedData.tariff = await this.getTariff(
+      tariff,
+      _.get(model, 'tariff.name', ''),
+    );
+    preparedData.citizenship = await this.getCitizenship(
+      citizenship,
+      _.get(model, 'citizenship.name', null),
     );
 
-    await Promise.all(preparedLogs.map(log => this.logStore.create(log)));
-
     await this.executorStore.update({ id }, { ...model, ...preparedData });
+    await this.logUpdates(id, model, preparedData);
     return null;
   }
 
@@ -188,12 +150,10 @@ export class ExecutorService {
       throw new NotFoundException(ERRORS.EXECUTOR_NOT_FOUND);
     }
 
-    // TODO: history update model
+    const preparedData = { statusReason, status: Status.DISABLED };
 
-    await this.executorStore.update(
-      { id },
-      { ...model, statusReason, status: Status.DISABLED },
-    );
+    await this.executorStore.update({ id }, { ...model, ...preparedData });
+    await this.logUpdates(id, model, preparedData);
     await this.executorStore.logicRemove(id);
     return null;
   }
@@ -206,21 +166,21 @@ export class ExecutorService {
     dateFrom,
     dateTo,
     limit,
-  }: IGetHistoryProfileRequest): Promise<{history: LogModel[]}> {
+  }: IGetHistoryProfileRequest): Promise<{ history: LogModel[] }> {
     const query: {
       where: Partial<ILog> & {
         createdAt?: FindOperator<string>;
-      },
-      take?: number,
+      };
+      take?: number;
     } = {
       where: {},
-    }
+    };
 
     const logModelFields = { entityId, name, oldValue, newValue };
 
     for (const key in logModelFields) {
       if (logModelFields[key]) {
-        query.where[key] = logModelFields[key]
+        query.where[key] = logModelFields[key];
       }
     }
 
@@ -237,6 +197,75 @@ export class ExecutorService {
     }
 
     const history = await this.logRepo.find(query);
-    return {history};
+    return { history };
+  }
+
+  private async getCitizenship(
+    citizenship: string,
+    oldVal: string,
+  ): Promise<CitizenshipModel> {
+    if (citizenship && citizenship !== oldVal) {
+      const citizenshipInDb = await this.citizenshipStore.findOneByCriteria({
+        where: [{ name: citizenship }],
+      });
+
+      if (citizenshipInDb) {
+        return citizenshipInDb;
+      } else {
+        throw new InvalidArgumentException(ERRORS.CITIZENSHIP_NOT_FOUND);
+      }
+    }
+    return null;
+  }
+
+  private async getTariff(
+    tariff: string,
+    oldVal: string,
+  ): Promise<TariffModel> {
+    if (tariff && tariff !== oldVal) {
+      const tariffInDb = await this.tariffStore.findOneByCriteria({
+        where: [{ name: tariff }],
+      });
+
+      if (tariffInDb) {
+        return tariffInDb;
+      } else {
+        throw new InvalidArgumentException(ERRORS.TARIFF_NOT_FOUND);
+      }
+    }
+    return null;
+  }
+
+  private async getSpecialization(
+    specialization: string[],
+    oldVal: string[],
+  ): Promise<SpecializationModel[]> {
+    if (specialization && _.difference(specialization, oldVal).length) {
+      const specWhere: ISpecialization[] = specialization.map(
+        name => <ISpecialization>{ name },
+      );
+      const specializationInDb = await this.specializationStore.findByCriteria({
+        where: specWhere,
+      });
+
+      if (specializationInDb.length !== specialization.length) {
+        throw new InvalidArgumentException(ERRORS.SPECIALIZATION_NOT_FOUND);
+      }
+
+      if (specializationInDb.length) return specializationInDb;
+    }
+    return null;
+  }
+
+  private async logUpdates(entityId: string, oldData: {}, newData: {}) {
+    const preparedLogs = this.logFieldsPickerUtil.prepareLogCollection(
+      ExecutorModel.name,
+      entityId,
+      LogEntity.EXECUTOR,
+      oldData,
+      newData,
+    );
+
+    await Promise.all(preparedLogs.map(log => this.logStore.create(log)));
   }
 }

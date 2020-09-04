@@ -22,6 +22,8 @@ import {
 import { Passport } from '../../infrastructure/executor/executor.partial';
 import { Type } from 'class-transformer';
 
+// TODO: проверка в dto о пустых специализациях
+
 export class ExecutorDto implements ICreateExecutorRequest {
   @IsString()
   address: string;
@@ -73,7 +75,6 @@ export class UpdateExecutor implements IUpdateExecutorRequest {
   @IsOptional()
   specialization?: string[];
 
-  // TODO: чекнуть по какому полю будет привязка, после накатывания статики
   @IsString()
   @IsOptional()
   tariff?: string;

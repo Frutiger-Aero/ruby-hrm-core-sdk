@@ -25,20 +25,10 @@ import { SpecializationModel } from '../specialization/specialization.model';
 import { TariffModel } from '../tariff/tariff.model';
 import { CitizenshipModel } from '../citizenship/citizenship.model';
 
-export const weekDaysTransformer = {
-  to: (days: number[]): string => `{${days.join(',')}}`,
-  from: (weekDaysString: string): number[] =>
-    weekDaysString
-      .replace(/\{|\}/g, '')
-      .split(',')
-      .map(item => +item),
-};
-
 @Entity({
   name: 'executor',
 })
 export class ExecutorModel extends BaseModel<IExecutor> implements IExecutor {
-  // TODO: проверить в букинге верную подстановку ссоИД
   @IsUUID('4')
   @Column({ nullable: false, name: 'sso_id', unique: true })
   ssoId: string;
@@ -53,7 +43,6 @@ export class ExecutorModel extends BaseModel<IExecutor> implements IExecutor {
 
   @IsDateString()
   @Column({ name: 'accepted_use_terms', nullable: true })
-  // TODO нужна отдельная ручка подписание ползь соглаш
   acceptedUseTerms: string;
 
   @ManyToOne(

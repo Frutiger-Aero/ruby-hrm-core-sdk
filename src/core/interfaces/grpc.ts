@@ -1,10 +1,10 @@
 import { Metadata } from 'grpc';
 import {
   IPassport,
-  ITariff,
   IExecutorProfileHistoryItem,
   Status,
 } from './executor';
+import {ITariff} from "./tariff";
 
 export interface IGetExecutorRequest {}
 

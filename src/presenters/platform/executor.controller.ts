@@ -17,6 +17,9 @@ import {DisableExecutor, ExecutorDto, GetExecutor, GetHistoryProfileDto, UpdateE
 
 const GRPC_SERVICE_NAME = 'HRMExecutorService';
 
+// TODO нужна отдельная ручка подписание ползь соглаш
+// TODO: проверить в букинге верную подстановку ссоИД
+
 @Controller()
 @UseFilters(RpcExceptionFilter.for(GRPC_SERVICE_NAME))
 @UseGuards(PLTJWTGuard)
