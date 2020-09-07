@@ -67,7 +67,7 @@ app-template:
 postgresql:
   enabled: true
   postgresqlPassword: staging
-  postgresqlDatabase: master-postgresql
+  postgresqlDatabase: postgres
   persistence:
     enabled: true
   initdbScripts:
