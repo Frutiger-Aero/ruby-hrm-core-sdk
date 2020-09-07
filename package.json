@@ -14,16 +14,16 @@
     "start": "npm run typeorm migration:run && npm run start:prod",
     "test:cov": "jest --coverage",
     "test": "jest --verbose --runInBand --setupFiles dotenv/config --config ./test/jest.json",
-    "test:e2e": "npm run fixtures:insert && HRM_CORE_URL=localhost:5000 jest --verbose --setupFiles dotenv/config --runInBand --config ./test/jest-e2e.json",
+    "test:e2e": "HRM_CORE_URL=localhost:5000 jest --verbose --setupFiles dotenv/config --runInBand --config ./test/jest-e2e.json",
     "webpack": "webpack --config webpack.config.js",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
-    "entrypoint": "npm run typeorm migration:run && npm run start:prod",
+    "entrypoint": "npm run typeorm migration:run && npm run fixtures:insert && npm run start:prod",
     "publish:sdk": "npm publish sdk/nestjs",
     "build:sdk": "npm run proto && cp -r ./src/core/interfaces ./sdk/nestjs/src && cd sdk/nestjs && npm run build",
     "bump:sdk": "cd sdk/nestjs && npm version patch",
     "db:eml": "./node_modules/.bin/ts-node ./node_modules/.bin/typeorm-uml -d=eml.png",
     "documentation": "npx compodoc -p tsconfig.json -s",
-    "fixtures:insert": "ts-node -r dotenv/config ./utils/fixture-inserter.ts"
+    "fixtures:insert": "cp -R ./data ./dist && node dist/utils/fixture-inserter.js"
   },
   "dependencies": {
     "@nestjs/common": "6.3.2",
@@ -33,6 +33,7 @@
     "@nestjs/platform-express": "^6.10.5",
     "@nestjs/swagger": "^4.1.11",
     "@nestjs/typeorm": "^6.2.0",
+    "@qlean/crm-booking-sdk": "^0.1.0",
     "@qlean/nestjs-exceptions": "^0.2.2",
     "@qlean/nestjs-logger": "^0.2.3",
     "@qlean/nestjs-stats": "0.5.0",
