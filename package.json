@@ -6,10 +6,10 @@
   "license": "MIT",
   "scripts": {
     "format": "prettier --write \"**/*.ts\"",
-    "build": "npm run proto && rm -rf dist && tsc",
+    "build": "npm run proto && rm -rf dist && tsc && cp -R ./proto ./dist",
     "proto": "MAIN_PROTO=hrm-core.proto node ./bin/proto.js && mkdir -p ./sdk/nestjs/proto && cp -r ./proto/* ./sdk/nestjs/proto",
     "start:dev": "ts-node -r dotenv/config -r tsconfig-paths/register src/main.ts",
-    "start:prod": "node -r dotenv/config dist/main.js",
+    "start:prod": "node -r dotenv/config dist/src/main.js",
     "start:hmr": "node dist/server",
     "start": "npm run typeorm migration:run && npm run start:prod",
     "test:cov": "jest --coverage",

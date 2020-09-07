@@ -21,7 +21,7 @@
   },
   "include": [
     "src/**/*",
-    "./migration/*.ts"
+    "./migrations/*.ts"
   ],
   "exclude": [
     "node_modules",
