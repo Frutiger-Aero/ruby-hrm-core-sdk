@@ -1,6 +1,6 @@
 dependencies:
 - name: app-template
-  version: ~1.2
+  version: ~1.4
   repository: https://registry.manage.cloud.qlean.ru/chartrepo/gitlab
   alias: app-template
 

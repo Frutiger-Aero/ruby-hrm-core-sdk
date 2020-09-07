@@ -30,10 +30,13 @@ variables:
 # задачи на стадии production
 # можно выполнять только на ветке master
 .prod-only: &prod-only
-  when: manual
   only:
     refs:
       - master
+.stage-only: &stage-only
+  only:
+    refs:
+      - branches
 
 build:
   stage: build
@@ -57,28 +60,16 @@ test unit:
   script:
     - cd /opt/app; npm run test
 
-release:
-  stage: release
-  image: docker
-  tags:
-    - staging
-    - platform
-  only:
-    - tags
-  services:
-    - docker:dind
-  script:
-    - release
-
 deploy to staging:
   tags:
     - staging
     - platform
   stage: staging
+  <<: *stage-only
   variables:
     GIT_STRATEGY: clone
     KUBE_NAMESPACE: app-${CI_PROJECT_NAME}
-    HELM_RELEASE_NAME: ${CI_COMMIT_REF_SLUG}
+    HELM_RELEASE_NAME: ${CI_PROJECT_NAME}-${CI_COMMIT_REF_SLUG}
   environment:
     name: stage/$CI_COMMIT_REF_SLUG
     url: $STAGE_URL
@@ -99,7 +90,7 @@ stop_stage:
   variables:
     GIT_STRATEGY: none
     KUBE_NAMESPACE: app-${CI_PROJECT_NAME}
-    HELM_RELEASE_NAME: ${CI_COMMIT_REF_SLUG}
+    HELM_RELEASE_NAME: ${CI_PROJECT_NAME}-${CI_COMMIT_REF_SLUG}
     VAULT_ADDR: https://vault.stage.cloud.qlean.ru
     VAULT_KEYPATH: secret/platform/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}
   image: registry.manage.cloud.qlean.ru/gitlab/platform/utils/k8s-client
@@ -111,17 +102,16 @@ stop_stage:
     action: stop
   when: manual
 
-deploy to production:
+.deploy to production:
   stage: production
   <<: *prod-only
-  when: manual
   tags:
     - production
     - platform
   variables:
     GIT_STRATEGY: clone
     KUBE_NAMESPACE: app-${CI_PROJECT_NAME}
-    HELM_RELEASE_NAME: master
+    HELM_RELEASE_NAME: ${CI_PROJECT_NAME}
   environment:
     name: prod
     url: $PROD_URL
@@ -137,5 +127,5 @@ deploy to production:
 # this will include global before_script definition
 include:
   - project: 'platform/libraries/app-boilerplate'
-    ref: master
+    ref: inf-412
     file: '/before-script.yml'

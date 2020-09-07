@@ -31,17 +31,17 @@ app-template:
     readinessProbe:
       tcpSocket:
         port: 5000
-      initialDelaySeconds: 125
+      initialDelaySeconds: 120
       periodSeconds: 10
     livenessProbe:
       tcpSocket:
         port: 5000
-      initialDelaySeconds: 125
+      initialDelaySeconds: 120
       periodSeconds: 15
 
   extraEnv:
     BRANCH: master
-    REWRITE_TYPEORM_HOST: ${BRANCH}-postgresql
+    REWRITE_TYPEORM_HOST: ${HELM_RELEASE_NAME}-postgresql
 
   ingress:
     data:
