@@ -17,7 +17,7 @@
     "test:e2e": "HRM_CORE_URL=localhost:5000 jest --verbose --setupFiles dotenv/config --runInBand --config ./test/jest-e2e.json",
     "webpack": "webpack --config webpack.config.js",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
-    "entrypoint": "npm run fixtures:insert",
+    "entrypoint": "npm run typeorm migration:run && npm run fixtures:insert && npm run start:prod",
     "publish:sdk": "npm publish sdk/nestjs",
     "build:sdk": "npm run proto && cp -r ./src/core/interfaces ./sdk/nestjs/src && cd sdk/nestjs && npm run build",
     "bump:sdk": "cd sdk/nestjs && npm version patch",
