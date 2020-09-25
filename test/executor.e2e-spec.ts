@@ -1,4 +1,4 @@
-import { HrmExecutorApi, HrmCoreModule } from '../sdk/nestjs/build';
+import { HrmExecutorApi, HrmCoreModule } from '../sdk/nestjs/src';
 import { Test } from '@nestjs/testing';
 import { AppModule } from '../src/app.module';
 import { grpcOptions } from '../src/app.options';

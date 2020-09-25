@@ -23,7 +23,7 @@ export const GRANTS = {
   /**
    * можно отключать исполнителя
    */
-  EXECUTOR_DISABLE: 'hrm:core:executor:remove',
+  EXECUTOR_DISABLE: 'hrm:core:executor:disable',
 
   /**
    * можно получать список изменений профиля исполнителя

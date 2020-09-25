@@ -3,9 +3,9 @@ import {ICitizenship} from "./citizenship";
 import {ISpecialization} from "./specialization";
 
 export enum Status {
-  CREATED = 0,
-  ENABLED = 1,
-  DISABLED = 2,
+  CREATED = 1,
+  ENABLED = 2,
+  DISABLED = 3,
 }
 
 export interface IPassport {

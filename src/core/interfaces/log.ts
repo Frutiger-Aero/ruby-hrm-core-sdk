@@ -1,5 +1,5 @@
 export enum LogEntity {
-  EXECUTOR = 0,
+  EXECUTOR = 1,
 }
 
 export interface ILog {

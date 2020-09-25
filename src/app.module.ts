@@ -9,7 +9,7 @@ import { PlatformModule } from './presenters/platform/platform.module';
     PlatformModule,
     StatsModule.forRoot({
       transport: StatsTransportEnum.PROMETHEUS,
-      scrapedUrl: '/api/metrics',
+      scrapedUrl: '/metrics'
     }),
   ],
 })
