@@ -11,7 +11,6 @@ export class TestTokensource implements ITokenSource {
 
   patchMetadata(metadata: Metadata): Promise<Metadata> {
     metadata.set('token', this._token);
-
     return Promise.resolve(metadata);
   }
 }
@@ -33,7 +32,6 @@ export class AuthService {
   }
 
   static allGrants({tenantId, clientId, uid = null }) {
-
     const token = new Token({
       alg: SIGNING_ALGORITHM.RS256,
     }, {

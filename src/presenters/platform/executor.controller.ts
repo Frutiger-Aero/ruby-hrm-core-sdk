@@ -1,4 +1,4 @@
-import { Controller, UseFilters, UseGuards, UsePipes } from '@nestjs/common';
+import {Controller, UseFilters, UseGuards, UseInterceptors, UsePipes} from '@nestjs/common';
 import { ITokenBody } from '@qlean/sso-sdk';
 import { PermissionKey, PLTJWTGuard } from '@qlean/sso-sdk/build';
 import { ValidationPipe, RpcExceptionFilter } from '@qlean/nestjs-exceptions';
@@ -14,6 +14,7 @@ import {
   IUpdateExecutorResponse
 } from "../../core/interfaces";
 import {DisableExecutor, ExecutorDto, GetExecutor, GetHistoryProfileDto, UpdateExecutor} from "../dto/executor.dto";
+import {StatsInterceptor} from "@qlean/nestjs-stats";
 
 const GRPC_SERVICE_NAME = 'HRMExecutorService';
 
@@ -23,6 +24,7 @@ const GRPC_SERVICE_NAME = 'HRMExecutorService';
 @Controller()
 @UseFilters(RpcExceptionFilter.for(GRPC_SERVICE_NAME))
 @UseGuards(PLTJWTGuard)
+@UseInterceptors(StatsInterceptor)
 export class ExecutorController implements IHRMExecutorService {
   private readonly logger = new Logger(ExecutorController.name);
 
@@ -37,8 +39,6 @@ export class ExecutorController implements IHRMExecutorService {
     metadata?: Metadata,
     authTokenBody?: ITokenBody,
   ): Promise<ICreateExecutorResponse> {
-    // TODO:question уточнить sso_id === tenantId , почему у них разный нейминг ?
-    // Почему в тек реализации он назвывается iss, что означает это ?
     const id = await this.executorService.createExecutor(
       {executor: data, ssoId: authTokenBody.iss},
     );
