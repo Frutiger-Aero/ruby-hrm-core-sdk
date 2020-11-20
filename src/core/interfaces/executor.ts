@@ -1,6 +1,6 @@
 import {ITariff} from "./tariff";
 import {ICitizenship} from "./citizenship";
-import {ISpecialization} from "./specialization";
+import {ISpecialization} from "./specialization.interface";
 
 export enum Status {
   CREATED = 1,

@@ -3,4 +3,4 @@ export * from './executor';
 export * from './tariff';
 export * from './citizenship';
 export * from './log';
-export * from './specialization';
+export * from './specialization.interface';
