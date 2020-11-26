@@ -1,5 +1,6 @@
-import { IAddress } from './address.interface';
 import { IBaseModel } from '@qlean/nestjs-typeorm-persistence-search';
+import { IAddress } from './address.interface';
+import { IFio } from './fio.interface';
 
 export enum PERSON_STATUS {
   /**
@@ -43,12 +44,12 @@ export interface IExecutor extends IBaseModel {
   /**
    * Официальное, полное имя
    */
-  officialFio: IAddress;
+  fio: IFio;
 
   /**
    * Адрес проживания
    */
-  residenceAddress: IAddress;
+  address: IAddress;
 
   /**
    * Рейтинг исполнителя, дробное число

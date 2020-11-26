@@ -2,9 +2,9 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SpecializationModule } from './specialization';
 import { ProductModule } from './product';
-import { GradeModule } from './grade';
-import { CommissionModule } from './commission';
+import { PositionModule } from './position';
 import { TariffModule } from './tariff';
+import { ExecutorModule } from '../../core/executor/executor.module';
 
 @Module({
   imports: [
@@ -13,17 +13,17 @@ import { TariffModule } from './tariff';
     }),
     SpecializationModule,
     ProductModule,
-    GradeModule,
-    CommissionModule,
+    PositionModule,
     TariffModule,
+    ExecutorModule,
   ],
   exports: [
     TypeOrmModule,
     SpecializationModule,
     ProductModule,
-    GradeModule,
-    CommissionModule,
+    PositionModule,
     TariffModule,
+    ExecutorModule,
   ],
 })
 export class PersistenceModule {}

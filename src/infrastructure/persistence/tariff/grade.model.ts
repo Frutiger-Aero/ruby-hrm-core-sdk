@@ -2,13 +2,13 @@ import { Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseModel } from '@qlean/nestjs-typeorm-persistence-search';
 import { IGrade } from '../../../core/interfaces';
 import { PositionModel } from '../position/position.model';
-import { CommissionModel } from '../commission/commission.model';
+import { CommissionModel } from './commission.model';
 import { TariffModel } from './tariff.model';
 
 @Entity({
   name: 'grades',
 })
-export class GradeModel extends BaseModel<IGrade> {
+export class GradeModel extends BaseModel<IGrade> implements IGrade {
   @ManyToOne(type => TariffModel, e => e.grades)
   @JoinColumn()
   readonly tariff: TariffModel;

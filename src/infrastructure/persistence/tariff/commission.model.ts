@@ -2,12 +2,12 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { IsEnum, IsNumber, IsString } from 'class-validator';
 import { BaseModel } from '@qlean/nestjs-typeorm-persistence-search';
 import { COMMISSION_TYPE, COMMISSION_UNIT, ICommission } from '../../../core/interfaces';
-import { GradeModel } from '../tariff/grade.model';
+import { GradeModel } from './grade.model';
 
 @Entity({
   name: 'commissions',
 })
-export class CommissionModel extends BaseModel<ICommission> {
+export class CommissionModel extends BaseModel<ICommission> implements ICommission {
   @IsNumber()
   @Column({ type: 'integer' })
   amount: number;
@@ -18,7 +18,7 @@ export class CommissionModel extends BaseModel<ICommission> {
 
   @IsEnum(COMMISSION_UNIT)
   @Column({ type: 'string', default: COMMISSION_UNIT.SERVICE })
-  unit?: COMMISSION_UNIT;
+  unit: COMMISSION_UNIT;
 
   @IsString()
   @Column({ nullable: true })

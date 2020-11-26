@@ -9,7 +9,7 @@ import { GradeModel } from './grade.model';
 @Entity({
   name: 'tariffs',
 })
-export class TariffModel extends BaseModel<ITariff> {
+export class TariffModel extends BaseModel<ITariff> implements ITariff {
   @IsString()
   @Column({ length: 128, unique: true })
   name: string;

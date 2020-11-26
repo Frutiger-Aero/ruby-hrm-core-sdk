@@ -1,5 +1,5 @@
 import { Column } from 'typeorm';
-import { GenderEnum, IDadataFIO, IFio } from '../../core/interfaces';
+import { GenderEnum, IDadataFIO, IFio } from '../../../core/interfaces';
 
 export class FioPartial implements IFio {
 

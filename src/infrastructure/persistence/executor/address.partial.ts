@@ -1,11 +1,14 @@
 import { Column } from 'typeorm';
-import { IAddress, IAddressDetail, IAddressObject, IMetro, IPoint } from '../../core/interfaces';
+import { IAddress, IAddressDetail, IAddressObject, IMetro, IPoint } from '../../../core/interfaces';
+import { IsString } from 'class-validator';
 
 export class AddressPartial implements IAddress {
 
+  @IsString()
   @Column({ type: 'character varying', name: '_value', nullable: true })
   readonly value: string;
 
+  @IsString()
   @Column({ type: 'character varying', name: '_unrestricted_value', nullable: true })
   readonly unrestrictedValue: string;
 

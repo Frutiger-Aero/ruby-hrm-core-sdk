@@ -7,7 +7,7 @@ import { GradeModel } from '../tariff/grade.model';
 @Entity({
   name: 'positions',
 })
-export class PositionModel extends BaseModel<IPosition> {
+export class PositionModel extends BaseModel<IPosition> implements IPosition {
   @IsString()
   @Column({ length: 128 })
   readonly title: string;

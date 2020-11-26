@@ -7,7 +7,7 @@ import { TariffModel } from '../tariff/tariff.model';
 @Entity({
   name: 'specializations',
 })
-export class SpecializationModel extends BaseModel<ISpecialization> {
+export class SpecializationModel extends BaseModel<ISpecialization> implements ISpecialization {
   @IsString()
   @Column({ length: 128 })
   title: string;
