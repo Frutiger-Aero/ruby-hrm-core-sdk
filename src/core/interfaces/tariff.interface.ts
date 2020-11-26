@@ -1,4 +1,4 @@
-import { ITariffGrade } from './tariff-grade.interface';
+import { IGrid } from './grid.interface';
 import { IProduct } from './product.interface';
 import { ISpecialization } from './specialization.interface';
 import { IBaseModel } from '@qlean/nestjs-typeorm-persistence-search';
@@ -20,7 +20,7 @@ export interface ITariff extends IBaseModel {
   specialization: ISpecialization;
 
   /**
-   * @description Массив грейдов тарифа
+   * @description Тарифная сетка в рамках грейдов
    */
-  grades: ITariffGrade[];
+  grades: IGrid[];
 }

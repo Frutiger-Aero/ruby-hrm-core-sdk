@@ -1,6 +1,6 @@
 import { IBaseModel } from '@qlean/nestjs-typeorm-persistence-search';
 import { ITariff } from './tariff.interface';
-import { ITariffGrade } from './tariff-grade.interface';
+import { IGrid } from './grid.interface';
 import { IProduct } from './product.interface';
 import { ISpecialization } from './specialization.interface';
 
@@ -33,7 +33,7 @@ export interface IContract extends IBaseModel {
   /**
    * @description Текущий грейд исполнителя
    */
-  grade: ITariffGrade;
+  grade: IGrid;
 
   /**
    * @description Продукт в рамках тарифа

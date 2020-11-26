@@ -1,11 +1,11 @@
 import { IBaseModel } from '@qlean/nestjs-typeorm-persistence-search';
 
-export enum COST_TYPE {
+export enum COMMISSION_TYPE {
   FIXED = 'fixed',
   PERCENT = 'percent',
 }
 
-export enum COST_UNIT {
+export enum COMMISSION_UNIT {
   SERVICE = 'SERVICE',
   HOUR = 'HOUR',
   OPTION = 'OPTION',
@@ -14,10 +14,9 @@ export enum COST_UNIT {
 export interface ICommission extends IBaseModel {
   amount: number;
 
-  type: COST_TYPE;
+  type: COMMISSION_TYPE;
 
-  // Если UNIT не указан - цена per Service
-  unit?: COST_UNIT;
+  unit: COMMISSION_UNIT;
 
   // Если UNIT = OPTION -> тут указываем за какую именно опцию
   option?: string;

@@ -3,10 +3,10 @@ import { IGrade } from './grade.interface';
 import { ICommission } from './commission.interface';
 
 /**
- * @description Справочник грейдов - младший, старший, наставник
+ * @description Тарифная сетка в рамках грейда
  *
  */
-export interface ITariffGrade extends IBaseModel {
+export interface IGrid extends IBaseModel {
   /**
    * @description Исспользуемый грейд
    */
