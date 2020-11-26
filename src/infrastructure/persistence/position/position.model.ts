@@ -1,13 +1,13 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 import { BaseModel } from '@qlean/nestjs-typeorm-persistence-search';
-import { IGrade } from '../../../core/interfaces';
+import { IPosition } from '../../../core/interfaces';
 import { IsString } from 'class-validator';
-import { GridModel } from '../grid/grid.model';
+import { GradeModel } from '../tariff/grade.model';
 
 @Entity({
-  name: 'grades',
+  name: 'positions',
 })
-export class GradeModel extends BaseModel<IGrade> {
+export class PositionModel extends BaseModel<IPosition> {
   @IsString()
   @Column({ length: 128 })
   readonly title: string;
@@ -16,6 +16,6 @@ export class GradeModel extends BaseModel<IGrade> {
   @Column({ length: 128, unique: true })
   readonly name: string;
 
-  @OneToMany(type => GridModel, e => e.grade)
-  readonly grids: GridModel[];
+  @OneToMany(type => GradeModel, e => e.position)
+  readonly grades: GradeModel[];
 }

@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TariffModel } from './tariff.model';
 import { TariffStore } from './tariff.store';
-import { GridModel } from './grid.model';
+import { GradeModel } from './grade.model';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([GridModel, TariffModel])],
+  imports: [TypeOrmModule.forFeature([GradeModel, TariffModel])],
   exports: [TariffStore],
   providers: [TariffStore],
 })

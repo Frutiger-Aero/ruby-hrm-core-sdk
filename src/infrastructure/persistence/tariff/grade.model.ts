@@ -1,23 +1,23 @@
 import { Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseModel } from '@qlean/nestjs-typeorm-persistence-search';
-import { IGrid } from '../../../core/interfaces';
-import { GradeModel } from '../grade/grade.model';
+import { IGrade } from '../../../core/interfaces';
+import { PositionModel } from '../position/position.model';
 import { CommissionModel } from '../commission/commission.model';
 import { TariffModel } from './tariff.model';
 
 @Entity({
-  name: 'grids',
+  name: 'grades',
 })
-export class GridModel extends BaseModel<IGrid> {
-  @ManyToOne(type => TariffModel, e => e.grids)
+export class GradeModel extends BaseModel<IGrade> {
+  @ManyToOne(type => TariffModel, e => e.grades)
   @JoinColumn()
   readonly tariff: TariffModel;
 
-  @ManyToOne(type => GradeModel, e => e.grids)
+  @ManyToOne(type => PositionModel, e => e.grades)
   @JoinColumn()
-  readonly grade: GradeModel;
+  readonly position: PositionModel;
 
-  @OneToMany(type => CommissionModel, e => e.grid, {
+  @OneToMany(type => CommissionModel, e => e.grade, {
     eager: true,
     cascade: true,
     onUpdate: 'CASCADE',

@@ -2,7 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { IsEnum, IsNumber, IsString } from 'class-validator';
 import { BaseModel } from '@qlean/nestjs-typeorm-persistence-search';
 import { COMMISSION_TYPE, COMMISSION_UNIT, ICommission } from '../../../core/interfaces';
-import { GridModel } from '../grid/grid.model';
+import { GradeModel } from '../tariff/grade.model';
 
 @Entity({
   name: 'commissions',
@@ -24,7 +24,7 @@ export class CommissionModel extends BaseModel<ICommission> {
   @Column({ nullable: true })
   option?: string;
 
-  @ManyToOne(type => GridModel, e => e.commissions)
+  @ManyToOne(type => GradeModel, e => e.commissions)
   @JoinColumn()
-  readonly grid: GridModel;
+  readonly grade: GradeModel;
 }

@@ -1,18 +1,19 @@
 import { IBaseModel } from '@qlean/nestjs-typeorm-persistence-search';
+import { IPosition } from './positions.interface';
+import { ICommission } from './commission.interface';
 
 /**
- * @description Справочник грейдов - младший, старший, наставник
+ * @description Тарифная сетка в рамках рабочей позиции для тарифа
  *
  */
 export interface IGrade extends IBaseModel {
   /**
-   * @description Человекочитаемое название грейда
+   * @description Рабочая позиция
    */
-  title: string;
+  position: IPosition;
 
   /**
-   * @description Уникальный слаг грейда, если не передано -
-   * будет автоматически сгенерировано из title.
+   * @description Матрица коммиссий
    */
-  name: string;
+  commissions: ICommission[];
 }

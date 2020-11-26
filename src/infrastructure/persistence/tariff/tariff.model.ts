@@ -4,7 +4,7 @@ import { IsString } from 'class-validator';
 import { ITariff } from '../../../core/interfaces';
 import { SpecializationModel } from '../specialization/specialization.model';
 import { ProductModel } from '../product/product.model';
-import { GridModel } from './grid.model';
+import { GradeModel } from './grade.model';
 
 @Entity({
   name: 'tariffs',
@@ -22,11 +22,11 @@ export class TariffModel extends BaseModel<ITariff> {
   @JoinColumn()
   readonly product: ProductModel;
 
-  @OneToMany(type => GridModel, e => e.tariff, {
+  @OneToMany(type => GradeModel, e => e.tariff, {
     eager: true,
     cascade: true,
     onUpdate: 'CASCADE',
     onDelete: 'CASCADE',
   })
-  readonly grids: GridModel[];
+  readonly grades: GradeModel[];
 }
