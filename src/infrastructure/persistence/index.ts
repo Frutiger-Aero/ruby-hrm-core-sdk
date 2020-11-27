@@ -4,3 +4,4 @@ export * from './product';
 export * from './position';
 export * from './tariff';
 export * from './executor';
+export * from './contract';

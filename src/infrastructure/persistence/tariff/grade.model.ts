@@ -1,9 +1,10 @@
-import { Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 import { BaseModel } from '@qlean/nestjs-typeorm-persistence-search';
 import { IGrade } from '../../../core/interfaces';
 import { PositionModel } from '../position/position.model';
 import { CommissionModel } from './commission.model';
 import { TariffModel } from './tariff.model';
+import { ContractModel } from '../contract/contract.model';
 
 @Entity({
   name: 'grades',
@@ -16,6 +17,9 @@ export class GradeModel extends BaseModel<IGrade> implements IGrade {
   @ManyToOne(type => PositionModel, e => e.grades)
   @JoinColumn()
   readonly position: PositionModel;
+
+  @OneToMany(type => ContractModel, e => e.grade)
+  readonly contracts: ContractModel[];
 
   @OneToMany(type => CommissionModel, e => e.grade, {
     eager: true,

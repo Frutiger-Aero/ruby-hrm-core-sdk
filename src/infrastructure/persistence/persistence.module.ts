@@ -5,6 +5,7 @@ import { ProductModule } from './product';
 import { PositionModule } from './position';
 import { TariffModule } from './tariff';
 import { ExecutorModule } from '../../core/executor/executor.module';
+import { ContractModule } from './contract';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ExecutorModule } from '../../core/executor/executor.module';
     PositionModule,
     TariffModule,
     ExecutorModule,
+    ContractModule,
   ],
   exports: [
     TypeOrmModule,
@@ -24,6 +26,7 @@ import { ExecutorModule } from '../../core/executor/executor.module';
     PositionModule,
     TariffModule,
     ExecutorModule,
+    ContractModule,
   ],
 })
 export class PersistenceModule {}

@@ -3,8 +3,9 @@ import { ITariff } from './tariff.interface';
 import { IGrade } from './grade.interface';
 import { IProduct } from './product.interface';
 import { ISpecialization } from './specialization.interface';
+import { IExecutor } from './executor.interface';
 
-export enum WORK_STATUS {
+export enum CONTRACT_STATUS {
   /**
    * Активный, может выполнять работу
    */
@@ -23,7 +24,7 @@ export interface IContract extends IBaseModel {
   /**
    * @description Рабочий сатус исполнителя в рамках текущего договора
    */
-  status: WORK_STATUS;
+  status: CONTRACT_STATUS;
 
   /**
    * @description Текущий тариф исполнителя
@@ -44,5 +45,10 @@ export interface IContract extends IBaseModel {
    * @description Специализация в рамках тарифа
    */
   specialization: ISpecialization;
+
+  /**
+   * @description Исполнитель, владелец контракта
+   */
+  executor: IExecutor;
 
 }

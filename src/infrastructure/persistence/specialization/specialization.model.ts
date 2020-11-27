@@ -3,6 +3,7 @@ import { BaseModel } from '@qlean/nestjs-typeorm-persistence-search';
 import { ISpecialization } from '../../../core/interfaces';
 import { IsString } from 'class-validator';
 import { TariffModel } from '../tariff/tariff.model';
+import { ContractModel } from '../contract/contract.model';
 
 @Entity({
   name: 'specializations',
@@ -18,4 +19,7 @@ export class SpecializationModel extends BaseModel<ISpecialization> implements I
 
   @OneToMany(type => TariffModel, e => e.specialization)
   readonly tariffs: TariffModel[];
+
+  @OneToMany(type => ContractModel, e => e.specialization)
+  readonly contracts: ContractModel[];
 }
