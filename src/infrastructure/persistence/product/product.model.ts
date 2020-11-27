@@ -2,7 +2,7 @@ import { Column, Entity, OneToMany } from 'typeorm';
 import { BaseModel } from '@qlean/nestjs-typeorm-persistence-search';
 import { IProduct } from '../../../core/interfaces';
 import { IsString } from 'class-validator';
-import { TariffModel } from '../tariff/tariff.model';
+import { WageModel } from '../wage/wage.model';
 import { ContractModel } from '../contract/contract.model';
 
 @Entity({
@@ -17,8 +17,8 @@ export class ProductModel extends BaseModel<IProduct> implements IProduct {
   @Column({ length: 128, unique: true })
   readonly name: string;
 
-  @OneToMany(type => TariffModel, e => e.product)
-  readonly tariffs: TariffModel[];
+  @OneToMany(type => WageModel, e => e.product)
+  readonly wages: WageModel[];
 
   @OneToMany(type => ContractModel, e => e.product)
   readonly contracts: ContractModel[];

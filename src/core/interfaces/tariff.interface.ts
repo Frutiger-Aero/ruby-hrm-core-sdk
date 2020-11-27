@@ -3,24 +3,24 @@ import { IProduct } from './product.interface';
 import { ISpecialization } from './specialization.interface';
 import { IBaseModel } from '@qlean/nestjs-typeorm-persistence-search';
 
-export interface ITariff extends IBaseModel {
+export interface IWage extends IBaseModel {
   /**
    * @description Название тарифа
    */
-  name?: string;
+  readonly name?: string;
 
   /**
    * @description Продукт в рамках тарифа
    */
-  product: IProduct;
+  readonly product: IProduct;
 
   /**
    * @description Специализация в рамках тарифа
    */
-  specialization: ISpecialization;
+  readonly specialization: ISpecialization;
 
   /**
    * @description Тарифная сетка в рамках грейдов
    */
-  grades: IGrade[];
+  readonly grades: IGrade[];
 }

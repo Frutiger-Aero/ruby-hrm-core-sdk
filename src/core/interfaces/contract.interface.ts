@@ -1,5 +1,5 @@
 import { IBaseModel } from '@qlean/nestjs-typeorm-persistence-search';
-import { ITariff } from './tariff.interface';
+import { IWage } from './tariff.interface';
 import { IGrade } from './grade.interface';
 import { IProduct } from './product.interface';
 import { ISpecialization } from './specialization.interface';
@@ -29,7 +29,7 @@ export interface IContract extends IBaseModel {
   /**
    * @description Текущий тариф исполнителя
    */
-  tariff: ITariff;
+  wage: IWage;
 
   /**
    * @description Текущий грейд исполнителя

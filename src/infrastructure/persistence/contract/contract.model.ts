@@ -2,10 +2,10 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseModel } from '@qlean/nestjs-typeorm-persistence-search';
 import { IContract, CONTRACT_STATUS } from '../../../core/interfaces';
 import { IsEnum } from 'class-validator';
-import { TariffModel } from '../tariff/tariff.model';
+import { WageModel } from '../wage/wage.model';
 import { ProductModel } from '../product/product.model';
 import { SpecializationModel } from '../specialization/specialization.model';
-import { GradeModel } from '../tariff/grade.model';
+import { GradeModel } from '../wage/grade.model';
 import { ExecutorModel } from '../executor/executor.model';
 
 @Entity({
@@ -27,9 +27,9 @@ export class ContractModel extends BaseModel<IContract> implements IContract {
   @ManyToOne(type => GradeModel, e => e.contracts)
   readonly grade: GradeModel;
 
-  @ManyToOne(type => TariffModel, e => e.contracts)
+  @ManyToOne(type => WageModel, e => e.contracts)
   @JoinColumn()
-  readonly tariff: TariffModel;
+  readonly wage: WageModel;
 
   @ManyToOne(type => ExecutorModel, e => e.contracts)
   @JoinColumn()

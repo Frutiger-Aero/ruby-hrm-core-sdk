@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { SpecializationModule } from './specialization';
 import { ProductModule } from './product';
 import { PositionModule } from './position';
-import { TariffModule } from './tariff';
+import { WageModule } from './wage';
 import { ExecutorModule } from '../../core/executor/executor.module';
 import { ContractModule } from './contract';
 
@@ -15,7 +15,7 @@ import { ContractModule } from './contract';
     SpecializationModule,
     ProductModule,
     PositionModule,
-    TariffModule,
+    WageModule,
     ExecutorModule,
     ContractModule,
   ],
@@ -24,7 +24,7 @@ import { ContractModule } from './contract';
     SpecializationModule,
     ProductModule,
     PositionModule,
-    TariffModule,
+    WageModule,
     ExecutorModule,
     ContractModule,
   ],

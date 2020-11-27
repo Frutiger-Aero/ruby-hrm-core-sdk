@@ -17,14 +17,22 @@ export enum PERSON_STATUS {
    * Полноценный исполнитель
    */
   EXECUTOR = 2,
+}
 
-  /**
-   * Заблокированный исполнитель
-   */
+export enum WORK_STATUS {
+  ACTIVE = 0,
+
   BLOCKED = 3,
+
+  FRIZING = 3,
 }
 
 export interface IExecutor extends IBaseModel {
+
+  /**
+   * Рабочий статус
+   */
+  workStatus: WORK_STATUS;
 
   /**
    * Статус персоны

@@ -2,7 +2,7 @@ import { Column, Entity, OneToMany } from 'typeorm';
 import { BaseModel } from '@qlean/nestjs-typeorm-persistence-search';
 import { IPosition } from '../../../core/interfaces';
 import { IsString } from 'class-validator';
-import { GradeModel } from '../tariff/grade.model';
+import { GradeModel } from '../wage/grade.model';
 
 @Entity({
   name: 'positions',

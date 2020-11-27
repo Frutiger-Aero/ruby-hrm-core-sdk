@@ -1,7 +1,7 @@
 import { Entity, Column, OneToMany } from 'typeorm';
 import { BaseModel } from '@qlean/nestjs-typeorm-persistence-search';
 import { IsNumber, IsEnum, ValidateNested, IsObject, IsUUID } from 'class-validator';
-import { IExecutor, PERSON_STATUS } from '../../../core/interfaces';
+import { IExecutor, PERSON_STATUS, WORK_STATUS } from '../../../core/interfaces';
 import { AddressPartial } from './address.partial';
 import { FioPartial } from './fio.partial';
 import { ContractModel } from '../contract/contract.model';
@@ -27,6 +27,11 @@ export class ExecutorModel extends BaseModel<IExecutor> implements IExecutor {
   @IsEnum(PERSON_STATUS)
   @Column({ default: PERSON_STATUS.CREATED })
   status: PERSON_STATUS;
+
+
+  @IsEnum(WORK_STATUS)
+  @Column({ default: WORK_STATUS.ACTIVE })
+  workStatus: WORK_STATUS;
 
   @IsNumber()
   @Column('double precision', { default: 0 })
