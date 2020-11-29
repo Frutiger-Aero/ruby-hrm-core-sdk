@@ -1,4 +1,4 @@
-import { IBaseModel } from '@qlean/nestjs-typeorm-persistence-search';
+import { TModelID } from '@qlean/nestjs-typeorm-persistence-search';
 import { IPosition } from './positions.interface';
 import { ICompensation } from './compensation.interface';
 import { IRate } from './rate.interface';
@@ -7,7 +7,12 @@ import { IRate } from './rate.interface';
  * @description Тарифная сетка в рамках рабочей позиции для тарифа
  *
  */
-export interface IGrade extends IBaseModel {
+export interface IGrade {
+  /**
+   * @description Идентификатор записи в БД
+   */
+  readonly id: TModelID;
+
   /**
    * @description Рабочая позиция
    */

@@ -3,9 +3,9 @@ import { BaseModel } from '@qlean/nestjs-typeorm-persistence-search';
 import { IsString } from 'class-validator';
 import { IWage } from '../../../core/interfaces';
 import { SpecializationModel } from '../specialization/specialization.model';
+import { ContractModel } from '../contract/contract.model';
 import { ProductModel } from '../product/product.model';
 import { GradeModel } from './grade.model';
-import { ContractModel } from '../contract/contract.model';
 
 @Entity({
   name: 'wages',
@@ -23,9 +23,6 @@ export class WageModel extends BaseModel<IWage> implements IWage {
   @JoinColumn()
   readonly product: ProductModel;
 
-  @OneToMany(type => ContractModel, e => e.wage)
-  readonly contracts: ContractModel[];
-
   @OneToMany(type => GradeModel, e => e.wage, {
     eager: true,
     cascade: true,
@@ -33,4 +30,8 @@ export class WageModel extends BaseModel<IWage> implements IWage {
     onDelete: 'CASCADE',
   })
   readonly grades: GradeModel[];
+
+  @OneToMany(type => ContractModel, e => e.wage)
+  readonly contracts: ContractModel[];
+
 }

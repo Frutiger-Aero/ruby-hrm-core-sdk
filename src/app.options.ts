@@ -27,7 +27,7 @@ export const GRANTS = {
 
   /**
    * можно получать список изменений профиля исполнителя
-   * */
+   */
   GET_HISTORY_PROFILE: 'hrm:core:history-profile:get',
 };
 

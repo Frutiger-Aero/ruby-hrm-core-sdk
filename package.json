@@ -35,7 +35,7 @@
     "@qlean/crm-booking-sdk": "^0.1.0",
     "@qlean/nestjs-exceptions": "^0.2.2",
     "@qlean/nestjs-logger": "^0.2.3",
-    "@qlean/nestjs-stats": "0.9.0",
+    "@qlean/nestjs-stats": "0.9.1",
     "@qlean/nestjs-typeorm-persistence-search": "^1.2.0",
     "@qlean/sso-sdk": "0.1.27",
     "@sentry/node": "^5.15.4",

@@ -1,13 +1,26 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-import { IsEnum, IsNumber, IsString } from 'class-validator';
-import { BaseModel } from '@qlean/nestjs-typeorm-persistence-search';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { IsEnum, IsNumber, IsString, IsUUID } from 'class-validator';
+import { TBaseModelArgs, TModelID } from '@qlean/nestjs-typeorm-persistence-search';
 import { AMOUNT_TYPE, ICompensation } from '../../../core/interfaces';
 import { GradeModel } from './grade.model';
 
 @Entity({
   name: 'compensations',
 })
-export class CompensationModel extends BaseModel<ICompensation> implements ICompensation {
+export class CompensationModel implements ICompensation {
+  constructor(args?: TBaseModelArgs<ICompensation>) {
+    for (const prop of Object.keys(args || {})) {
+      this[prop] = args[prop];
+    }
+  }
+
+  /**
+   * Идентификатор записи из БД
+   */
+  @IsUUID()
+  @PrimaryGeneratedColumn('uuid')
+  id: TModelID;
+
   @IsNumber()
   @Column({ type: 'integer' })
   readonly amount: number;

@@ -2,4 +2,8 @@ syntax = "proto3";
 
 package hrm.core;
 
-import "./executor.proto";
+import "./product.proto";
+import "./specialization.proto";
+import "./position.proto";
+import "./wage.proto";
+

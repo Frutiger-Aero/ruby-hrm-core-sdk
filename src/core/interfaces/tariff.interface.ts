@@ -7,7 +7,7 @@ export interface IWage extends IBaseModel {
   /**
    * @description Название тарифа
    */
-  readonly name?: string;
+  readonly name: string;
 
   /**
    * @description Продукт в рамках тарифа

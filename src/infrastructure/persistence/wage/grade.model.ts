@@ -1,17 +1,30 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
-import { BaseModel } from '@qlean/nestjs-typeorm-persistence-search';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { TBaseModelArgs, TModelID } from '@qlean/nestjs-typeorm-persistence-search';
 import { IGrade } from '../../../core/interfaces';
 import { PositionModel } from '../position/position.model';
 import { CompensationModel } from './compensation.model';
 import { WageModel } from './wage.model';
 import { ContractModel } from '../contract/contract.model';
-import { IsObject, ValidateNested } from 'class-validator';
+import { IsObject, IsUUID, ValidateNested } from 'class-validator';
 import { RatePartial } from './rate.partial';
 
 @Entity({
   name: 'grades',
 })
-export class GradeModel extends BaseModel<IGrade> implements IGrade {
+export class GradeModel implements IGrade {
+  constructor(args?: TBaseModelArgs<IGrade>) {
+    for (const prop of Object.keys(args || {})) {
+      this[prop] = args[prop];
+    }
+  }
+
+  /**
+   * Идентификатор записи из БД
+   */
+  @IsUUID()
+  @PrimaryGeneratedColumn('uuid')
+  id: TModelID;
+
   @ManyToOne(type => PositionModel, e => e.grades)
   @JoinColumn()
   readonly position: PositionModel;

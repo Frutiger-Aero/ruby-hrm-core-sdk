@@ -1,0 +1,122 @@
+syntax = "proto3";
+
+package hrm.core;
+import "node_modules/@qlean/nestjs-typeorm-persistence-search/proto/common-search.proto";
+import "./specialization.proto";
+import "./position.proto";
+import "./product.proto";
+
+service WageService {
+    rpc Create (WageCreateRequest) returns (WageResponse) {}
+    rpc Update (WageUpdateRequest) returns (WageResponse) {}
+    rpc Search (WageSearchRequest) returns (WageSearchResponse) {}
+    rpc FindById (qlean.common.search.UuidRequest) returns (WageResponse) {}
+    rpc Remove (qlean.common.search.UuidRequest) returns (WageResponse) {}
+    rpc Restore (qlean.common.search.UuidRequest) returns (WageResponse) {}
+}
+
+message WageCreateRequest {
+    string name = 1;
+    Product product = 2;
+    Specialization specialization = 3;
+    repeated Grade grades = 4;
+}
+
+message WageUpdateRequest {
+    string id = 1;
+    string name = 2;
+    Product product = 3;
+    Specialization specialization = 4;
+    repeated Grade grades = 5;
+}
+
+message WageResponse {
+    Wage data = 1;
+}
+
+message WageSearchRequest {
+    int32 page = 1;
+    int32 limit = 2;
+    /* ******************
+     * Элементы массива задают последовательность сортировки
+     * ****************** */
+    repeated qlean.common.search.SortField sort = 3;
+    /* ******************
+     * Элементы массива применяются как OR
+     * ****************** */
+    repeated WhereFields where = 4;
+
+    /* ******************
+     * Поля для критериев фильтрации
+     * Свойства применяются как AND
+     * ****************** */
+    message WhereFields {
+        qlean.common.search.UuidCondition id = 1;
+        qlean.common.search.DateCondition createdAt = 2;
+        qlean.common.search.DateCondition updatedAt = 3;
+        qlean.common.search.DateCondition deletedAt = 4;
+        bool isDeleted = 5;
+
+        qlean.common.search.StringCondition name = 6;
+        qlean.common.search.UuidCondition product = 7;
+        qlean.common.search.UuidCondition specialization = 8;
+    }
+}
+
+message WageSearchResponse {
+    repeated Wage data = 1;
+    int32 page = 2;
+    int32 pageCount = 3;
+    int32 limit = 4;
+    int32 count = 5;
+    int32 total = 6;
+}
+
+message Wage {
+    string id = 1;
+    string createdAt = 2;
+    string updatedAt = 3;
+    bool isDeleted = 4;
+    string deletedAt = 5;
+
+    string name = 6;
+    Product product = 7;
+    Specialization specialization = 8;
+    repeated Grade grades = 9;
+}
+
+message Grade {
+    string id = 1;
+    Position position = 2;
+    Rate rate = 3;
+    repeated Compensation compensations = 4;
+}
+
+
+enum HRM_CORE_AMOUNT_TYPE {
+    UNKNOWN = 0;
+    FIXED = 1;
+    PERCENT = 2;
+}
+
+enum HRM_CORE_RATE_UNIT {
+    UNKNOWN = 0;
+    SERVICE = 1;
+    HOUR = 2;
+    DAY = 3;
+    MONTH = 4;
+}
+
+message Rate {
+    string id = 1;
+    int32 amount = 2;
+    HRM_CORE_AMOUNT_TYPE type = 3;
+    HRM_CORE_RATE_UNIT unit = 4;
+}
+
+message Compensation {
+    string id = 1;
+    int32 amount = 2;
+    HRM_CORE_AMOUNT_TYPE type = 3;
+    string option = 4;
+}

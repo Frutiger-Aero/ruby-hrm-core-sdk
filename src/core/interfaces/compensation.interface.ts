@@ -1,11 +1,27 @@
-import { IBaseModel } from '@qlean/nestjs-typeorm-persistence-search';
+import { TModelID } from '@qlean/nestjs-typeorm-persistence-search';
 import { AMOUNT_TYPE } from './amount-type.enum';
 
-export interface ICompensation extends IBaseModel {
+/**
+ * @description Надбавка за выполнение опции
+ */
+export interface ICompensation {
+  /**
+   * @description Идентификатор записи в БД
+   */
+  readonly id: TModelID;
+
+  /**
+   * @description Размер вознаграждения
+   */
   readonly amount: number;
 
+  /**
+   * @description Тип размера вознаграждения - проценты, число
+   */
   readonly type: AMOUNT_TYPE;
 
-  // Если UNIT = OPTION -> тут указываем за какую именно опцию
+  /**
+   * @description Ссылка на уникальное имя опции
+   */
   readonly option: string;
 }

@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package hrm.core;
+import "node_modules/@qlean/nestjs-typeorm-persistence-search/proto/common-search.proto";
+
+service SpecializationService {
+    rpc Create (SpecializationCreateRequest) returns (SpecializationResponse) {}
+    rpc Update (SpecializationUpdateRequest) returns (SpecializationResponse) {}
+    rpc Search (SpecializationSearchRequest) returns (SpecializationSearchResponse) {}
+    rpc FindById (qlean.common.search.UuidRequest) returns (SpecializationResponse) {}
+    rpc Remove (qlean.common.search.UuidRequest) returns (SpecializationResponse) {}
+    rpc Restore (qlean.common.search.UuidRequest) returns (SpecializationResponse) {}
+}
+
+message SpecializationCreateRequest {
+    string title = 1;
+    string name = 2;
+}
+
+message SpecializationUpdateRequest {
+    string id = 1;
+    string title = 2;
+    string name = 3;
+}
+
+message SpecializationResponse {
+    Specialization data = 1;
+}
+
+message SpecializationSearchRequest {
+    int32 page = 1;
+    int32 limit = 2;
+    /* ******************
+     * Элементы массива задают последовательность сортировки
+     * ****************** */
+    repeated qlean.common.search.SortField sort = 3;
+    /* ******************
+     * Элементы массива применяются как OR
+     * ****************** */
+    repeated WhereFields where = 4;
+
+    /* ******************
+     * Поля для критериев фильтрации
+     * Свойства применяются как AND
+     * ****************** */
+    message WhereFields {
+        qlean.common.search.UuidCondition id = 1;
+        qlean.common.search.StringCondition title = 2;
+        qlean.common.search.StringCondition name = 3;
+        bool isDeleted = 4;
+        qlean.common.search.DateCondition createdAt = 5;
+        qlean.common.search.DateCondition updatedAt = 6;
+        qlean.common.search.DateCondition deletedAt = 7;
+    }
+}
+
+message SpecializationSearchResponse {
+    repeated Specialization data = 1;
+    int32 page = 2;
+    int32 pageCount = 3;
+    int32 limit = 4;
+    int32 count = 5;
+    int32 total = 6;
+}
+
+message Specialization {
+    string id = 1;
+    string title = 2;
+    string name = 3;
+    string createdAt = 4;
+    string updatedAt = 5;
+    bool isDeleted = 6;
+    string deletedAt = 7;
+}
