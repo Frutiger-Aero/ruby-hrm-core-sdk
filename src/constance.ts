@@ -1,5 +1,11 @@
-import { GrpcOptions, Transport } from '@nestjs/microservices';
-import { join } from 'path';
+export const PACKAGE_NAME = 'hrm.core';
+
+export const ERRORS = {
+  EXECUTOR_NOT_FOUND: 'исполнитель не найден',
+  TARIFF_NOT_FOUND: 'тариф не найден',
+  SPECIALIZATION_NOT_FOUND: 'специализация не найдена',
+  CITIZENSHIP_NOT_FOUND: 'передаваемое гражданство не поддерживается',
+};
 
 /**
  * SSO гранты для работы c сервисом
@@ -31,21 +37,4 @@ export const GRANTS = {
   GET_HISTORY_PROFILE: 'hrm:core:history-profile:get',
 };
 
-const { GRPC_PORT = 5000 } = process.env;
-
-export const grpcOptions: GrpcOptions = {
-  transport: Transport.GRPC,
-  options: {
-    url: `0.0.0.0:${GRPC_PORT}`,
-    package: 'hrm.core',
-    protoPath: join(__dirname, '../proto/hrm-core.proto'),
-  },
-};
-
-/**
- * Настройки авторизации
- */
-export const authOptions = {
-  url: process.env.PLT_JWT_URL,
-  audiences: [],
-};
+export const APP_PROPS = {};

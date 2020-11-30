@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { TBaseModelArgs, TModelID } from '@qlean/nestjs-typeorm-persistence-search';
-import { IGrade } from '../../../core/interfaces';
+import { IGrade } from '../../../domain';
 import { PositionModel } from '../position/position.model';
 import { CompensationModel } from './compensation.model';
 import { WageModel } from './wage.model';

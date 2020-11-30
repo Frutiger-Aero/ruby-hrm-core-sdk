@@ -8,4 +8,4 @@ import { SpecializationStore } from './specialization.store';
   exports: [SpecializationStore],
   providers: [SpecializationStore],
 })
-export class SpecializationModule {}
+export class SpecializationPersistenceModule {}

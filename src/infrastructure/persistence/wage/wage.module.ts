@@ -10,4 +10,4 @@ import { CompensationModel } from './compensation.model';
   exports: [WageStore],
   providers: [WageStore],
 })
-export class WageModule {}
+export class WagePersistenceModule {}

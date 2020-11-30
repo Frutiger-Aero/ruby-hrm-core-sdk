@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 import { BaseModel } from '@qlean/nestjs-typeorm-persistence-search';
-import { IPosition } from '../../../core/interfaces';
+import { IPosition } from '../../../domain';
 import { IsString } from 'class-validator';
 import { GradeModel } from '../wage/grade.model';
 

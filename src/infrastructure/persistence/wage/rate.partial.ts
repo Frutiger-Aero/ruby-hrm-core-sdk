@@ -1,6 +1,6 @@
 import { Column } from 'typeorm';
 import { IsEnum, IsNumber } from 'class-validator';
-import { RATE_UNIT, RATE_TYPE, IRate } from '../../../core/interfaces';
+import { RATE_UNIT, RATE_TYPE, IRate } from '../../../domain';
 
 export class RatePartial implements IRate {
   @IsNumber()

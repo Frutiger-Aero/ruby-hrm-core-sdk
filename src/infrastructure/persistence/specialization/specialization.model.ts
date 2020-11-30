@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 import { BaseModel } from '@qlean/nestjs-typeorm-persistence-search';
-import { ISpecialization } from '../../../core/interfaces';
+import { ISpecialization } from '../../../domain';
 import { IsString } from 'class-validator';
 import { ContractModel } from '../contract/contract.model';
 import { WageModel } from '../wage/wage.model';

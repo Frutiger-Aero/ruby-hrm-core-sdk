@@ -1,12 +1,12 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { StatsService } from '@qlean/nestjs-stats';
-import { Logger } from '@qlean/nestjs-logger';
-import { grpcOptions } from './app.options';
 import { urlencoded, json } from 'express';
-import {StatsModule} from "./stats.module";
+import { NestFactory } from '@nestjs/core';
+import { Logger } from '@qlean/nestjs-logger';
+import { StatsService } from '@qlean/nestjs-stats';
+import { AppModule } from './app.module';
+import { StatsModule } from './stats.module';
+import { grpcClientOptions } from './grpc-client.options';
 
-const { GRPC_PORT, HTTP_PORT, HOST = 'localhost' } = process.env;
+const { GRPC_PORT, HTTP_PORT, HOST = '0.0.0.0' } = process.env;
 
 async function bootstrap() {
   const logger = new Logger('system');
@@ -27,7 +27,7 @@ async function bootstrap() {
   await statsApp.listen(process.env.STATS_PORT, HOST);
 
   const host = HOST;
-  app.connectMicroservice(grpcOptions);
+  app.connectMicroservice(grpcClientOptions);
 
   await app.startAllMicroservicesAsync();
   await app.listen(HTTP_PORT, host);

@@ -8,4 +8,4 @@ import { ProductStore } from './product.store';
   exports: [ProductStore],
   providers: [ProductStore],
 })
-export class ProductModule {}
+export class ProductPersistenceModule {}

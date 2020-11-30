@@ -8,4 +8,4 @@ import { ContractStore } from './contract.store';
   exports: [ContractStore],
   providers: [ContractStore],
 })
-export class ContractModule {}
+export class ContractPersistenceModule {}

@@ -8,4 +8,4 @@ import { PositionStore } from './position.store';
   exports: [PositionStore],
   providers: [PositionStore],
 })
-export class PositionModule {}
+export class PositionPersistenceModule {}

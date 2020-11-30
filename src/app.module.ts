@@ -1,15 +1,17 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { StatsModule, StatsTransportEnum } from '@qlean/nestjs-stats';
-import { PlatformModule } from './presenters/platform/platform.module';
+import { InfrastructureModule } from './infrastructure';
+import { CoreModule } from './core';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(),
-    PlatformModule,
+    InfrastructureModule,
+    CoreModule,
     StatsModule.forRoot({
       transport: StatsTransportEnum.PROMETHEUS,
-      scrapedUrl: '/metrics'
+      scrapedUrl: '/metrics',
     }),
   ],
 })

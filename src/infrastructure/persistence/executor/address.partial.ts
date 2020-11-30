@@ -1,5 +1,5 @@
 import { Column } from 'typeorm';
-import { IAddress, IAddressDetail, IAddressObject, IMetro, IPoint } from '../../../core/interfaces';
+import { IAddress, IAddressDetail, IAddressObject, IMetro, IPoint } from '../../../domain';
 import { IsString } from 'class-validator';
 
 export class AddressPartial implements IAddress {

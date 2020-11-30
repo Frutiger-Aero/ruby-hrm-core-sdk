@@ -1,7 +1,7 @@
 import { Entity, Column, OneToMany } from 'typeorm';
 import { BaseModel } from '@qlean/nestjs-typeorm-persistence-search';
 import { IsNumber, IsEnum, ValidateNested, IsObject, IsUUID } from 'class-validator';
-import { IExecutor, PERSON_STATUS, WORK_STATUS } from '../../../core/interfaces';
+import { IExecutor, PERSON_STATUS, WORK_STATUS } from '../../../domain';
 import { AddressPartial } from './address.partial';
 import { FioPartial } from './fio.partial';
 import { ContractModel } from '../contract/contract.model';

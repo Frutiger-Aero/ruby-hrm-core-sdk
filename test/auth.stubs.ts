@@ -1,7 +1,7 @@
 import { Metadata } from 'grpc';
 import { Token, SIGNING_ALGORITHM, ITokenSource, IAuthConfig } from '@qlean/sso-sdk/build';
 import { JWKSSource } from '@qlean/sso-sdk/build/plt-sso-sdk/plt-jwt.guard/jwks-source.service';
-import { GRANTS } from '../src/app.options';
+import { GRANTS } from '../src/sso.options';
 
 export class TestTokensource implements ITokenSource {
   constructor(config: IAuthConfig) {

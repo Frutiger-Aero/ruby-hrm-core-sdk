@@ -1,7 +1,7 @@
 import { HrmExecutorApi, HrmCoreModule } from '../sdk/nestjs/src';
 import { Test } from '@nestjs/testing';
 import { AppModule } from '../src/app.module';
-import { grpcOptions } from '../src/app.options';
+import { grpcOptions } from '../src/sso.options';
 import { AuthService, TestTokensource } from './auth.stubs';
 import { cleanup } from './utils';
 import { getConnection } from 'typeorm';

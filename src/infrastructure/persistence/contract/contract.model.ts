@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseModel } from '@qlean/nestjs-typeorm-persistence-search';
-import { IContract, CONTRACT_STATUS } from '../../../core/interfaces';
+import { IContract, CONTRACT_STATUS } from '../../../domain';
 import { IsEnum } from 'class-validator';
 import { WageModel } from '../wage/wage.model';
 import { ProductModel } from '../product/product.model';

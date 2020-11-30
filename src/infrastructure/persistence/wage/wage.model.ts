@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseModel } from '@qlean/nestjs-typeorm-persistence-search';
 import { IsString } from 'class-validator';
-import { IWage } from '../../../core/interfaces';
+import { IWage } from '../../../domain';
 import { SpecializationModel } from '../specialization/specialization.model';
 import { ContractModel } from '../contract/contract.model';
 import { ProductModel } from '../product/product.model';

@@ -8,4 +8,4 @@ import { ExecutorStore } from './executor.store';
   providers: [ExecutorStore],
   exports: [ExecutorStore],
 })
-export class ExecutorModuleInfra {}
+export class ExecutorPersistenceModule {}
