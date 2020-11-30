@@ -8,10 +8,10 @@ export class RatePartial implements IRate {
   readonly amount: number;
 
   @IsEnum(AMOUNT_TYPE)
-  @Column({ type: 'string', default: AMOUNT_TYPE.FIXED })
+  @Column({ type: 'character varying', default: AMOUNT_TYPE.FIXED })
   readonly type: AMOUNT_TYPE;
 
   @IsEnum(RATE_UNIT)
-  @Column({ type: 'string', default: RATE_UNIT.SERVICE })
+  @Column({ type: 'character varying', default: RATE_UNIT.SERVICE })
   readonly unit: RATE_UNIT;
 }

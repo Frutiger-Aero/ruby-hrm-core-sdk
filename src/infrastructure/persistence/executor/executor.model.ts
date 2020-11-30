@@ -25,12 +25,11 @@ export class ExecutorModel extends BaseModel<IExecutor> implements IExecutor {
   address: AddressPartial;
 
   @IsEnum(PERSON_STATUS)
-  @Column({ default: PERSON_STATUS.CREATED })
+  @Column({ type: 'character varying', default: PERSON_STATUS.CREATED })
   status: PERSON_STATUS;
 
-
   @IsEnum(WORK_STATUS)
-  @Column({ default: WORK_STATUS.ACTIVE })
+  @Column({ type: 'character varying', default: WORK_STATUS.ACTIVE })
   workStatus: WORK_STATUS;
 
   @IsNumber()

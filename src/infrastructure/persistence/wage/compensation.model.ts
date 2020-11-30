@@ -26,7 +26,7 @@ export class CompensationModel implements ICompensation {
   readonly amount: number;
 
   @IsEnum(AMOUNT_TYPE)
-  @Column({ type: 'string', default: AMOUNT_TYPE.FIXED })
+  @Column({ type: 'character varying', default: AMOUNT_TYPE.FIXED })
   readonly type: AMOUNT_TYPE;
 
   @IsString()

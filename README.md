@@ -8,3 +8,21 @@
 
 ## Сущности
 ...
+
+### Генерация файла с миграцией
+Чтобы сгенерировать миграции нужно выполнить
+npm run typeorm migration:generate -- -n init
+Настройки .env:
+TYPEORM_ENTITIES = "src/**/*.entity.ts"
+TYPEORM_MIGRATIONS = "src/infrastructure/migration/*.ts"
+TYPEORM_MIGRATIONS_DIR = "src/infrastructure/migration"
+
+### Запуск миграции
+Чтобы сгенерировать миграции нужно выполнить команду:
+
+npm run typeorm migration:run
+
+Настройки .env:
+TYPEORM_ENTITIES = "src/**/*.entity.ts"
+TYPEORM_MIGRATIONS = "src/infrastructure/migration/*.ts"
+TYPEORM_MIGRATIONS_DIR = "src/infrastructure/migration"

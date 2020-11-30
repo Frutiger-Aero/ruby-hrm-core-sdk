@@ -13,7 +13,7 @@ import { ExecutorModel } from '../executor/executor.model';
 })
 export class ContractModel extends BaseModel<IContract> implements IContract {
   @IsEnum(CONTRACT_STATUS)
-  @Column({ default: CONTRACT_STATUS.ACTIVE })
+  @Column({ type: 'character varying', default: CONTRACT_STATUS.ACTIVE })
   readonly status: CONTRACT_STATUS;
 
   @ManyToOne(type => ProductModel, e => e.contracts)
