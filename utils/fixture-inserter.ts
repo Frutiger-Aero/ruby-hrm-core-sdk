@@ -2,9 +2,9 @@ import { AppModule } from '../src/app.module';
 import { Logger } from '@qlean/nestjs-logger';
 import { NestFactory } from '@nestjs/core';
 import { getConnection } from 'typeorm';
-import { CitizenshipModel } from '../src/infrastructure/citizenship/citizenship.model';
-import { SpecializationModel } from '../src/infrastructure/specialization/specialization.model';
-import { TariffModel } from '../src/infrastructure/tariff/tariff.model';
+// import { CitizenshipModel } from '../src/infrastructure/citizenship/citizenship.model';
+// import { SpecializationModel } from '../src/infrastructure/specialization/specialization.model';
+// import { TariffModel } from '../src/infrastructure/tariff/tariff.model';
 import _ from 'lodash';
 import fs from 'fs';
 import path from 'path';
@@ -29,7 +29,7 @@ async function bootstrap() {
     const connection = getConnection();
 
     const [citizenshipDb, specializationDb, tariffDb] = await Promise.all(
-      [CitizenshipModel, SpecializationModel, TariffModel].map(model =>
+      [].map(model =>
         connection
           .createQueryBuilder()
           .select()
@@ -49,7 +49,7 @@ async function bootstrap() {
         const data = require(`../data/${filename}`);
         filename = filename.replace(/\.json/, '');
 
-        const model = [CitizenshipModel, SpecializationModel, TariffModel].find(
+        const model = [].find(
           model =>
             model.name.toLocaleLowerCase().replace(/model/, '') === filename,
         );
