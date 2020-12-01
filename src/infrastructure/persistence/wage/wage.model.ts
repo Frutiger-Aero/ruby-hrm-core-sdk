@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
-import { BaseModel } from '@qlean/nestjs-typeorm-persistence-search';
-import { IsString } from 'class-validator';
+import { BaseModel, TModelID } from '@qlean/nestjs-typeorm-persistence-search';
+import { IsString, IsUUID } from 'class-validator';
 import { IWage } from '../../../domain';
 import { SpecializationModel } from '../specialization/specialization.model';
 import { ContractModel } from '../contract/contract.model';
@@ -16,11 +16,11 @@ export class WageModel extends BaseModel<IWage> implements IWage {
   readonly name: string;
 
   @ManyToOne(type => SpecializationModel, e => e.wages)
-  @JoinColumn()
+  @JoinColumn({ name: 'specialization_id' })
   readonly specialization: SpecializationModel;
 
   @ManyToOne(type => ProductModel, e => e.wages)
-  @JoinColumn()
+  @JoinColumn({ name: 'product_id' })
   readonly product: ProductModel;
 
   @OneToMany(type => GradeModel, e => e.wage, {

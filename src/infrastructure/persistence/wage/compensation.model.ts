@@ -34,6 +34,6 @@ export class CompensationModel implements ICompensation {
   readonly option: string;
 
   @ManyToOne(type => GradeModel, e => e.compensations)
-  @JoinColumn()
+  @JoinColumn({ name: 'grade_id' })
   readonly grade: GradeModel;
 }

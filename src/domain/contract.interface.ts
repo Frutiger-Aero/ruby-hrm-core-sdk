@@ -1,9 +1,9 @@
 import { IBaseModel } from '@qlean/nestjs-typeorm-persistence-search';
-import { IWage } from './tariff.interface';
+import { IWage } from './wage.interface';
 import { IGrade } from './grade.interface';
 import { IProduct } from './product.interface';
 import { ISpecialization } from './specialization.interface';
-import { IExecutor } from './executor.interface';
+import { IContractor } from './contractor.interface';
 
 export enum CONTRACT_STATUS {
   /**
@@ -49,6 +49,6 @@ export interface IContract extends IBaseModel {
   /**
    * @description Исполнитель, владелец контракта
    */
-  executor: IExecutor;
+  contractor: IContractor;
 
 }

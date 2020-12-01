@@ -58,8 +58,8 @@ message WageSearchRequest {
         bool isDeleted = 5;
 
         qlean.common.search.StringCondition name = 6;
-        qlean.common.search.UuidCondition product = 7;
-        qlean.common.search.UuidCondition specialization = 8;
+        qlean.common.search.UuidCondition productId = 7;
+        qlean.common.search.UuidCondition specializationId = 8;
     }
 }
 

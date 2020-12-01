@@ -5,7 +5,7 @@ import { ProductPersistenceModule } from './product';
 import { PositionPersistenceModule } from './position';
 import { WagePersistenceModule } from './wage';
 import { ContractPersistenceModule } from './contract';
-import { ExecutorPersistenceModule } from './executor';
+import { ExecutorPersistenceModule } from './contractor';
 
 @Module({
   imports: [

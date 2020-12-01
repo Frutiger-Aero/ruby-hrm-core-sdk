@@ -1,6 +1,4 @@
-import { IBaseModel } from '@qlean/nestjs-typeorm-persistence-search';
-import { IAddress } from './address.interface';
-import { IFio } from './fio.interface';
+import { IBaseModel, TModelID } from '@qlean/nestjs-typeorm-persistence-search';
 
 export enum PERSON_STATUS {
   /**
@@ -27,7 +25,7 @@ export enum WORK_STATUS {
   FRIZING = 3,
 }
 
-export interface IExecutor extends IBaseModel {
+export interface IContractor extends IBaseModel {
 
   /**
    * Рабочий статус
@@ -42,22 +40,7 @@ export interface IExecutor extends IBaseModel {
   /**
    * Ссылка на пользователя в SSO
    */
-  userId: string;
-
-  // /**
-  //  * Фото для различных документов
-  //  */
-  // photo: string;
-
-  /**
-   * Официальное, полное имя
-   */
-  fio: IFio;
-
-  /**
-   * Адрес проживания
-   */
-  address: IAddress;
+  userId?: TModelID;
 
   /**
    * Рейтинг исполнителя, дробное число

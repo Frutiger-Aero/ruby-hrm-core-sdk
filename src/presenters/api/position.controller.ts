@@ -1,6 +1,6 @@
 import { classToPlain } from 'class-transformer';
 import { Controller, UseFilters, UsePipes, UseGuards, UseInterceptors } from '@nestjs/common';
-import { PermissionKey, PLTJWTGuard } from '@qlean/sso-sdk';
+import { PermissionKey, PLTJWTGuard } from '@qlean/sso-utils-sdk';
 import { GrpcMethod } from '@nestjs/microservices';
 import { SentryInterceptor } from '@qlean/nestjs-sentry';
 import { RpcExceptionFilter, ValidationPipe } from '@qlean/nestjs-exceptions';
@@ -14,7 +14,7 @@ import { hrm } from '../../../proto/generated/app.proto';
 const PROTO_SVS_NAME = 'PositionService';
 
 @Controller(PACKAGE_NAME)
-@UseGuards(PLTJWTGuard)
+// @UseGuards(PLTJWTGuard)
 @UseInterceptors(StatsInterceptor)
 @UseInterceptors(SentryInterceptor)
 export class PositionController {

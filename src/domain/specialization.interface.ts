@@ -9,11 +9,11 @@ export interface ISpecialization extends IBaseModel {
   /**
    * @description Человекочитаемое название специализации
    */
-  title: string;
+  readonly title: string;
 
   /**
    * @description Уникальный слаг специализации, если не передано -
    * будет автоматически сгенерировано из title.
    */
-  name: string;
+  readonly name: string;
 }

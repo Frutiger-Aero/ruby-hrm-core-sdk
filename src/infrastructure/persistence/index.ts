@@ -3,5 +3,5 @@ export * from './specialization';
 export * from './product';
 export * from './position';
 export * from './wage';
-export * from './executor';
+export * from './contractor';
 export * from './contract';

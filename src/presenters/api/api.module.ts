@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { PLTJWTModule } from '@qlean/sso-sdk';
+import { PLTJWTModule } from '@qlean/sso-utils-sdk';
 import { ssoOptions } from '../../sso.options';
 import { CatalogModule } from '../../core';
 import { ProductController } from './product.controller';

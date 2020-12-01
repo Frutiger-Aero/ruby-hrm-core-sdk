@@ -26,7 +26,7 @@ export class GradeModel implements IGrade {
   id: TModelID;
 
   @ManyToOne(type => PositionModel, e => e.grades)
-  @JoinColumn()
+  @JoinColumn({ name: 'position_id' })
   readonly position: PositionModel;
 
   @IsObject()
@@ -43,7 +43,7 @@ export class GradeModel implements IGrade {
   readonly compensations: CompensationModel[];
 
   @ManyToOne(type => WageModel, e => e.grades)
-  @JoinColumn()
+  @JoinColumn({ name: 'wage_id' })
   readonly wage: WageModel;
 
   @OneToMany(type => ContractModel, e => e.grade)

@@ -11,11 +11,11 @@ import { WageModel } from '../wage/wage.model';
 export class SpecializationModel extends BaseModel<ISpecialization> implements ISpecialization {
   @IsString()
   @Column({ length: 128 })
-  title: string;
+  readonly title: string;
 
   @IsString()
   @Column({ length: 128, unique: true })
-  name: string;
+  readonly name: string;
 
   @OneToMany(type => WageModel, e => e.specialization)
   readonly wages: WageModel[];

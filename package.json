@@ -38,7 +38,7 @@
     "@qlean/nestjs-sentry": "^0.1.2",
     "@qlean/nestjs-stats": "0.9.1",
     "@qlean/nestjs-typeorm-persistence-search": "^1.2.0",
-    "@qlean/sso-sdk": "0.1.27",
+    "@qlean/sso-utils-sdk": "^0.1.2",
     "@sentry/node": "^5.15.4",
     "@slack/client": "^4.8.0",
     "@types/amqplib": "^0.5.9",
