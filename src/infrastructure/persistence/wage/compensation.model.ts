@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { IsEnum, IsNumber, IsString, IsUUID } from 'class-validator';
 import { TBaseModelArgs, TModelID } from '@qlean/nestjs-typeorm-persistence-search';
 import { AMOUNT_TYPE, ICompensation } from '../../../domain';
@@ -39,5 +39,6 @@ export class CompensationModel implements ICompensation {
     onUpdate: 'CASCADE',
   })
   @JoinColumn({ name: 'grade_id' })
+  @Index()
   readonly grade: GradeModel;
 }

@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseModel, TModelID } from '@qlean/nestjs-typeorm-persistence-search';
 import { IsString, IsUUID } from 'class-validator';
 import { IWage } from '../../../domain';
@@ -24,6 +24,7 @@ export class WageModel extends BaseModel<IWage> implements IWage {
     nullable: false,
   })
   @JoinColumn({ name: 'specialization_id' })
+  @Index()
   readonly specialization: SpecializationModel;
 
   @ManyToOne(type => ProductModel, e => e.wages, {
@@ -31,6 +32,7 @@ export class WageModel extends BaseModel<IWage> implements IWage {
     nullable: false,
   })
   @JoinColumn({ name: 'product_id' })
+  @Index()
   readonly product: ProductModel;
 
   @OneToMany(type => GradeModel, e => e.wage, {

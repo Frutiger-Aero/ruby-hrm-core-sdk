@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseModel, TModelID } from '@qlean/nestjs-typeorm-persistence-search';
 import { IContract, CONTRACT_STATUS } from '../../../domain';
 import { IsEnum, IsUUID } from 'class-validator';
@@ -18,21 +18,26 @@ export class ContractModel extends BaseModel<IContract> implements IContract {
 
   @ManyToOne(type => ProductModel, e => e.contracts)
   @JoinColumn({ name: 'product_id' })
+  @Index()
   readonly product: ProductModel;
 
   @ManyToOne(type => SpecializationModel, e => e.contracts)
   @JoinColumn({ name: 'specialization_id' })
+  @Index()
   readonly specialization: SpecializationModel;
 
   @ManyToOne(type => GradeModel, e => e.contracts)
   @JoinColumn({ name: 'grade_id' })
+  @Index()
   readonly grade: GradeModel;
 
   @ManyToOne(type => WageModel, e => e.contracts)
   @JoinColumn({ name: 'wage_id' })
+  @Index()
   readonly wage: WageModel;
 
   @ManyToOne(type => ContractorModel, e => e.contracts)
   @JoinColumn({ name: 'contractor_id' })
+  @Index()
   readonly contractor: ContractorModel;
 }

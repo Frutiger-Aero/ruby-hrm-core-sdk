@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { TBaseModelArgs, TModelID } from '@qlean/nestjs-typeorm-persistence-search';
 import { IGrade } from '../../../domain';
 import { PositionModel } from '../position/position.model';
@@ -49,6 +49,7 @@ export class GradeModel implements IGrade {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'wage_id' })
+  @Index()
   readonly wage: WageModel;
 
   @OneToMany(type => ContractModel, e => e.grade)
