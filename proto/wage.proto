@@ -17,17 +17,19 @@ service WageService {
 
 message WageCreateRequest {
     string name = 1;
-    Product product = 2;
-    Specialization specialization = 3;
+    ProductRelation product = 2;
+    SpecializationRelation specialization = 3;
     repeated Grade grades = 4;
+    string regionId = 5;
 }
 
 message WageUpdateRequest {
     string id = 1;
     string name = 2;
-    Product product = 3;
-    Specialization specialization = 4;
+    ProductRelation product = 3;
+    SpecializationRelation specialization = 4;
     repeated Grade grades = 5;
+    string regionId = 6;
 }
 
 message WageResponse {
@@ -60,6 +62,7 @@ message WageSearchRequest {
         qlean.common.search.StringCondition name = 6;
         qlean.common.search.UuidCondition productId = 7;
         qlean.common.search.UuidCondition specializationId = 8;
+        qlean.common.search.UuidCondition regionId = 9;
     }
 }
 
@@ -83,40 +86,25 @@ message Wage {
     Product product = 7;
     Specialization specialization = 8;
     repeated Grade grades = 9;
+    string regionId = 10;
 }
 
 message Grade {
     string id = 1;
-    Position position = 2;
+    PositionRelation position = 2;
     Rate rate = 3;
     repeated Compensation compensations = 4;
 }
 
-
-enum HRM_CORE_AMOUNT_TYPE {
-    UNKNOWN = 0;
-    FIXED = 1;
-    PERCENT = 2;
-}
-
-enum HRM_CORE_RATE_UNIT {
-    UNKNOWN = 0;
-    SERVICE = 1;
-    HOUR = 2;
-    DAY = 3;
-    MONTH = 4;
-}
-
 message Rate {
-    string id = 1;
-    int32 amount = 2;
-    HRM_CORE_AMOUNT_TYPE type = 3;
-    HRM_CORE_RATE_UNIT unit = 4;
+    int32 amount = 1;
+    string type = 2;
+    string unit = 3;
 }
 
 message Compensation {
     string id = 1;
     int32 amount = 2;
-    HRM_CORE_AMOUNT_TYPE type = 3;
+    string type = 3;
     string option = 4;
 }

@@ -3,7 +3,7 @@ import { IsOptional, ValidateNested } from 'class-validator';
 import {
   BaseWhereFieldsDto,
   StringConditionDto,
-  TWhereCriteria,
+  TWhereCriteria, UuidConditionDto,
 } from '@qlean/nestjs-typeorm-persistence-search';
 import { hrm } from '../../../../proto/generated/app.proto';
 import { IWage } from '../../../domain';
@@ -14,11 +14,21 @@ export class WhereFieldsDto extends BaseWhereFieldsDto
   @IsOptional()
   @ValidateNested()
   @Type(() => StringConditionDto)
-  readonly title?: StringConditionDto;
+  readonly name?: StringConditionDto;
 
   @IsOptional()
   @ValidateNested()
-  @Type(() => StringConditionDto)
-  readonly name?: StringConditionDto;
+  @Type(() => UuidConditionDto)
+  readonly productId?: UuidConditionDto;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => UuidConditionDto)
+  readonly specializationId?: UuidConditionDto;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => UuidConditionDto)
+  readonly regionId?: UuidConditionDto;
 
 }

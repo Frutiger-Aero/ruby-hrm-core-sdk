@@ -1,6 +1,10 @@
-import { IsString, IsOptional, IsUUID, Length } from 'class-validator';
+import { IsString, IsOptional, IsUUID, Length, ValidateNested } from 'class-validator';
 import { hrm } from '../../../../proto/generated/app.proto';
 import { IWage } from '../../../domain';
+import { Type } from 'class-transformer';
+import { GradeDto } from './grade.dto';
+import { ProductRelationDto } from '../product';
+import { SpecializationRelationDto } from '../specialization';
 
 export class WageUpdateDto implements Partial<IWage>, hrm.core.IWageUpdateRequest {
   @IsUUID()
@@ -9,10 +13,25 @@ export class WageUpdateDto implements Partial<IWage>, hrm.core.IWageUpdateReques
   @IsOptional()
   @IsString()
   @Length(0, 128)
-  readonly title: string;
+  readonly name: string;
 
   @IsOptional()
-  @IsString()
-  @Length(0, 128)
-  readonly name: string;
+  @ValidateNested()
+  @Type(() => ProductRelationDto)
+  readonly product: ProductRelationDto;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => SpecializationRelationDto)
+  readonly specialization: SpecializationRelationDto;
+
+  @IsOptional()
+  @ValidateNested({ each: true })
+  @Type(() => GradeDto)
+  readonly grades: GradeDto[];
+
+  @IsOptional()
+  @IsUUID()
+  readonly regionId: string;
+
 }

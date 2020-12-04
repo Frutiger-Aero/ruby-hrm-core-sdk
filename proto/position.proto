@@ -72,3 +72,9 @@ message Position {
     bool isDeleted = 6;
     string deletedAt = 7;
 }
+
+message PositionRelation {
+    string id = 1;
+    string title = 2;
+    string name = 3;
+}

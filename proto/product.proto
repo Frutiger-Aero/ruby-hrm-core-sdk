@@ -72,3 +72,9 @@ message Product {
     bool isDeleted = 6;
     string deletedAt = 7;
 }
+
+message ProductRelation {
+    string id = 1;
+    string title = 2;
+    string name = 3;
+}

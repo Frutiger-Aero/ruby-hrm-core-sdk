@@ -1,5 +1,5 @@
 import { TModelID } from '@qlean/nestjs-typeorm-persistence-search';
-import { IPosition } from './positions.interface';
+import { IPosition } from './position.interface';
 import { ICompensation } from './compensation.interface';
 import { IRate } from './rate.interface';
 
@@ -16,7 +16,7 @@ export interface IGrade {
   /**
    * @description Рабочая позиция
    */
-  readonly position: IPosition;
+  readonly position: Partial<IPosition>;
 
   /**
    * @description Базовая ставка

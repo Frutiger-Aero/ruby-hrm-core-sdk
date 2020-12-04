@@ -5,6 +5,7 @@ import { CatalogModule } from '../../core';
 import { ProductController } from './product.controller';
 import { PositionController } from './position.controller';
 import { SpecializationController } from './specialization.controller';
+import { WageController } from './wage.controller';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { SpecializationController } from './specialization.controller';
     ProductController,
     PositionController,
     SpecializationController,
+    WageController,
   ],
   providers: [],
 })

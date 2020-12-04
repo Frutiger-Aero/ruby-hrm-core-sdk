@@ -30,10 +30,14 @@ export class CompensationModel implements ICompensation {
   readonly type: AMOUNT_TYPE;
 
   @IsString()
-  @Column()
+  @Column({ length: 256 })
   readonly option: string;
 
-  @ManyToOne(type => GradeModel, e => e.compensations)
+  @ManyToOne(type => GradeModel, e => e.compensations, {
+    nullable: false,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   @JoinColumn({ name: 'grade_id' })
   readonly grade: GradeModel;
 }

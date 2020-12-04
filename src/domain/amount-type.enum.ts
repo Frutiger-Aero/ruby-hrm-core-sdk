@@ -5,10 +5,10 @@ export enum AMOUNT_TYPE {
   /**
    * @description Фиксированное значение, например 100р
    */
-  FIXED = 'fixed',
+  FIXED = 'FIXED',
 
   /**
    * @description Процентное значение, например 100%
    */
-  PERCENT = 'percent',
+  PERCENT = 'PERCENT',
 }

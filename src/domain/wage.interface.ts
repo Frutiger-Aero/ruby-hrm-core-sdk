@@ -1,7 +1,7 @@
 import { IGrade } from './grade.interface';
 import { IProduct } from './product.interface';
 import { ISpecialization } from './specialization.interface';
-import { IBaseModel } from '@qlean/nestjs-typeorm-persistence-search';
+import { IBaseModel, TModelID } from '@qlean/nestjs-typeorm-persistence-search';
 
 export interface IWage extends IBaseModel {
   /**
@@ -10,14 +10,19 @@ export interface IWage extends IBaseModel {
   readonly name: string;
 
   /**
+   * Идентификатор региона в сервисе Регионы присутствия.
+   */
+  readonly regionId?: TModelID;
+
+  /**
    * @description Продукт в рамках тарифа
    */
-  readonly product: IProduct;
+  readonly product: Partial<IProduct>;
 
   /**
    * @description Специализация в рамках тарифа
    */
-  readonly specialization: ISpecialization;
+  readonly specialization: Partial<ISpecialization>;
 
   /**
    * @description Тарифная сетка в рамках грейдов

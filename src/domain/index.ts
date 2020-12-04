@@ -4,7 +4,7 @@ export * from './address.interface';
 
 export * from './product.interface';
 export * from './specialization.interface';
-export * from './positions.interface';
+export * from './position.interface';
 export * from './rate.interface';
 export * from './compensation.interface';
 export * from './contractor.interface';

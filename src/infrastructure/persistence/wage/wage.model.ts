@@ -15,19 +15,27 @@ export class WageModel extends BaseModel<IWage> implements IWage {
   @Column({ length: 128, unique: true })
   readonly name: string;
 
-  @ManyToOne(type => SpecializationModel, e => e.wages)
+  @IsUUID('4')
+  @Column({ type: 'uuid', nullable: true, name: 'region_id' })
+  readonly regionId?: string;
+
+  @ManyToOne(type => SpecializationModel, e => e.wages, {
+    eager: true,
+    nullable: false,
+  })
   @JoinColumn({ name: 'specialization_id' })
   readonly specialization: SpecializationModel;
 
-  @ManyToOne(type => ProductModel, e => e.wages)
+  @ManyToOne(type => ProductModel, e => e.wages, {
+    eager: true,
+    nullable: false,
+  })
   @JoinColumn({ name: 'product_id' })
   readonly product: ProductModel;
 
   @OneToMany(type => GradeModel, e => e.wage, {
     eager: true,
     cascade: true,
-    onUpdate: 'CASCADE',
-    onDelete: 'CASCADE',
   })
   readonly grades: GradeModel[];
 

@@ -12,6 +12,10 @@ export class ContractorModel extends BaseModel<IContractor> implements IContract
   @Column({ type: 'uuid', nullable: true, name: 'user_id', unique: true })
   readonly userId?: string;
 
+  @IsUUID('4')
+  @Column({ type: 'uuid', nullable: true, name: 'region_id' })
+  readonly regionId?: string;
+
   @IsEnum(PERSON_STATUS)
   @Column({ type: 'character varying', default: PERSON_STATUS.CREATED })
   readonly status: PERSON_STATUS;

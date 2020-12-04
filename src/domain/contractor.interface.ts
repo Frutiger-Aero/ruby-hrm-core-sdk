@@ -30,21 +30,26 @@ export interface IContractor extends IBaseModel {
   /**
    * Рабочий статус
    */
-  workStatus: WORK_STATUS;
+  readonly workStatus: WORK_STATUS;
 
   /**
    * Статус персоны
    */
-  status: PERSON_STATUS;
+  readonly status: PERSON_STATUS;
 
   /**
-   * Ссылка на пользователя в SSO
+   * Идентификатор пользователя в сервисе SSO
    */
-  userId?: TModelID;
+  readonly userId?: TModelID;
+
+  /**
+   * Идентификатор региона в сервисе Регионы присутствия.
+   */
+  readonly regionId?: TModelID;
 
   /**
    * Рейтинг исполнителя, дробное число
    */
-  rating: number;
+  readonly rating: number;
 
 }

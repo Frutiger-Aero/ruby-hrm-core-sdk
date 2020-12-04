@@ -25,7 +25,10 @@ export class GradeModel implements IGrade {
   @PrimaryGeneratedColumn('uuid')
   id: TModelID;
 
-  @ManyToOne(type => PositionModel, e => e.grades)
+  @ManyToOne(type => PositionModel, e => e.grades, {
+    eager: true,
+    nullable: false,
+  })
   @JoinColumn({ name: 'position_id' })
   readonly position: PositionModel;
 
@@ -37,12 +40,14 @@ export class GradeModel implements IGrade {
   @OneToMany(type => CompensationModel, e => e.grade, {
     eager: true,
     cascade: true,
-    onUpdate: 'CASCADE',
-    onDelete: 'CASCADE',
   })
   readonly compensations: CompensationModel[];
 
-  @ManyToOne(type => WageModel, e => e.grades)
+  @ManyToOne(type => WageModel, e => e.grades, {
+    nullable: false,
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'wage_id' })
   readonly wage: WageModel;
 
