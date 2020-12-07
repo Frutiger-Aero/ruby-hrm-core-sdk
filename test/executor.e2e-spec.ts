@@ -1,7 +1,7 @@
 import { HrmExecutorApi, HrmCoreModule } from '../sdk/nestjs/src';
 import { Test } from '@nestjs/testing';
 import { AppModule } from '../src/app.module';
-import { grpcOptions } from '../src/sso.options';
+import { grpcClientOptions } from '../src/grpc-client.options';
 import { AuthService, TestTokensource } from './auth.stubs';
 import { cleanup } from './utils';
 import { getConnection } from 'typeorm';
@@ -34,7 +34,7 @@ describe('Executor (e2e)', () => {
       .compile();
 
     app = moduleFixture.createNestApplication();
-    app.connectMicroservice(grpcOptions);
+    app.connectMicroservice(grpcClientOptions);
     await app.startAllMicroservicesAsync();
     await app.init();
 
