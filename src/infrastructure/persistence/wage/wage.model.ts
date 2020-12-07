@@ -24,7 +24,7 @@ export class WageModel extends BaseModel<IWage> implements IWage {
     nullable: false,
   })
   @JoinColumn({ name: 'specialization_id' })
-  @Index()
+  @Index('idx-wages-specialization_id')
   readonly specialization: SpecializationModel;
 
   @ManyToOne(type => ProductModel, e => e.wages, {
@@ -32,7 +32,7 @@ export class WageModel extends BaseModel<IWage> implements IWage {
     nullable: false,
   })
   @JoinColumn({ name: 'product_id' })
-  @Index()
+  @Index('idx-wages-product_id')
   readonly product: ProductModel;
 
   @OneToMany(type => GradeModel, e => e.wage, {

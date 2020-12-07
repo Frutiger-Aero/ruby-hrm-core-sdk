@@ -39,6 +39,6 @@ export class CompensationModel implements ICompensation {
     onUpdate: 'CASCADE',
   })
   @JoinColumn({ name: 'grade_id' })
-  @Index()
+  @Index('idx-compensations-grade_id')
   readonly grade: GradeModel;
 }

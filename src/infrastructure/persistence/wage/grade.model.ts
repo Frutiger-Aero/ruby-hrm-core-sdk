@@ -30,6 +30,7 @@ export class GradeModel implements IGrade {
     nullable: false,
   })
   @JoinColumn({ name: 'position_id' })
+  @Index('idx-grades-position_id')
   readonly position: PositionModel;
 
   @IsObject()
@@ -49,7 +50,7 @@ export class GradeModel implements IGrade {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'wage_id' })
-  @Index()
+  @Index('idx-grades-wage_id')
   readonly wage: WageModel;
 
   @OneToMany(type => ContractModel, e => e.grade)
