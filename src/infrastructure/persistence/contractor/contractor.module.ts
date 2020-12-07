@@ -8,4 +8,4 @@ import { ContractorStore } from './contractor.store';
   providers: [ContractorStore],
   exports: [ContractorStore],
 })
-export class ExecutorPersistenceModule {}
+export class ContractorPersistenceModule {}
