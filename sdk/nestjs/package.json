@@ -12,14 +12,14 @@
   "author": "d.stets",
   "license": "ISC",
   "dependencies": {
-    "@grpc/proto-loader": "0.5.1"
+    "@grpc/proto-loader": "0.5.1",
+    "@qlean/sso-sdk": "^0.1.25"
   },
   "devDependencies": {
     "typescript": "3.7.4"
   },
   "peerDependencies": {
     "grpc": "1.22.2",
-    "@qlean/sso-sdk": "^0.1.25",
     "@nestjs/common": "6.x",
     "@nestjs/core": "6.x",
     "@nestjs/microservices": "6.x"

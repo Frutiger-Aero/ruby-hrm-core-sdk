@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ClientsModule } from '@nestjs/microservices';
 import { PACKAGE_API, apiOptions, ssoOptions } from './hrm-core.options';
 import { HrmExecutorApi } from './hrm-executor.api';
+import { SpecializationHrmApiAdapter } from './hrm-specialization-hrm-api.adapter';
 
 @Module({
   imports: [
@@ -12,7 +13,7 @@ import { HrmExecutorApi } from './hrm-executor.api';
       },
     ]),
   ],
-  exports: [HrmCoreModule, HrmExecutorApi],
+  exports: [HrmCoreModule, HrmExecutorApi, SpecializationHrmApiAdapter],
   providers: [
     {
       provide: 'SSO_OPTIONS',
@@ -24,6 +25,7 @@ import { HrmExecutorApi } from './hrm-executor.api';
     },
     HrmCoreModule,
     HrmExecutorApi,
+    SpecializationHrmApiAdapter
   ],
 })
 export class HrmCoreModule {}

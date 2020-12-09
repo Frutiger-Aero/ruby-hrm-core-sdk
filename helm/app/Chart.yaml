@@ -4,4 +4,6 @@ description: HRM-core
 maintainers:
   - name: Stets Dmitriy
     email: d.stets@qlean.ru
+  - name: Smirnov Mikhail
+    email: m.smirnov@qlean.ru
 apiVersion: 1.0

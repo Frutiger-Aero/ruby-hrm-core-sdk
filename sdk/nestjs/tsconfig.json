@@ -12,7 +12,7 @@
     "baseUrl": "./generated",
     "moduleResolution": "node",
     "skipLibCheck": true,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "lib": [
       "esnext",
       "es5",

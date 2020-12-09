@@ -1,13 +1,14 @@
 import { Metadata } from 'grpc';
-import { Token, SIGNING_ALGORITHM, ITokenSource, IAuthConfig } from '@qlean/sso-sdk/build';
+import { Token, SIGNING_ALGORITHM, ITokenSource, IAuthConfig } from '@qlean/sso-utils-sdk';
 import { JWKSSource } from '@qlean/sso-sdk/build/plt-sso-sdk/plt-jwt.guard/jwks-source.service';
-import { GRANTS } from '../src/sso.options';
+
+import { env } from 'process';
 
 export class TestTokensource implements ITokenSource {
   constructor(config: IAuthConfig) {
   }
 
-  _token: string;
+  _token: string = '123';
 
   patchMetadata(metadata: Metadata): Promise<Metadata> {
     metadata.set('token', this._token);
@@ -39,7 +40,7 @@ export class AuthService {
       cli: clientId,
       tfn: '1234',
       uid,
-      per: Object.entries(GRANTS).map(([, value]) => value),
+      per: env.SSO_M2M_PERMISSIONS.split(','),
       exp: Date.now() + 1000 * 60,
     }, 'test');
 

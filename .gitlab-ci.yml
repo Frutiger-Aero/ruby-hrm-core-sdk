@@ -122,6 +122,7 @@ stop_stage:
     - ensure_shared_files
     - install_tiller
     - deployToK8s && send_changelog || send_changelog
+  when: manual
 
 # ---------------------------------------------------------------------------
 # this will include global before_script definition
