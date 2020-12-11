@@ -9,27 +9,27 @@ export enum CONTRACT_STATUS {
   /**
    * Активный, может выполнять работу
    */
-  ACTIVE = 0,
+  ACTIVE = 'ACTIVE',
   /**
    * Заблокирован, не может брать заказы
    */
-  BLOCKED = 1,
+  BLOCKED = 'BLOCKED',
   /**
    * Заморожен, не может брать заказы
    */
-  FROZEN = 2,
+  FROZEN = 'FROZEN',
 }
 
 export interface IContract extends IBaseModel {
   /**
-   * @description Рабочий сатус исполнителя в рамках текущего договора
+   * @description Рабочий статус исполнителя в рамках текущего договора
    */
   status: CONTRACT_STATUS;
 
   /**
    * @description Текущий тариф исполнителя
    */
-  wage: IWage;
+  wage: Partial<IWage>;
 
   /**
    * @description Текущий грейд исполнителя
@@ -39,12 +39,12 @@ export interface IContract extends IBaseModel {
   /**
    * @description Продукт в рамках тарифа
    */
-  product: IProduct;
+  product: Partial<IProduct>;
 
   /**
    * @description Специализация в рамках тарифа
    */
-  specialization: ISpecialization;
+  specialization: Partial<ISpecialization>;
 
   /**
    * @description Исполнитель, владелец контракта

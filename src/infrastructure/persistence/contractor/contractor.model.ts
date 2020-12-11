@@ -28,6 +28,9 @@ export class ContractorModel extends BaseModel<IContractor> implements IContract
   @Column('double precision', { default: 0 })
   readonly rating: number;
 
-  @OneToMany(type => ContractModel, e => e.contractor)
+  @OneToMany(type => ContractModel, e => e.contractor,  {
+    eager: true,
+    nullable: true,
+  })
   readonly contracts: ContractModel[];
 }

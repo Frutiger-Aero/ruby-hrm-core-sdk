@@ -2,7 +2,7 @@ import { IsString, IsOptional, IsUUID, Length, ValidateNested } from 'class-vali
 import { hrm } from '../../../../proto/generated/app.proto';
 import { IWage } from '../../../domain';
 import { Type } from 'class-transformer';
-import { GradeDto } from './grade.dto';
+import { GradeDto } from '../common';
 import { ProductRelationDto } from '../product';
 import { SpecializationRelationDto } from '../specialization';
 

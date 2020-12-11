@@ -81,12 +81,16 @@ message Wage {
     string updatedAt = 3;
     bool isDeleted = 4;
     string deletedAt = 5;
-
     string name = 6;
     Product product = 7;
     Specialization specialization = 8;
     repeated Grade grades = 9;
     string regionId = 10;
+}
+
+message WageRelation {
+    string id = 1;
+    string name = 2;
 }
 
 message Grade {

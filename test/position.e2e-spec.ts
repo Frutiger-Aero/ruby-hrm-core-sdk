@@ -8,7 +8,7 @@ import { getConnection } from 'typeorm';
 import { positionFixture1, positionFixture2 } from './fixtures';
 import { HrmCoreModule } from '../sdk/nestjs/build';
 
-describe('Position (e2e)', () => {
+describe.skip('Position (e2e)', () => {
   let positionApi: PositionHrmApiAdapter;
   let id: string;
   let app = null;
@@ -48,7 +48,7 @@ describe('Position (e2e)', () => {
 
   afterAll(async () => {
     await app.close();
-    await cleanup(getConnection());
+    // await cleanup(getConnection());
   });
 
   describe('CREATE position', () => {

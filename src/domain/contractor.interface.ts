@@ -1,28 +1,29 @@
 import { IBaseModel, TModelID } from '@qlean/nestjs-typeorm-persistence-search';
+import { IContract } from './contract.interface';
 
 export enum PERSON_STATUS {
   /**
    * Промежуточный, для значения по умолчанию
    */
-  CREATED = 0,
+  CREATED = 'CREATED',
 
   /**
    * Находится в процессе онбординга на работу
    */
-  CANDIDATE = 1,
+  CANDIDATE = 'CANDIDATE',
 
   /**
    * Полноценный исполнитель
    */
-  EXECUTOR = 2,
+  EXECUTOR = 'EXECUTOR',
 }
 
 export enum WORK_STATUS {
-  ACTIVE = 0,
+  ACTIVE = 'ACTIVE',
 
-  BLOCKED = 3,
+  BLOCKED = 'BLOCKED',
 
-  FRIZING = 3,
+  FROZEN = 'FROZEN',
 }
 
 export interface IContractor extends IBaseModel {
@@ -52,4 +53,8 @@ export interface IContractor extends IBaseModel {
    */
   readonly rating: number;
 
+  /**
+   * Контракты исполнителя
+   */
+  readonly contracts: Partial<IContract>[]
 }

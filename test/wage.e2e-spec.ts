@@ -13,15 +13,14 @@ import {
   specializationFixtureForBase1,
   specializationFixtureForBase2,
   wageFixture1,
-  wageFixture2, 
-  wageFixture3
+  wageFixture2
 } from './fixtures';
 import { HrmCoreModule } from '../sdk/nestjs/build';
 import { SpecializationModel } from '../src/infrastructure/persistence/specialization/specialization.model';
 import { ProductModel } from '../src/infrastructure/persistence/product/product.model';
 import { PositionModel } from '../src/infrastructure/persistence/position/position.model';
 
-describe.only('Wage (e2e)', () => {
+describe.skip('Wage (e2e)', () => {
   let wageApi: WageHrmApiAdapter;
   let id: string;
   let app = null;
@@ -61,8 +60,6 @@ describe.only('Wage (e2e)', () => {
         clientId: 'testApp',
       });
 
-
-      await cleanup(getConnection());
       specializationRepo = getConnection().getRepository(SpecializationModel);
       productRepo = getConnection().getRepository(ProductModel);
       positionRepo = getConnection().getRepository(PositionModel);

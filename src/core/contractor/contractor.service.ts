@@ -19,6 +19,7 @@ export class ContractorService {
    * Создает запись о новом исполнителе
    */
   async create(args: Partial<IContractor>): Promise<IContractor> {
+    console.log(JSON.stringify(args, null, 4));
     return from(this.store.create(args))
       .pipe(mergeMap(({ id }) => this.findById(id)))
       .toPromise();

@@ -1,5 +1,5 @@
 export * from './hrm-core.module';
-export * from './hrm-executor.api';
 export * from './hrm-specialization-hrm-api.adapter';
 export * from './hrm-position-hrm-api.adapter';
 export * from './hrm-wage-hrm-api.adapter';
+export * from './hrm-contractor-hrm-api.adapter';

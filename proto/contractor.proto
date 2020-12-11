@@ -1,0 +1,94 @@
+syntax = "proto3";
+
+package hrm.core;
+import "node_modules/@qlean/nestjs-typeorm-persistence-search/proto/common-search.proto";
+import "./specialization.proto";
+import "./position.proto";
+import "./product.proto";
+import "./wage.proto";
+
+service ContractorService {
+  rpc Create (ContractorCreateRequest) returns (ContractorResponse) {}
+  rpc Update (ContractorUpdateRequest) returns (ContractorResponse) {}
+  rpc Search (ContractorSearchRequest) returns (ContractorSearchResponse) {}
+  rpc FindById (qlean.common.search.UuidRequest) returns (ContractorResponse) {}
+  rpc Remove (qlean.common.search.UuidRequest) returns (ContractorResponse) {}
+  rpc Restore (qlean.common.search.UuidRequest) returns (ContractorResponse) {}
+}
+
+
+
+message ContractorCreateRequest {
+  string userId = 1;
+  string status = 2;
+  string workStatus = 3;
+  double rating = 4;
+  repeated Contract contracts = 5;
+  string regionId = 6;
+}
+
+message ContractorUpdateRequest {
+  string id = 1;
+  string userId = 2;
+  string status = 3;
+  string workStatus = 4;
+  double rating = 5;
+  repeated Contract contracts = 6;
+  string regionId = 7;
+}
+
+message Contract {
+  string status = 1;
+  ProductRelation product = 2;
+  SpecializationRelation specialization = 3;
+  Grade grade = 4;
+  Wage wage = 5;
+}
+
+message Contractor {
+  string id = 1;
+  string userId = 2;
+  string status = 3;
+  string workStatus = 4;
+  double rating = 5;
+  repeated Contract contracts = 6;
+  string regionId = 7;
+}
+
+message ContractorResponse {
+  Contractor data = 1;
+}
+
+message ContractorSearchResponse {
+  repeated Contractor data = 1;
+  int32 page = 2;
+  int32 pageCount = 3;
+  int32 limit = 4;
+  int32 count = 5;
+  int32 total = 6;
+}
+
+message ContractorSearchRequest {
+  int32 page = 1;
+  int32 limit = 2;
+  /* ******************
+    * Элементы массива задают последовательность сортировки
+    * ****************** */
+  repeated qlean.common.search.SortField sort = 3;
+  /* ******************
+    * Элементы массива применяются как OR
+    * ****************** */
+  repeated WhereFields where = 4;
+
+  /* ******************
+    * Поля для критериев фильтрации
+    * Свойства применяются как AND
+    * ****************** */
+  message WhereFields {
+      qlean.common.search.UuidCondition id = 1;
+      bool isDeleted = 2;
+      qlean.common.search.UuidCondition userId = 3;
+      qlean.common.search.StringCondition workStatus = 4;
+      qlean.common.search.StringCondition status = 5;
+  }
+}

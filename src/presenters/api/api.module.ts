@@ -6,6 +6,7 @@ import { ProductController } from './product.controller';
 import { PositionController } from './position.controller';
 import { SpecializationController } from './specialization.controller';
 import { WageController } from './wage.controller';
+import { ContractorController } from './contractor.controller';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { WageController } from './wage.controller';
     PositionController,
     SpecializationController,
     WageController,
+    ContractorController
   ],
   providers: [],
 })
