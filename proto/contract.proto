@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+package hrm.core;
+import "node_modules/@qlean/nestjs-typeorm-persistence-search/proto/common-search.proto";
+import "./product.proto";
+import "./specialization.proto";
+import "./contractor.proto";
+import "./product.proto";
+import "./common.proto";
+
+service ContractService {
+    rpc Create (ContractCreateRequest) returns (ContractResponse) {}
+    rpc Update (ContractUpdateRequest) returns (ContractResponse) {}
+    rpc Search (ContractSearchRequest) returns (ContractSearchResponse) {}
+    rpc FindById (qlean.common.search.UuidRequest) returns (ContractResponse) {}
+    rpc Remove (qlean.common.search.UuidRequest) returns (ContractResponse) {}
+    rpc Restore (qlean.common.search.UuidRequest) returns (ContractResponse) {}
+}
+
+message ContractCreateRequest {
+    string status = 1;
+    string productId = 2;
+    string specializationId = 3;
+    string gradeId = 4;
+    string wageId = 5;
+    string contractorId = 6;
+}
+
+message ContractUpdateRequest {
+    string id = 1;
+    string status = 2;
+    string productId = 3;
+    string specializationId = 4;
+    string gradeId = 5;
+    string wageId = 6;
+    string contractorId = 7;
+}
+
+message Contract {
+    string id = 1;
+    string createdAt = 2;
+    string updatedAt = 3;
+    bool isDeleted = 4;
+    string deletedAt = 5;
+    string status = 6;
+    ProductRelation product = 7;
+    SpecializationRelation specialization = 8;
+    Grade grade = 9;
+    WageRelation wage = 10;
+    ContractorRelation contractor = 11;
+}
+
+message ContractResponse {
+    Contract data = 1;
+}
+
+message ContractSearchRequest {
+    int32 page = 1;
+    int32 limit = 2;
+    /* ******************
+     * Элементы массива задают последовательность сортировки
+     * ****************** */
+    repeated qlean.common.search.SortField sort = 3;
+    /* ******************
+     * Элементы массива применяются как OR
+     * ****************** */
+    repeated WhereFields where = 4;
+
+    /* ******************
+     * Поля для критериев фильтрации
+     * Свойства применяются как AND
+     * ****************** */
+    message WhereFields {
+        qlean.common.search.UuidCondition id = 1;
+        qlean.common.search.StringCondition status = 2;
+        qlean.common.search.UuidCondition productId = 3;
+        bool isDeleted = 4;
+        qlean.common.search.UuidCondition specializationId = 5;
+        qlean.common.search.UuidCondition gradeId = 6;
+        qlean.common.search.UuidCondition wageId = 7;
+        qlean.common.search.UuidCondition contractorId = 8;
+    }
+}
+
+message ContractSearchResponse {
+    repeated Contract data = 1;
+    int32 page = 2;
+    int32 pageCount = 3;
+    int32 limit = 4;
+    int32 count = 5;
+    int32 total = 6;
+}
+
+
+
+message ContractRelation {
+    string id = 1;
+}

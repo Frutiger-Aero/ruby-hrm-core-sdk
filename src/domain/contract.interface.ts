@@ -34,7 +34,7 @@ export interface IContract extends IBaseModel {
   /**
    * @description Текущий грейд исполнителя
    */
-  grade: IGrade;
+  grade: Partial<IGrade>;
 
   /**
    * @description Продукт в рамках тарифа

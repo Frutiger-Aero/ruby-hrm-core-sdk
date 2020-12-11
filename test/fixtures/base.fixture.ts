@@ -1,3 +1,8 @@
+import { IWage } from "../../sdk/nestjs/build"
+import { AMOUNT_TYPE, IContract, IGrade, RATE_UNIT } from "../../src/domain"
+import { WageModel } from "../../src/infrastructure/persistence/wage/wage.model"
+import { wageFixture1 } from "./wage.fixture"
+
 export const specializationFixtureForBase1 = {
   title: 'Доярка',
   name: 'Doyarka',
@@ -32,4 +37,52 @@ export const positionFixtureForBase2 = {
   title: 'Разнорабочий',
   name: 'Worker',
   id: '9f8bd5ee-928c-4bf5-b45e-854c5ae321f0'
+}
+
+export const gradeFixtureForBase1: Partial<IGrade> = {
+  id: 'dd8cac77-78f2-4e57-99be-9f06e5ac3acc',
+  position: {
+    id: productFixtureForBase1.id
+  },
+  rate: {
+    amount: 33,
+    type: AMOUNT_TYPE.FIXED,
+    unit: RATE_UNIT.DAY
+  },
+  compensations: [
+    {
+      id: 'b27158db-d48b-4bb4-a0e4-c8ea0c9f7ce7',
+      amount: 32,
+      option: 'honor',
+      type: AMOUNT_TYPE.FIXED
+    }
+  ]
+}
+
+export const wageFixtureForBase1: Partial<IWage> = {
+  id: 'ff9bd9a0-b991-47ad-881b-8f3c2055b1c7',
+  name: 'Тариф для уборки',
+  regionId: '948050cf-9273-48d6-a111-178d029caefd',
+  specialization: {
+    id: specializationFixtureForBase1.id
+  },
+  product: {
+    id: productFixtureForBase1.id
+  }
+}
+
+export const contractForBase: Partial<IContract> = {
+  id: 'bf6557b8-7a92-4dd3-8d13-2f1e8e592e1e',
+  grade: {
+    id: gradeFixtureForBase1.id
+  },
+  product: {
+    id: productFixtureForBase1.id
+  },
+  specialization: {
+    id: specializationFixtureForBase1.id
+  },
+  wage: {
+    id: wageFixtureForBase1.id
+  }
 }

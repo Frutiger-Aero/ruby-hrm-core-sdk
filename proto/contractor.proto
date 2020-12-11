@@ -6,6 +6,7 @@ import "./specialization.proto";
 import "./position.proto";
 import "./product.proto";
 import "./wage.proto";
+import "./contract.proto";
 
 service ContractorService {
   rpc Create (ContractorCreateRequest) returns (ContractorResponse) {}
@@ -16,15 +17,12 @@ service ContractorService {
   rpc Restore (qlean.common.search.UuidRequest) returns (ContractorResponse) {}
 }
 
-
-
 message ContractorCreateRequest {
   string userId = 1;
   string status = 2;
   string workStatus = 3;
   double rating = 4;
-  repeated Contract contracts = 5;
-  string regionId = 6;
+  string regionId = 5;
 }
 
 message ContractorUpdateRequest {
@@ -33,16 +31,7 @@ message ContractorUpdateRequest {
   string status = 3;
   string workStatus = 4;
   double rating = 5;
-  repeated Contract contracts = 6;
-  string regionId = 7;
-}
-
-message Contract {
-  string status = 1;
-  ProductRelation product = 2;
-  SpecializationRelation specialization = 3;
-  Grade grade = 4;
-  Wage wage = 5;
+  string regionId = 6;
 }
 
 message Contractor {
@@ -53,6 +42,19 @@ message Contractor {
   double rating = 5;
   repeated Contract contracts = 6;
   string regionId = 7;
+  string createdAt = 8;
+  string updatedAt = 9;
+  bool isDeleted = 10;
+  string deletedAt = 11;
+}
+
+message ContractorRelation {
+  string id = 1;
+  string userId = 2;
+  string status = 3;
+  string workStatus = 4;
+  double rating = 5;
+  string regionId = 6;
 }
 
 message ContractorResponse {

@@ -6,4 +6,6 @@ import "./product.proto";
 import "./specialization.proto";
 import "./position.proto";
 import "./wage.proto";
+import "./contract.proto";
 import "./contractor.proto";
+import "./common.proto";

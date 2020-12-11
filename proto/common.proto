@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package hrm.core;
+
+message Grade {
+  string id = 1;
+  PositionRelation position = 2;
+  Rate rate = 3;
+  repeated Compensation compensations = 4;
+}
+
+message Rate {
+  int32 amount = 1;
+  string type = 2;
+  string unit = 3;
+}
+
+message Compensation {
+  string id = 1;
+  int32 amount = 2;
+  string type = 3;
+  string option = 4;
+}

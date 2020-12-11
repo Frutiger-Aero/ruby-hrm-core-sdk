@@ -5,6 +5,7 @@ import "node_modules/@qlean/nestjs-typeorm-persistence-search/proto/common-searc
 import "./specialization.proto";
 import "./position.proto";
 import "./product.proto";
+import "./common.proto";
 
 service WageService {
     rpc Create (WageCreateRequest) returns (WageResponse) {}
@@ -91,24 +92,4 @@ message Wage {
 message WageRelation {
     string id = 1;
     string name = 2;
-}
-
-message Grade {
-    string id = 1;
-    PositionRelation position = 2;
-    Rate rate = 3;
-    repeated Compensation compensations = 4;
-}
-
-message Rate {
-    int32 amount = 1;
-    string type = 2;
-    string unit = 3;
-}
-
-message Compensation {
-    string id = 1;
-    int32 amount = 2;
-    string type = 3;
-    string option = 4;
 }
