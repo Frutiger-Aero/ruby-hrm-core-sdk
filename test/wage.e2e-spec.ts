@@ -20,7 +20,7 @@ import { SpecializationModel } from '../src/infrastructure/persistence/specializ
 import { ProductModel } from '../src/infrastructure/persistence/product/product.model';
 import { PositionModel } from '../src/infrastructure/persistence/position/position.model';
 
-describe.skip('Wage (e2e)', () => {
+describe('Wage (e2e)', () => {
   let wageApi: WageHrmApiAdapter;
   let id: string;
   let app = null;
@@ -76,7 +76,7 @@ describe.skip('Wage (e2e)', () => {
 
   afterAll(async () => {
     await app.close();
-    // await cleanup(getConnection());
+    await cleanup(getConnection());
   });
 
   describe('CREATE wage', () => {

@@ -8,7 +8,7 @@ import { getConnection } from 'typeorm';
 import { specializationFixture1, specializationFixture2 } from './fixtures';
 import { HrmCoreModule } from '../sdk/nestjs';
 
-describe.skip('Specialization (e2e)', () => {
+describe('Specialization (e2e)', () => {
   let specializationApi: SpecializationHrmApiAdapter;
   let id: string;
   let app = null;
@@ -44,14 +44,11 @@ describe.skip('Specialization (e2e)', () => {
         tenantId: 'test',
         clientId: 'testApp',
       });
-
-    // await cleanup(getConnection());
-
   });
 
   afterAll(async () => {
     await app.close();
-    // await cleanup(getConnection());
+    await cleanup(getConnection());
   });
 
   describe('CREATE specialization', () => {

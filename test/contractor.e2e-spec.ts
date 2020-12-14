@@ -8,7 +8,7 @@ import { getConnection } from 'typeorm';
 import { contractorFixture1, contractorFixture2 } from './fixtures';
 import { HrmCoreModule } from '../sdk/nestjs/build';
 
-describe('Position (e2e)', () => {
+describe('Contract (e2e)', () => {
   let contractorApi: ContractorHrmApiAdapter;
   let id: string;
   let app = null;
@@ -44,13 +44,11 @@ describe('Position (e2e)', () => {
         tenantId: 'test',
         clientId: 'testApp',
       });
-
-      await cleanup(getConnection());
   });
 
   afterAll(async () => {
     await app.close();
-    // await cleanup(getConnection());
+    await cleanup(getConnection());
   });
 
   describe('CREATE contractor', () => {

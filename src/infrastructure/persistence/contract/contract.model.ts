@@ -21,23 +21,39 @@ export class ContractModel extends BaseModel<IContract> implements IContract {
   @Index('idx-contracts-product_id')
   readonly product: ProductModel;
 
+  @Column({ name: 'product_id' })
+  readonly productId: string;
+
+
   @ManyToOne(type => SpecializationModel, e => e.contracts)
   @JoinColumn({ name: 'specialization_id' })
   @Index('idx-contracts-specialization_id')
   readonly specialization: SpecializationModel;
+
+  @Column({ name: 'specialization_id' })
+  readonly specializationId: string;
 
   @ManyToOne(type => GradeModel, e => e.contracts)
   @JoinColumn({ name: 'grade_id' })
   @Index('idx-contracts-grade_id')
   readonly grade: GradeModel;
 
+  @Column({ name: 'grade_id' })
+  readonly gradeId: string;
+
   @ManyToOne(type => WageModel, e => e.contracts)
   @JoinColumn({ name: 'wage_id' })
   @Index('idx-contracts-wage_id')
   readonly wage: WageModel;
 
+  @Column({ name: 'wage_id' })
+  readonly wageId: string;
+
   @ManyToOne(type => ContractorModel, e => e.contracts)
   @JoinColumn({ name: 'contractor_id' })
   @Index('idx-contracts-contractor_id')
   readonly contractor: ContractorModel;
+
+  @Column({ name: 'contractor_id' })
+  readonly contractorId: string;
 }

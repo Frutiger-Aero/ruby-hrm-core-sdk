@@ -1,10 +1,11 @@
-import { Type } from "class-transformer";
 import { IsEnum, IsNumber, IsOptional, IsPositive, IsUUID, ValidateNested } from "class-validator";
 import { hrm } from "../../../../proto/generated/app.proto";
 import { IContractor, PERSON_STATUS, WORK_STATUS } from "../../../domain";
-import { ContractDto } from "./contract.dto";
 
 export class ContractorUpdateDto implements Partial<IContractor>, hrm.core.IContractorCreateRequest {
+  @IsUUID()
+  readonly id: string;
+
   @IsOptional()
   @IsEnum(WORK_STATUS)
   readonly workStatus?: WORK_STATUS;
@@ -25,10 +26,5 @@ export class ContractorUpdateDto implements Partial<IContractor>, hrm.core.ICont
   @IsNumber()
   @IsPositive()
   readonly rating: number;
-
-  @IsOptional()
-  @Type(() => ContractDto)
-  @ValidateNested({ each: true })
-  readonly contracts: ContractDto[]
 }
 
