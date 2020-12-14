@@ -30,4 +30,8 @@ export class ContractUpdateDto implements Partial<IContract>, hrm.core.IContract
   @IsUUID()
   @IsOptional()
   readonly specializationId: string
+
+  @IsUUID()
+  @IsOptional()
+  readonly contractorId: string
 }

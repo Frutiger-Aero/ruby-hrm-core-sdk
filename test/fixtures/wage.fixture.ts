@@ -21,12 +21,8 @@ export const wageFixture2: IWageUpdateRequest = {
       }
     }
   ],
-  specialization: {
-    id: specializationFixtureForBase2.id
-  },
-  product: {
-    id: productFixtureForBase2.id
-  }
+  specializationId: specializationFixtureForBase2.id,
+  productId: productFixtureForBase2.id
 }
 
 export const wageFixture1: IWageCreateRequest = {
@@ -50,11 +46,7 @@ export const wageFixture1: IWageCreateRequest = {
     }
   ],
   name: 'тариф1',
-  product: {
-    id: productFixtureForBase1.id
-  },
+  productId: productFixtureForBase1.id,
   regionId: '24601ff4-36d9-45f3-8f81-0d3d79262e63',
-  specialization: {
-    id: specializationFixtureForBase1.id
-  }
+  specializationId: specializationFixtureForBase1.id
 }

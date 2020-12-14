@@ -15,15 +15,11 @@ export class WageUpdateDto implements Partial<IWage>, hrm.core.IWageUpdateReques
   @Length(0, 128)
   readonly name: string;
 
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => ProductRelationDto)
-  readonly product: ProductRelationDto;
+  @IsUUID()
+  readonly productId: string;
 
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => SpecializationRelationDto)
-  readonly specialization: SpecializationRelationDto;
+  @IsUUID()
+  readonly specializationId: string;
 
   @IsOptional()
   @ValidateNested({ each: true })
@@ -33,5 +29,4 @@ export class WageUpdateDto implements Partial<IWage>, hrm.core.IWageUpdateReques
   @IsOptional()
   @IsUUID()
   readonly regionId: string;
-
 }

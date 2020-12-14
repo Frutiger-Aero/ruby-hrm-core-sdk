@@ -22,7 +22,7 @@ export interface IGrade {
   /**
    * @description тариф
    */
-  readonly wage: Partial<IWage>;
+  readonly wage?: Partial<IWage>;
 
   /**
    * @description Базовая ставка

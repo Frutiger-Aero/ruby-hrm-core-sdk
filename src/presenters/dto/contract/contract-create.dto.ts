@@ -22,4 +22,7 @@ export class ContractCreateDto implements Partial<IContract>, hrm.core.IContract
 
   @IsUUID()
   readonly specializationId: string
+
+  @IsUUID()
+  readonly contractorId: string
 }

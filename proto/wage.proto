@@ -18,8 +18,8 @@ service WageService {
 
 message WageCreateRequest {
     string name = 1;
-    ProductRelation product = 2;
-    SpecializationRelation specialization = 3;
+    string productId = 2;
+    string specializationId = 3;
     repeated Grade grades = 4;
     string regionId = 5;
 }
@@ -27,8 +27,8 @@ message WageCreateRequest {
 message WageUpdateRequest {
     string id = 1;
     string name = 2;
-    ProductRelation product = 3;
-    SpecializationRelation specialization = 4;
+    string productId = 3;
+    string specializationId = 4;
     repeated Grade grades = 5;
     string regionId = 6;
 }
@@ -84,7 +84,7 @@ message Wage {
     string deletedAt = 5;
     string name = 6;
     Product product = 7;
-    Specialization specialization = 8;
+    SpecializationRelation specialization = 8;
     repeated Grade grades = 9;
     string regionId = 10;
 }
