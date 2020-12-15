@@ -23,6 +23,7 @@
     "bump:sdk": "cd sdk/nestjs && npm version patch",
     "db:eml": "./node_modules/.bin/ts-node ./node_modules/.bin/typeorm-uml -d=eml.png",
     "documentation": "npx compodoc -p tsconfig.json -s",
+    "typeorm:migrate": "npm run typeorm migration:run",
     "fixtures:insert": "cp -R ./data ./dist && node dist/utils/fixture-inserter.js"
   },
   "dependencies": {
