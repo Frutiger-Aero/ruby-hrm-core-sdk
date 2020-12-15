@@ -102,7 +102,7 @@ stop_stage:
     action: stop
   when: manual
 
-.deploy to production:
+deploy to production:
   stage: production
   <<: *prod-only
   tags:
