@@ -12,8 +12,9 @@ done
 if [ $# -eq 0 ]
 then
     echo "Auto run"
-    echo "Done migration"
-    exec npm run entrypoint
+    npm run typeorm:migrate &&\
+      echo "Done migration" &&\
+      exec npm run start:prod
 else
     echo "Custom run"
     $@
