@@ -45,7 +45,7 @@ build:
     - staging
     - platform
   services:
-    - docker:dind
+    - docker:19-dind
   variables:
     GIT_STRATEGY: clone
   script:
