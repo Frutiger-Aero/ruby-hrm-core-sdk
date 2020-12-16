@@ -11,11 +11,13 @@ export class WageCreateDto implements Partial<IWage>, hrm.core.IWageCreateReques
   @Length(0, 128)
   readonly name: string;
 
-  @IsUUID()
-  readonly productId: string;
+  @ValidateNested()
+  @Type(() => ProductRelationDto)
+  readonly product: ProductRelationDto;
 
-  @IsUUID()
-  readonly specializationId: string;
+  @ValidateNested()
+  @Type(() => SpecializationRelationDto)
+  readonly specialization: SpecializationRelationDto;
 
   @ValidateNested({ each: true })
   @Type(() => GradeDto)

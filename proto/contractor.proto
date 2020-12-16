@@ -94,3 +94,7 @@ message ContractorSearchRequest {
       qlean.common.search.StringCondition status = 5;
   }
 }
+
+message ConractorRelation {
+  string id = 1;
+}

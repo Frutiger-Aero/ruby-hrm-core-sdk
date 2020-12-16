@@ -9,6 +9,10 @@ message Grade {
   repeated Compensation compensations = 4;
 }
 
+message GradeRelation {
+  string id = 1;
+}
+
 message Rate {
   int32 amount = 1;
   string type = 2;

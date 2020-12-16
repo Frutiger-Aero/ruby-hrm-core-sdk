@@ -27,9 +27,6 @@ export class WageModel extends BaseModel<IWage> implements IWage {
   @Index('idx-wages-specialization_id')
   readonly specialization: SpecializationModel;
 
-  @Column({ name: 'specialization_id' })
-  readonly specializationId: string;
-
   @ManyToOne(type => ProductModel, e => e.wages, {
     eager: true,
     nullable: false,
@@ -37,9 +34,6 @@ export class WageModel extends BaseModel<IWage> implements IWage {
   @JoinColumn({ name: 'product_id' })
   @Index('idx-wages-product_id')
   readonly product: ProductModel;
-
-  @Column({ name: 'product_id' })
-  readonly productId: string;
 
   @OneToMany(type => GradeModel, e => e.wage, {
     eager: true,
@@ -49,5 +43,4 @@ export class WageModel extends BaseModel<IWage> implements IWage {
 
   @OneToMany(type => ContractModel, e => e.wage)
   readonly contracts: ContractModel[];
-
 }

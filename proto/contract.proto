@@ -19,21 +19,17 @@ service ContractService {
 
 message ContractCreateRequest {
     string status = 1;
-    string productId = 2;
-    string specializationId = 3;
-    string gradeId = 4;
-    string wageId = 5;
-    string contractorId = 6;
+    GradeRelation grade = 2;
+    WageRelation wage = 3;
+    ConractorRelation contractor = 4;
 }
 
 message ContractUpdateRequest {
     string id = 1;
     string status = 2;
-    string productId = 3;
-    string specializationId = 4;
-    string gradeId = 5;
-    string wageId = 6;
-    string contractorId = 7;
+    GradeRelation grade = 3;
+    WageRelation wage = 4;
+    ConractorRelation contractor = 5;
 }
 
 message Contract {

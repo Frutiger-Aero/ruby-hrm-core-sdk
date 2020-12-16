@@ -1,7 +1,7 @@
 ---
 app-template:
   app:
-    name: hrm-core-svs
+    name: hrm-core-svc
     component: backend
     project: platform
     env: prod

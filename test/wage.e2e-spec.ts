@@ -91,8 +91,8 @@ describe('Wage (e2e)', () => {
       expect(result.data.grades[0].rate.type).toEqual(wageFixture1.grades[0].rate.type);
       expect(result.data.grades[0].rate.unit).toEqual(wageFixture1.grades[0].rate.unit);
 
-      expect(result.data.product.id).toEqual(wageFixture1.productId);
-      expect(result.data.specialization.id).toEqual(wageFixture1.specializationId);
+      expect(result.data.product.id).toEqual(wageFixture1.product.id);
+      expect(result.data.specialization.id).toEqual(wageFixture1.specialization.id);
 
       expect(result.data.regionId).toEqual(wageFixture1.regionId);
 
@@ -117,8 +117,8 @@ describe('Wage (e2e)', () => {
       expect(result.data.grades[0].rate.amount).toEqual(wageFixture2.grades[0].rate.amount);
       expect(result.data.grades[0].rate.type).toEqual(wageFixture2.grades[0].rate.type);
       expect(result.data.grades[0].rate.unit).toEqual(wageFixture2.grades[0].rate.unit);
-      expect(result.data.product.id).toEqual(wageFixture2.productId);
-      expect(result.data.specialization.id).toEqual(wageFixture2.specializationId);
+      expect(result.data.product.id).toEqual(wageFixture2.product.id);
+      expect(result.data.specialization.id).toEqual(wageFixture2.specialization.id);
       
     });
   });
