@@ -10,18 +10,19 @@ import { PACKAGE_NAME } from '../../constance';
 import { ContractorService } from '../../core';
 import { ContractorCreateDto, ContractorSearchDto, ContractorUpdateDto } from '../dto';
 import { hrm } from '../../../proto/generated/app.proto';
+import { GRANTS } from '../../sso.options';
 
 const PROTO_SVS_NAME = 'ContractorService';
 
 @Controller(PACKAGE_NAME)
-// @UseGuards(PLTJWTGuard)
+@UseGuards(PLTJWTGuard)
 @UseInterceptors(StatsInterceptor)
 @UseInterceptors(SentryInterceptor)
 export class ContractorController {
   constructor(private readonly svs: ContractorService) {}
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey('kosmos-catalog')
+  @PermissionKey(GRANTS.CONTRACT_READ)
   @UseFilters(RpcExceptionFilter.for(`${ContractorController.name}::create`))
   @UsePipes(new ValidationPipe())
   async create(args: ContractorCreateDto): Promise<hrm.core.ContractorResponse> {
@@ -33,7 +34,7 @@ export class ContractorController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey('kosmos-catalog')
+  @PermissionKey(GRANTS.CONTRACT_READ)
   @UseFilters(RpcExceptionFilter.for(`${ContractorController.name}::update`))
   @UsePipes(new ValidationPipe())
   async update(args: ContractorUpdateDto): Promise<hrm.core.ContractorResponse> {
@@ -44,7 +45,7 @@ export class ContractorController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey('kosmos-catalog')
+  @PermissionKey(GRANTS.CONTRACT_READ)
   @UseFilters(RpcExceptionFilter.for(`${ContractorController.name}::remove`))
   @UsePipes(new ValidationPipe())
   async remove(args: UuidRequestDto): Promise<hrm.core.ContractorResponse> {
@@ -55,7 +56,7 @@ export class ContractorController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey('kosmos-catalog')
+  @PermissionKey(GRANTS.CONTRACT_READ)
   @UseFilters(RpcExceptionFilter.for(`${ContractorController.name}::restore`))
   @UsePipes(new ValidationPipe())
   async restore(args: UuidRequestDto): Promise<hrm.core.ContractorResponse> {
@@ -66,7 +67,7 @@ export class ContractorController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey('kosmos-catalog')
+  @PermissionKey(GRANTS.CONTRACT_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${ContractorController.name}::search`))
   @UsePipes(new ValidationPipe())
   async search(args: ContractorSearchDto): Promise<hrm.core.ContractorSearchResponse> {
@@ -78,7 +79,7 @@ export class ContractorController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey('kosmos-catalog')
+  @PermissionKey(GRANTS.CONTRACT_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${ContractorController.name}::findById`))
   @UsePipes(new ValidationPipe())
   async findById(args: UuidRequestDto): Promise<hrm.core.ContractorResponse> {

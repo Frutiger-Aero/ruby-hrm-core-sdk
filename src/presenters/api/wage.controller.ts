@@ -10,18 +10,19 @@ import { PACKAGE_NAME } from '../../constance';
 import { WageService } from '../../core';
 import { WageCreateDto, WageSearchDto, WageUpdateDto } from '../dto';
 import { hrm } from '../../../proto/generated/app.proto';
+import { GRANTS } from '../../sso.options';
 
 const PROTO_SVS_NAME = 'WageService';
 
 @Controller(PACKAGE_NAME)
-// @UseGuards(PLTJWTGuard)
+@UseGuards(PLTJWTGuard)
 @UseInterceptors(StatsInterceptor)
 @UseInterceptors(SentryInterceptor)
 export class WageController {
   constructor(private readonly svs: WageService) {}
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey('kosmos-catalog')
+  @PermissionKey(GRANTS.WAGE_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${WageController.name}::create`))
   @UsePipes(new ValidationPipe())
   async create(args: WageCreateDto): Promise<hrm.core.WageResponse> {
@@ -33,7 +34,7 @@ export class WageController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey('kosmos-catalog')
+  @PermissionKey(GRANTS.WAGE_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${WageController.name}::update`))
   @UsePipes(new ValidationPipe())
   async update(args: WageUpdateDto): Promise<hrm.core.WageResponse> {
@@ -44,7 +45,7 @@ export class WageController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey('kosmos-catalog')
+  @PermissionKey(GRANTS.WAGE_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${WageController.name}::remove`))
   @UsePipes(new ValidationPipe())
   async remove(args: UuidRequestDto): Promise<hrm.core.WageResponse> {
@@ -55,7 +56,7 @@ export class WageController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey('kosmos-catalog')
+  @PermissionKey(GRANTS.WAGE_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${WageController.name}::restore`))
   @UsePipes(new ValidationPipe())
   async restore(args: UuidRequestDto): Promise<hrm.core.WageResponse> {
@@ -66,7 +67,7 @@ export class WageController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey('kosmos-catalog')
+  @PermissionKey(GRANTS.WAGE_READ)
   @UseFilters(RpcExceptionFilter.for(`${WageController.name}::search`))
   @UsePipes(new ValidationPipe())
   async search(args: WageSearchDto): Promise<hrm.core.WageSearchResponse> {
@@ -78,7 +79,7 @@ export class WageController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey('kosmos-catalog')
+  @PermissionKey(GRANTS.WAGE_READ)
   @UseFilters(RpcExceptionFilter.for(`${WageController.name}::findById`))
   @UsePipes(new ValidationPipe())
   async findById(args: UuidRequestDto): Promise<hrm.core.WageResponse> {

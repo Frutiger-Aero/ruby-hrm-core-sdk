@@ -10,18 +10,19 @@ import { PACKAGE_NAME } from '../../constance';
 import { PositionService } from '../../core';
 import { PositionCreateDto, PositionSearchDto, PositionUpdateDto } from '../dto';
 import { hrm } from '../../../proto/generated/app.proto';
+import { GRANTS } from '../../sso.options';
 
 const PROTO_SVS_NAME = 'PositionService';
 
 @Controller(PACKAGE_NAME)
-// @UseGuards(PLTJWTGuard)
+@UseGuards(PLTJWTGuard)
 @UseInterceptors(StatsInterceptor)
 @UseInterceptors(SentryInterceptor)
 export class PositionController {
   constructor(private readonly svs: PositionService) {}
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey('kosmos-catalog')
+  @PermissionKey(GRANTS.CATALOG_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${PositionController.name}::create`))
   @UsePipes(new ValidationPipe())
   async create(args: PositionCreateDto): Promise<hrm.core.PositionResponse> {
@@ -33,7 +34,7 @@ export class PositionController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey('kosmos-catalog')
+  @PermissionKey(GRANTS.CATALOG_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${PositionController.name}::update`))
   @UsePipes(new ValidationPipe())
   async update(args: PositionUpdateDto): Promise<hrm.core.PositionResponse> {
@@ -44,7 +45,7 @@ export class PositionController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey('kosmos-catalog')
+  @PermissionKey(GRANTS.CATALOG_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${PositionController.name}::remove`))
   @UsePipes(new ValidationPipe())
   async remove(args: UuidRequestDto): Promise<hrm.core.PositionResponse> {
@@ -55,7 +56,7 @@ export class PositionController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey('kosmos-catalog')
+  @PermissionKey(GRANTS.CATALOG_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${PositionController.name}::restore`))
   @UsePipes(new ValidationPipe())
   async restore(args: UuidRequestDto): Promise<hrm.core.PositionResponse> {
@@ -66,7 +67,7 @@ export class PositionController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey('kosmos-catalog')
+  @PermissionKey(GRANTS.CATALOG_READ)
   @UseFilters(RpcExceptionFilter.for(`${PositionController.name}::search`))
   @UsePipes(new ValidationPipe())
   async search(args: PositionSearchDto): Promise<hrm.core.PositionSearchResponse> {
@@ -78,7 +79,7 @@ export class PositionController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey('kosmos-catalog')
+  @PermissionKey(GRANTS.CATALOG_READ)
   @UseFilters(RpcExceptionFilter.for(`${PositionController.name}::findById`))
   @UsePipes(new ValidationPipe())
   async findById(args: UuidRequestDto): Promise<hrm.core.PositionResponse> {

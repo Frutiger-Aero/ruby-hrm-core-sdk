@@ -1,5 +1,5 @@
 import { classToPlain } from 'class-transformer';
-import { Controller, UseFilters, UsePipes, UseInterceptors } from '@nestjs/common';
+import { Controller, UseFilters, UsePipes, UseInterceptors, UseGuards } from '@nestjs/common';
 import { PermissionKey, PLTJWTGuard } from '@qlean/sso-utils-sdk';
 import { GrpcMethod } from '@nestjs/microservices';
 import { SentryInterceptor } from '@qlean/nestjs-sentry';
@@ -10,18 +10,19 @@ import { PACKAGE_NAME } from '../../constance';
 import { ProductService } from '../../core';
 import { ProductCreateDto, ProductSearchDto, ProductUpdateDto } from '../dto';
 import { hrm } from '../../../proto/generated/app.proto';
+import { GRANTS } from '../../sso.options';
 
 const PROTO_SVS_NAME = 'ProductService';
 
 @Controller(PACKAGE_NAME)
-// @UseGuards(PLTJWTGuard)
+@UseGuards(PLTJWTGuard)
 @UseInterceptors(StatsInterceptor)
 @UseInterceptors(SentryInterceptor)
 export class ProductController {
   constructor(private readonly svs: ProductService) {}
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey('kosmos-catalog')
+  @PermissionKey(GRANTS.CATALOG_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${ProductController.name}::create`))
   @UsePipes(new ValidationPipe())
   async create(args: ProductCreateDto): Promise<hrm.core.ProductResponse> {
@@ -33,7 +34,7 @@ export class ProductController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey('kosmos-catalog')
+  @PermissionKey(GRANTS.CATALOG_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${ProductController.name}::update`))
   @UsePipes(new ValidationPipe())
   async update(args: ProductUpdateDto): Promise<hrm.core.ProductResponse> {
@@ -44,7 +45,7 @@ export class ProductController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey('kosmos-catalog')
+  @PermissionKey(GRANTS.CATALOG_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${ProductController.name}::remove`))
   @UsePipes(new ValidationPipe())
   async remove(args: UuidRequestDto): Promise<hrm.core.ProductResponse> {
@@ -55,7 +56,7 @@ export class ProductController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey('kosmos-catalog')
+  @PermissionKey(GRANTS.CATALOG_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${ProductController.name}::restore`))
   @UsePipes(new ValidationPipe())
   async restore(args: UuidRequestDto): Promise<hrm.core.ProductResponse> {
@@ -66,7 +67,7 @@ export class ProductController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey('kosmos-catalog')
+  @PermissionKey(GRANTS.CATALOG_READ)
   @UseFilters(RpcExceptionFilter.for(`${ProductController.name}::search`))
   @UsePipes(new ValidationPipe())
   async search(args: ProductSearchDto): Promise<hrm.core.ProductSearchResponse> {
@@ -78,7 +79,7 @@ export class ProductController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey('kosmos-catalog')
+  @PermissionKey(GRANTS.CATALOG_READ)
   @UseFilters(RpcExceptionFilter.for(`${ProductController.name}::findById`))
   @UsePipes(new ValidationPipe())
   async findById(args: UuidRequestDto): Promise<hrm.core.ProductResponse> {

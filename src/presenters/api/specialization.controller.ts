@@ -10,18 +10,19 @@ import { PACKAGE_NAME } from '../../constance';
 import { SpecializationService } from '../../core';
 import { SpecializationCreateDto, SpecializationSearchDto, SpecializationUpdateDto } from '../dto';
 import { hrm } from '../../../proto/generated/app.proto';
+import { GRANTS } from '../../sso.options';
 
 const PROTO_SVS_NAME = 'SpecializationService';
 
 @Controller(PACKAGE_NAME)
-// @UseGuards(PLTJWTGuard)
+@UseGuards(PLTJWTGuard)
 @UseInterceptors(StatsInterceptor)
 @UseInterceptors(SentryInterceptor)
 export class SpecializationController {
   constructor(private readonly svs: SpecializationService) {}
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey('kosmos-catalog')
+  @PermissionKey(GRANTS.CATALOG_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${SpecializationController.name}::create`))
   @UsePipes(new ValidationPipe())
   async create(args: SpecializationCreateDto): Promise<hrm.core.SpecializationResponse> {
@@ -33,7 +34,7 @@ export class SpecializationController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey('kosmos-catalog')
+  @PermissionKey(GRANTS.CATALOG_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${SpecializationController.name}::update`))
   @UsePipes(new ValidationPipe())
   async update(args: SpecializationUpdateDto): Promise<hrm.core.SpecializationResponse> {
@@ -44,7 +45,7 @@ export class SpecializationController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey('kosmos-catalog')
+  @PermissionKey(GRANTS.CATALOG_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${SpecializationController.name}::remove`))
   @UsePipes(new ValidationPipe())
   async remove(args: UuidRequestDto): Promise<hrm.core.SpecializationResponse> {
@@ -55,7 +56,7 @@ export class SpecializationController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey('kosmos-catalog')
+  @PermissionKey(GRANTS.CATALOG_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${SpecializationController.name}::restore`))
   @UsePipes(new ValidationPipe())
   async restore(args: UuidRequestDto): Promise<hrm.core.SpecializationResponse> {
@@ -66,7 +67,7 @@ export class SpecializationController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey('kosmos-catalog')
+  @PermissionKey(GRANTS.CATALOG_READ)
   @UseFilters(RpcExceptionFilter.for(`${SpecializationController.name}::search`))
   @UsePipes(new ValidationPipe())
   async search(args: SpecializationSearchDto): Promise<hrm.core.SpecializationSearchResponse> {
@@ -78,7 +79,7 @@ export class SpecializationController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey('kosmos-catalog')
+  @PermissionKey(GRANTS.CATALOG_READ)
   @UseFilters(RpcExceptionFilter.for(`${SpecializationController.name}::findById`))
   @UsePipes(new ValidationPipe())
   async findById(args: UuidRequestDto): Promise<hrm.core.SpecializationResponse> {
