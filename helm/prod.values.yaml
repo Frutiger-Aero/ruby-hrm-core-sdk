@@ -38,7 +38,7 @@ app-template:
   ingress:
     domain:
       suffix: cloud.qlean.ru
-      name: hrm-core-svs
+      name: hrm-core-svc
     tls:
       issueCert: false
     grpc:
