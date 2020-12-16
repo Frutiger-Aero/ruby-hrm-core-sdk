@@ -26,7 +26,8 @@ export const wageFixture2: IWageUpdateRequest = {
   },
   product: {
     id: productFixtureForBase2.id
-  }
+  },
+  type: 'INDIVIDUAL'
 }
 
 export const wageFixture1: IWageCreateRequest = {
@@ -56,5 +57,6 @@ export const wageFixture1: IWageCreateRequest = {
   regionId: '24601ff4-36d9-45f3-8f81-0d3d79262e63',
   specialization: {
     id: specializationFixtureForBase1.id
-  }
+  },
+  type: 'INDIVIDUAL'
 }

@@ -1,6 +1,7 @@
 import { IGrade } from './grade.interface';
 import { IProduct } from './product.interface';
 import { ISpecialization } from './specialization.interface';
+import { WAGE_TYPE } from './wage-type.enum';
 import { IBaseModel, TModelID } from '@qlean/nestjs-typeorm-persistence-search';
 
 export interface IWage extends IBaseModel {
@@ -28,4 +29,10 @@ export interface IWage extends IBaseModel {
    * @description Тарифная сетка в рамках грейдов
    */
   readonly grades: IGrade[];
+
+  /**
+   * @description Тип контракта физ.лицо, самозанятый
+   */
+
+  readonly type: WAGE_TYPE
 }

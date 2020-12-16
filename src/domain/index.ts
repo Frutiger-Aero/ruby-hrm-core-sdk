@@ -11,3 +11,4 @@ export * from './contractor.interface';
 export * from './wage.interface';
 export * from './grade.interface';
 export * from './contract.interface';
+export * from './wage-type.enum';

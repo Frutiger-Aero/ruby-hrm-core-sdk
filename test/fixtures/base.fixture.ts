@@ -1,4 +1,4 @@
-import { AMOUNT_TYPE, IContract, IGrade, PERSON_STATUS, RATE_UNIT, WORK_STATUS } from "../../src/domain"
+import { AMOUNT_TYPE, IContract, IGrade, PERSON_STATUS, RATE_UNIT, WAGE_TYPE, WORK_STATUS } from "../../src/domain"
 
 export const specializationFixtureForBase1 = {
   title: 'Доярка',
@@ -45,7 +45,8 @@ export const wageFixtureForBase1 = {
   },
   product: {
     id: productFixtureForBase1.id
-  }
+  },
+  type: WAGE_TYPE.INDIVIDUAL
 }
 
 export const wageFixtureForBase2 = {
@@ -57,7 +58,8 @@ export const wageFixtureForBase2 = {
   },
   product: {
     id: productFixtureForBase2.id
-  }
+  },
+  type: WAGE_TYPE.INDIVIDUAL
 }
 
 export const gradeFixtureForBase1: Partial<IGrade> = {

@@ -1,6 +1,6 @@
-import { IsString, IsOptional, IsUUID, Length, ValidateNested } from 'class-validator';
+import { IsString, IsOptional, IsUUID, Length, ValidateNested, IsEnum } from 'class-validator';
 import { hrm } from '../../../../proto/generated/app.proto';
-import { IWage } from '../../../domain';
+import { IWage, WAGE_TYPE } from '../../../domain';
 import { Type } from 'class-transformer';
 import { GradeDto } from '../common';
 import { ProductRelationDto } from '../product';
@@ -31,4 +31,8 @@ export class WageUpdateDto implements Partial<IWage>, hrm.core.IWageUpdateReques
   @IsOptional()
   @IsUUID()
   readonly regionId: string;
+
+  @IsEnum(WAGE_TYPE)
+  @IsOptional()
+  readonly type: WAGE_TYPE;
 }

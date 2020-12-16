@@ -1,7 +1,7 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
-import { BaseModel, TModelID } from '@qlean/nestjs-typeorm-persistence-search';
-import { IsString, IsUUID } from 'class-validator';
-import { IWage } from '../../../domain';
+import { BaseModel } from '@qlean/nestjs-typeorm-persistence-search';
+import { IsEnum, IsString, IsUUID } from 'class-validator';
+import { IWage, WAGE_TYPE } from '../../../domain';
 import { SpecializationModel } from '../specialization/specialization.model';
 import { ContractModel } from '../contract/contract.model';
 import { ProductModel } from '../product/product.model';
@@ -43,4 +43,8 @@ export class WageModel extends BaseModel<IWage> implements IWage {
 
   @OneToMany(type => ContractModel, e => e.wage)
   readonly contracts: ContractModel[];
+
+  @IsEnum(WAGE_TYPE)
+  @Column({ type: 'character varying' })
+  readonly type: WAGE_TYPE
 }

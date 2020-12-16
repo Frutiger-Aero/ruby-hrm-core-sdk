@@ -22,6 +22,7 @@ message WageCreateRequest {
     SpecializationRelation specialization = 3;
     repeated Grade grades = 4;
     string regionId = 5;
+    string type = 6;
 }
 
 message WageUpdateRequest {
@@ -31,6 +32,7 @@ message WageUpdateRequest {
     SpecializationRelation specialization = 4;
     repeated Grade grades = 5;
     string regionId = 6;
+    string type = 7;
 }
 
 message WageResponse {
@@ -87,6 +89,7 @@ message Wage {
     SpecializationRelation specialization = 8;
     repeated Grade grades = 9;
     string regionId = 10;
+    string type = 11;
 }
 
 message WageRelation {
