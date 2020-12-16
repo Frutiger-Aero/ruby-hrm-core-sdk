@@ -49,6 +49,6 @@ export interface IContract extends IBaseModel {
   /**
    * @description Исполнитель, владелец контракта
    */
-  contractor: IContractor;
+  contractor: Partial<IContractor>;
 
 }

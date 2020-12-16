@@ -89,16 +89,30 @@ describe('Contract (e2e)', () => {
   describe('CREATE contract', () => {
     it('Должен создать контракт', async () => {
       const result = await contractApi.create(contractFixture1);
-      console.log(JSON.stringify(result, null, 4));
-      expect(result.data.product.id).toEqual(contractFixture1.productId);
+      expect(result.data.product.id).toEqual(productFixtureForBase1.id);
       expect(result.data.status).toEqual(contractFixture1.status);
-      expect(result.data.specialization.id).toEqual(contractFixture1.specializationId);
-      expect(result.data.wage.id).toEqual(contractFixture1.wageId);
-      expect(result.data.grade.id).toEqual(contractFixture1.gradeId);
-      expect(result.data.contractor.id).toEqual(contractFixture1.contractorId);
+      expect(result.data.specialization.id).toEqual(specializationFixtureForBase1.id);
+      expect(result.data.wage.id).toEqual(contractFixture1.wage.id);
+      expect(result.data.grade.id).toEqual(contractFixture1.grade.id);
+      expect(result.data.contractor.id).toEqual(contractFixture1.contractor.id);
       expect(result.data?.id).not.toBeNull();
       expect(typeof result.data?.id).toBe('string');
       id = result.data.id;
+    });
+
+    it('Должен выдать ошибку при создании отсутствие wage', async () => {
+      let error;
+      try {
+        await contractApi.create({
+          ...contractFixture1,
+          wage: {
+            id: '709ec173-5de0-479a-bf85-5a31ad71456b'
+          }
+        });
+      } catch (err) {
+        error = err;
+      }
+      expect(error.message).toMatch(/INVALID_ARGUMENT - wage id=709ec173-5de0-479a-bf85-5a31ad71456b doesn't exist/);
     });
   });
 
@@ -108,24 +122,39 @@ describe('Contract (e2e)', () => {
         id,
         ...contractFixture2
       });
-      expect(result.data.product.id).toEqual(contractFixture2.productId);
+      expect(result.data.product.id).toEqual(productFixtureForBase1.id);
       expect(result.data.status).toEqual(contractFixture2.status);
-      expect(result.data.specialization.id).toEqual(contractFixture2.specializationId);
-      expect(result.data.wage.id).toEqual(contractFixture2.wageId);
-      expect(result.data.grade.id).toEqual(contractFixture2.gradeId);
-      expect(result.data.contractor.id).toEqual(contractFixture2.contractorId);
+      expect(result.data.specialization.id).toEqual(specializationFixtureForBase1.id);
+      expect(result.data.wage.id).toEqual(contractFixture2.wage.id);
+      expect(result.data.grade.id).toEqual(contractFixture2.grade.id);
+      expect(result.data.contractor.id).toEqual(contractFixture2.contractor.id);
+    });
+
+    it('Должен выдать ошибку при создании отсутствие wage', async () => {
+      let error;
+      try {
+        await contractApi.update({
+          id,
+          wage: {
+            id: '709ec173-5de0-479a-bf85-5a31ad71456b'
+          }
+        });
+      } catch (err) {
+        error = err;
+      }
+      expect(error.message).toMatch(/INVALID_ARGUMENT - wage id=709ec173-5de0-479a-bf85-5a31ad71456b doesn't exist/);
     });
   });
 
   describe('get contract by id', () => {
     it('Должен отдать контракт по id', async () => {
       const result = await contractApi.findById({id});
-      expect(result.data.product.id).toEqual(contractFixture2.productId);
+      expect(result.data.product.id).toEqual(productFixtureForBase1.id);
       expect(result.data.status).toEqual(contractFixture2.status);
-      expect(result.data.specialization.id).toEqual(contractFixture2.specializationId);
-      expect(result.data.wage.id).toEqual(contractFixture2.wageId);
-      expect(result.data.grade.id).toEqual(contractFixture2.gradeId);
-      expect(result.data.contractor.id).toEqual(contractFixture2.contractorId);
+      expect(result.data.specialization.id).toEqual(specializationFixtureForBase1.id);
+      expect(result.data.wage.id).toEqual(contractFixture2.wage.id);
+      expect(result.data.grade.id).toEqual(contractFixture2.grade.id);
+      expect(result.data.contractor.id).toEqual(contractFixture2.contractor.id);
       expect(result.data.id).toEqual(id);
     });
   });

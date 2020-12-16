@@ -14,7 +14,7 @@
     "start": "npm run typeorm migration:run && npm run start:prod",
     "test:cov": "jest --coverage",
     "test": "jest --verbose --runInBand --setupFiles dotenv/config --config ./test/jest.json",
-    "test:e2e": "ts-node -r dotenv/config ./utils/fixture-inserter.ts && HRM_CORE_URL=localhost:5000 jest --verbose --setupFiles dotenv/config --runInBand --config ./test/jest-e2e.json",
+    "test:e2e": "HRM_CORE_URL=localhost:5000 LOGGER_LEVEL=security jest --verbose --setupFiles dotenv/config --runInBand --config ./test/jest-e2e.json",
     "webpack": "webpack --config webpack.config.js",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "entrypoint": "npm run typeorm migration:run && npm run fixtures:insert && npm run start:prod",

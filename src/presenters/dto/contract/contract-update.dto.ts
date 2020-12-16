@@ -2,10 +2,9 @@ import { Type } from "class-transformer";
 import { IsEnum, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator";
 import { hrm } from "../../../../proto/generated/app.proto";
 import { CONTRACT_STATUS, IContract } from "../../../domain";
-import { GradeDto } from "../common";
-import { ProductRelationDto } from "../product";
-import { SpecializationRelationDto } from "../specialization";
+import { GradeRelationDto } from "../common";
 import { WageRelationDto } from "../wage";
+import { RelationDto } from "./relation.dto";
 
 export class ContractUpdateDto implements Partial<IContract>, hrm.core.IContractUpdateRequest {
   @IsUUID()
@@ -15,23 +14,18 @@ export class ContractUpdateDto implements Partial<IContract>, hrm.core.IContract
   @IsEnum(CONTRACT_STATUS)
   readonly status: CONTRACT_STATUS;
 
-  @IsUUID()
+  @ValidateNested()
+  @Type(() => WageRelationDto)
   @IsOptional()
-  readonly wageId: string;
+  readonly wage: WageRelationDto;
 
-  @IsUUID()
+  @ValidateNested()
+  @Type(() => GradeRelationDto)
   @IsOptional()
-  readonly gradeId: string;
+  readonly grade: GradeRelationDto;
 
-  @IsUUID()
+  @ValidateNested()
+  @Type(() => RelationDto)
   @IsOptional()
-  readonly productId: string;
-
-  @IsUUID()
-  @IsOptional()
-  readonly specializationId: string
-
-  @IsUUID()
-  @IsOptional()
-  readonly contractorId: string
+  readonly contractor: RelationDto
 }
