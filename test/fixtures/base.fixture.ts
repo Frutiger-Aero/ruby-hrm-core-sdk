@@ -108,7 +108,22 @@ export const gradeFixtureForBase2 : Partial<IGrade> =  {
   ]
 }
 
+export const blockingReasonForBase1 = {
+  id: 'a6586b34-0bbe-41e8-a4d0-7c6d9469d07d',
+  name: 'testing recoverable reason',
+  isRecoverable: true
+}
 
+export const blockingReasonForBase2 = {
+  id: '4c124635-e40c-43e8-9013-4d4f7e627670',
+  name: 'testing not recoverable reason',
+  isRecoverable: false
+}
+
+export const freezingReasonForBase1 = {
+  id: 'c14a337c-c6ec-49ad-a7e8-d94afe65c398',
+  name: 'testing reason',
+}
 
 export const contractForBase: Partial<IContract> = {
   id: 'bf6557b8-7a92-4dd3-8d13-2f1e8e592e1e',

@@ -45,7 +45,6 @@ export class CommonApiAdapter<S> implements OnModuleInit{
       await this.tokenSource.patchMetadata(metadata);
       return metadata;
     } catch (error) {
-      console.log(error)
       this.logger.error('Get sso token error', error);
       throw error;
     }

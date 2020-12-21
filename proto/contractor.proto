@@ -7,6 +7,7 @@ import "./position.proto";
 import "./product.proto";
 import "./wage.proto";
 import "./contract.proto";
+import "./reason.proto";
 
 service ContractorService {
   rpc Create (ContractorCreateRequest) returns (ContractorResponse) {}
@@ -15,6 +16,23 @@ service ContractorService {
   rpc FindById (qlean.common.search.UuidRequest) returns (ContractorResponse) {}
   rpc Remove (qlean.common.search.UuidRequest) returns (ContractorResponse) {}
   rpc Restore (qlean.common.search.UuidRequest) returns (ContractorResponse) {}
+  rpc Block (ContractorBlockRequest) returns (ContractorResponse) {}
+  rpc Activate (ContractorActivateRequest) returns (ContractorResponse) {}
+  rpc Freeze (ContractorFreezeRequest) returns (ContractorResponse) {}
+}
+
+message ContractorBlockRequest {
+  string id = 1;
+  ReasonRelation reason = 2;
+}
+
+message ContractorActivateRequest {
+  string id = 1;
+}
+
+message ContractorFreezeRequest {
+  string id = 1;
+  ReasonRelation reason = 2;
 }
 
 message ContractorCreateRequest {

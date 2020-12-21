@@ -33,4 +33,7 @@ export class ContractorModel extends BaseModel<IContractor> implements IContract
     nullable: true,
   })
   readonly contracts: ContractModel[];
+
+  @Column({ type: 'uuid', nullable: true, name: 'changed_status_reason_id' })
+  readonly changedStatusReasonId: string;
 }

@@ -1,15 +1,19 @@
 import { from } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { Injectable } from '@nestjs/common';
-import { AlreadyExistsException } from '@qlean/nestjs-exceptions';
+import { AlreadyExistsException, FailedPreconditionException, InvalidArgumentException, NotFoundException } from '@qlean/nestjs-exceptions';
 import { IFindAndTotalResponse, IFindPaginateCriteria, TModelID } from '@qlean/nestjs-typeorm-persistence-search';
-import { ContractorStore } from '../../infrastructure';
-import { IContractor } from '../../domain';
+import { ContractorStore, ReasonStore } from '../../infrastructure';
+import { IContractor, WORK_STATUS } from '../../domain';
+import { IActivateContractor, IBlockContractor, IFreezeContractor } from '../interfaces';
+import { RevisionHistoryStore } from '../../infrastructure/persistence/revision-history';
 
 @Injectable()
 export class ContractorService {
   constructor(
     private readonly store: ContractorStore,
+    private readonly reasonStore: ReasonStore,
+    private readonly revisionHistoryStore: RevisionHistoryStore
   ) {}
 
   private relations: string[] = [];
@@ -80,5 +84,79 @@ export class ContractorService {
       ...args,
       relations: this.relations,
     });
+  }
+
+  async block(args: IBlockContractor): Promise<IContractor> {
+    const {userId, reason: {id: reasonId}, id: contractorId } = args;
+    const reason = await this.reasonStore.getBlockingReasonById(reasonId);
+    if (!reason) {
+      throw new NotFoundException(`Reason id=${reasonId} doesn't exist`);
+    }
+    const contractor = await this.store.findById(contractorId);
+    if (!contractor) {
+      throw new NotFoundException(`Contractor id=${contractorId} doesn\'t exist`);
+    }
+    if (contractor.workStatus === WORK_STATUS.BLOCKED) {
+      return contractor;
+    }
+    await this.store.update({ id: contractorId }, { workStatus: WORK_STATUS.BLOCKED, id: contractorId, changedStatusReasonId: reasonId });
+    await this.revisionHistoryStore.create({
+      entityId: contractorId,
+      reasonId,
+      userId,
+      change: WORK_STATUS.BLOCKED
+    })
+    return this.store.findById(contractorId);
+  }
+
+  async activate(args: IActivateContractor): Promise<IContractor> {
+    const {userId, id: contractorId } = args;
+    const contractor = await this.store.findById(contractorId);
+    if (!contractor) {
+      throw new NotFoundException(`Contractor id=${contractorId} doesn't exist`);
+    }
+    if (contractor.workStatus === WORK_STATUS.ACTIVE) {
+      return contractor;
+    }
+    if (contractor.workStatus === WORK_STATUS.BLOCKED && contractor.changedStatusReasonId) {
+      const reason = await this.reasonStore.getBlockingReasonById(contractor.changedStatusReasonId);
+      if (!reason.isRecoverable) {
+        throw new FailedPreconditionException('Can\'t activate contractor because of blocking reason');
+      }
+    }
+    await this.store.update({ id: contractorId }, { workStatus: WORK_STATUS.ACTIVE, id: contractorId });
+    await this.revisionHistoryStore.create({
+      entityId: contractorId,
+      userId,
+      change: WORK_STATUS.ACTIVE
+    });
+    return this.store.findById(contractorId);
+  }
+
+
+  async freeze(args: IFreezeContractor): Promise<IContractor> {
+    const {userId, reason: {id: reasonId}, id: contractorId } = args;
+    const reason = await this.reasonStore.getFreezingReasonById(reasonId);
+    if (!reason) {
+      throw new NotFoundException(`Reason id=${reasonId} doesn't exist`);
+    }
+    const contractor = await this.store.findById(contractorId);
+    if (!contractor) {
+      throw new NotFoundException(`Contractor id=${contractorId} doesn't exist`);
+    }
+    if (contractor.workStatus === WORK_STATUS.FROZEN) {
+      return contractor;
+    }
+    if (contractor.workStatus === WORK_STATUS.BLOCKED) {
+      throw new InvalidArgumentException('Contractor is blocked');
+    } 
+    await this.store.update({ id: contractorId }, { workStatus: WORK_STATUS.FROZEN, id: contractorId, changedStatusReasonId: reasonId });
+    await this.revisionHistoryStore.create({
+      entityId: contractorId,
+      reasonId,
+      userId,
+      change: WORK_STATUS.FROZEN
+    });
+    return this.store.findById(contractorId);
   }
 }

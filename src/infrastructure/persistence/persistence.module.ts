@@ -6,6 +6,8 @@ import { PositionPersistenceModule } from './position';
 import { WagePersistenceModule } from './wage';
 import { ContractPersistenceModule } from './contract';
 import { ContractorPersistenceModule } from './contractor';
+import { ReasonPersistenceModule } from './reason';
+import { RevisionHistoryModule } from './revision-history';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { ContractorPersistenceModule } from './contractor';
     WagePersistenceModule,
     ContractPersistenceModule,
     ContractorPersistenceModule,
+    ReasonPersistenceModule,
+    RevisionHistoryModule
   ],
   exports: [
     TypeOrmModule,
@@ -27,6 +31,8 @@ import { ContractorPersistenceModule } from './contractor';
     WagePersistenceModule,
     ContractPersistenceModule,
     ContractorPersistenceModule,
+    ReasonPersistenceModule,
+    RevisionHistoryModule
   ],
 })
 export class PersistenceModule {}

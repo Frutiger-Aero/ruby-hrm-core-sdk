@@ -8,6 +8,7 @@ import { SpecializationController } from './specialization.controller';
 import { WageController } from './wage.controller';
 import { ContractorController } from './contractor.controller';
 import { ContractController } from './contract.controller';
+import { ReasonsController } from './reason.controller';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { ContractController } from './contract.controller';
     SpecializationController,
     WageController,
     ContractorController,
+    ReasonsController,
     ContractController
   ],
   providers: [],

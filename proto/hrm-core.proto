@@ -9,3 +9,4 @@ import "./wage.proto";
 import "./contract.proto";
 import "./contractor.proto";
 import "./common.proto";
+import "./reason.proto";

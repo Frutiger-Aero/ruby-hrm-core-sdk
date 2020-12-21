@@ -33,6 +33,14 @@ export class AuthService {
   }
 
   static allGrants({tenantId, clientId, uid = null }) {
+    const permissions = [
+      'hrm-core:catalog:write',
+      'hrm-core:catalog:read',
+      'hrm-core:wage:read',
+      'hrm-core:wage:write',
+      'hrm-core:contract:write',
+      'hrm-core:contract:read'
+    ]
     const token = new Token({
       alg: SIGNING_ALGORITHM.RS256,
     }, {
@@ -40,7 +48,7 @@ export class AuthService {
       cli: clientId,
       tfn: '1234',
       uid,
-      per: env.SSO_M2M_PERMISSIONS.split(','),
+      per: permissions,
       exp: Date.now() + 1000 * 60,
     }, 'test');
 

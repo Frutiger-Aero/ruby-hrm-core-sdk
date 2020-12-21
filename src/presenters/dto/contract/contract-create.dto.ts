@@ -4,7 +4,7 @@ import { hrm } from "../../../../proto/generated/app.proto";
 import { CONTRACT_STATUS, IContract } from "../../../domain";
 import { GradeRelationDto } from "../common";
 import { WageRelationDto } from "../wage";
-import { RelationDto } from "./relation.dto";
+import { RelationDto } from "../common/relation.dto";
 
 export class ContractCreateDto implements Partial<IContract>, hrm.core.IContractCreateRequest {
   @IsEnum(CONTRACT_STATUS)

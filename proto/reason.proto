@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package hrm.core;
+
+service ReasonService {
+  rpc GetBlockingReasons (Empty) returns (BlockingReasonsResponse) {}
+  rpc GetFreezingReasons (Empty) returns (FreezingReasonsResponse) {}
+}
+
+message Empty {
+
+}
+
+message BlockingReasonsResponse {
+  repeated BlockingReason data = 1;
+}
+
+message FreezingReasonsResponse {
+  repeated FreezingReason data = 1;
+}
+
+message BlockingReason {
+  string id = 1;
+  string name = 2;
+  bool isRecoverable = 3;
+}
+
+message FreezingReason {
+  string id = 1;
+  string name = 2;
+}
+
+message ReasonRelation {
+  string id = 1;
+}

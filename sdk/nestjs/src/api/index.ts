@@ -5,3 +5,4 @@ export * from './hrm-wage-hrm-api.adapter';
 export * from './hrm-contract-hrm-api.adapter';
 export * from './hrm-contractor-hrm-api.adapter';
 export * from './hrm-product-hrm-api.adapter';
+export * from './hrm-reason-hrm-api.adapter';
