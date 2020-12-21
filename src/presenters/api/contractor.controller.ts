@@ -22,7 +22,7 @@ export class ContractorController {
   constructor(private readonly svs: ContractorService) {}
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey(GRANTS.CONTRACT_READ)
+  @PermissionKey(GRANTS.CONTRACT_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${ContractorController.name}::create`))
   @UsePipes(new ValidationPipe())
   async create(args: ContractorCreateDto): Promise<hrm.core.ContractorResponse> {
@@ -34,7 +34,7 @@ export class ContractorController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  @PermissionKey(GRANTS.CONTRACT_READ)
+  @PermissionKey(GRANTS.CONTRACT_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${ContractorController.name}::update`))
   @UsePipes(new ValidationPipe())
   async update(args: ContractorUpdateDto): Promise<hrm.core.ContractorResponse> {
@@ -45,7 +45,7 @@ export class ContractorController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  @PermissionKey(GRANTS.CONTRACT_READ)
+  @PermissionKey(GRANTS.CONTRACT_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${ContractorController.name}::remove`))
   @UsePipes(new ValidationPipe())
   async remove(args: UuidRequestDto): Promise<hrm.core.ContractorResponse> {
@@ -56,7 +56,7 @@ export class ContractorController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  @PermissionKey(GRANTS.CONTRACT_READ)
+  @PermissionKey(GRANTS.CONTRACT_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${ContractorController.name}::restore`))
   @UsePipes(new ValidationPipe())
   async restore(args: UuidRequestDto): Promise<hrm.core.ContractorResponse> {
@@ -90,7 +90,7 @@ export class ContractorController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey(GRANTS.CONTRACT_WRITE)
+  @PermissionKey(GRANTS.CONTRACT_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${ContractorController.name}::block`))
   @UsePipes(new ValidationPipe())
   async block(
@@ -105,7 +105,7 @@ export class ContractorController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey(GRANTS.CONTRACT_WRITE)
+  @PermissionKey(GRANTS.CONTRACT_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${ContractorController.name}::freeze`))
   @UsePipes(new ValidationPipe())
   async freeze(
@@ -120,7 +120,7 @@ export class ContractorController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey(GRANTS.CONTRACT_WRITE)
+  @PermissionKey(GRANTS.CONTRACT_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${ContractorController.name}::activate`))
   @UsePipes(new ValidationPipe())
   async activate(
