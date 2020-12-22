@@ -14,3 +14,4 @@ export * from './wage-type.enum';
 export * from './freezing-reason.interface';
 export * from './blocking-reason.interface';
 export * from './revision-history.interface';
+export * from './option.interface';
