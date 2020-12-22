@@ -5,7 +5,8 @@ dependencies:
   alias: app-template
 
 - name: postgresql
-  version: 8.5.0
-  repository: https://kubernetes-charts.storage.googleapis.com
+  version: 9.8.12
+  repository: https://charts.bitnami.com/bitnami
   condition: postgresql.enabled
   alias: postgresql
+
