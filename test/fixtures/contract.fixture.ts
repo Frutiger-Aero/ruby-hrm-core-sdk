@@ -1,5 +1,5 @@
 import { IContractCreateRequest } from "../../sdk/nestjs/build";
-import { contractorForBase1, contractorForBase2, gradeFixtureForBase1, wageFixtureForBase1, gradeFixtureForBase2 } from "./base.fixture";
+import { contractorForBase1, contractorForBase2, gradeFixtureForBase1, wageFixtureForBase1, gradeFixtureForBase2, skill1 } from "./base.fixture";
 
 export const contractFixture1: IContractCreateRequest = {
   status: 'ACTIVE',
@@ -11,7 +11,10 @@ export const contractFixture1: IContractCreateRequest = {
   },
   wage: { 
     id: wageFixtureForBase1.id
-  }
+  },
+  skills: [{
+    id: skill1.id
+  }]
 }
 
 export const contractFixture2: IContractCreateRequest = {
@@ -25,4 +28,5 @@ export const contractFixture2: IContractCreateRequest = {
   wage: {
     id: wageFixtureForBase1.id
   },
+
 }

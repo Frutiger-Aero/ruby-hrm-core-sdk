@@ -8,6 +8,7 @@ import { ContractPersistenceModule } from './contract';
 import { ContractorPersistenceModule } from './contractor';
 import { ReasonPersistenceModule } from './reason';
 import { RevisionHistoryModule } from './revision-history';
+import { SkillPersistenceModule } from './skill';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { RevisionHistoryModule } from './revision-history';
     ContractPersistenceModule,
     ContractorPersistenceModule,
     ReasonPersistenceModule,
+    SkillPersistenceModule,
     RevisionHistoryModule
   ],
   exports: [
@@ -32,7 +34,8 @@ import { RevisionHistoryModule } from './revision-history';
     ContractPersistenceModule,
     ContractorPersistenceModule,
     ReasonPersistenceModule,
-    RevisionHistoryModule
+    RevisionHistoryModule,
+    SkillPersistenceModule
   ],
 })
 export class PersistenceModule {}

@@ -5,4 +5,5 @@ export * from './position';
 export * from './wage';
 export * from './contractor';
 export * from './contract';
-export * from './reason'
+export * from './reason';
+export * from './skill';

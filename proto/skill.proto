@@ -1,0 +1,85 @@
+syntax = "proto3";
+
+package hrm.core;
+import "node_modules/@qlean/nestjs-typeorm-persistence-search/proto/common-search.proto";
+
+service SkillService {
+    rpc Create (SkillCreateRequest) returns (SkillResponse) {}
+    rpc Update (SkillUpdateRequest) returns (SkillResponse) {}
+    rpc Search (SkillSearchRequest) returns (SkillSearchResponse) {}
+    rpc FindById (qlean.common.search.UuidRequest) returns (SkillResponse) {}
+    rpc Remove (qlean.common.search.UuidRequest) returns (SkillResponse) {}
+    rpc Restore (qlean.common.search.UuidRequest) returns (SkillResponse) {}
+}
+
+message SkillCreateRequest {
+    string title = 1;
+    string name = 2;
+    string option = 3;
+}
+
+message SkillUpdateRequest {
+    string id = 1;
+    string title = 2;
+    string name = 3;
+    string option = 4;
+}
+
+message SkillResponse {
+    Skill data = 1;
+}
+
+message SkillSearchRequest {
+    int32 page = 1;
+    int32 limit = 2;
+    /* ******************
+     * Элементы массива задают последовательность сортировки
+     * ****************** */
+    repeated qlean.common.search.SortField sort = 3;
+    /* ******************
+     * Элементы массива применяются как OR
+     * ****************** */
+    repeated WhereFields where = 4;
+
+    /* ******************
+     * Поля для критериев фильтрации
+     * Свойства применяются как AND
+     * ****************** */
+    message WhereFields {
+        qlean.common.search.UuidCondition id = 1;
+        qlean.common.search.StringCondition title = 2;
+        qlean.common.search.StringCondition name = 3;
+        bool isDeleted = 4;
+        qlean.common.search.DateCondition createdAt = 5;
+        qlean.common.search.DateCondition updatedAt = 6;
+        qlean.common.search.DateCondition deletedAt = 7;
+        qlean.common.search.StringCondition option = 8;
+    }
+}
+
+message SkillSearchResponse {
+    repeated Skill data = 1;
+    int32 page = 2;
+    int32 pageCount = 3;
+    int32 limit = 4;
+    int32 count = 5;
+    int32 total = 6;
+}
+
+message Skill {
+    string id = 1;
+    string title = 2;
+    string name = 3;
+    string option = 4;
+    string createdAt = 5;
+    string updatedAt = 6;
+    bool isDeleted = 7;
+    string deletedAt = 8;
+}
+
+message SkillRelation {
+    string id = 1;
+    string title = 2;
+    string name = 3;
+    string option = 4;
+}

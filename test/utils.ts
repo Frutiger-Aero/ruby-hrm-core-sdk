@@ -11,6 +11,9 @@ export async function cleanup(conn: Connection) {
   await conn.query(`TRUNCATE ${process.env.TYPEORM_SCHEMA}."blocking-reasons" CASCADE`);
 
   await conn.query(`TRUNCATE ${process.env.TYPEORM_SCHEMA}.wages CASCADE`);
+  await conn.query(`TRUNCATE ${process.env.TYPEORM_SCHEMA}.skills CASCADE`);
+  await conn.query(`TRUNCATE ${process.env.TYPEORM_SCHEMA}."contracts_skills" CASCADE`);
+
   await conn.query(`TRUNCATE ${process.env.TYPEORM_SCHEMA}.positions CASCADE`);
   await conn.query(`TRUNCATE ${process.env.TYPEORM_SCHEMA}.specializations CASCADE`);
 }

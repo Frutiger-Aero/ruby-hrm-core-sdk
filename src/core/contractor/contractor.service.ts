@@ -23,8 +23,8 @@ export class ContractorService {
    */
   async create(args: Partial<IContractor>): Promise<IContractor> {
     try {
-      await this.store.create(args);
-      return this.findById(args.id);
+      const { id } = await this.store.create(args);
+      return this.findById(id);
     } catch (error) {
       this.catchError(error, args);
     }

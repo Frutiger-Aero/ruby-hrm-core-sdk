@@ -8,6 +8,7 @@ import { SpecializationHrmApiAdapter } from './hrm-specialization-hrm-api.adapte
 import { WageHrmApiAdapter } from './hrm-wage-hrm-api.adapter';
 import { ProductHrmApiAdapter } from './hrm-product-hrm-api.adapter';
 import { ReasonHrmApiAdapter } from './hrm-reason-hrm-api.adapter';
+import { SkillHrmApiAdapter } from './hrm-skill-hrm-api.adapter';
 
 @Module({
   imports: [
@@ -26,7 +27,8 @@ import { ReasonHrmApiAdapter } from './hrm-reason-hrm-api.adapter';
     WageHrmApiAdapter,
     ContractHrmApiAdapter,
     ProductHrmApiAdapter,
-    ReasonHrmApiAdapter
+    ReasonHrmApiAdapter,
+    SkillHrmApiAdapter
   ],
   providers: [
     {
@@ -44,7 +46,8 @@ import { ReasonHrmApiAdapter } from './hrm-reason-hrm-api.adapter';
     WageHrmApiAdapter,
     ContractHrmApiAdapter,
     ProductHrmApiAdapter,
-    ReasonHrmApiAdapter
+    ReasonHrmApiAdapter,
+    SkillHrmApiAdapter
   ],
 })
 export class HrmCoreModule {}

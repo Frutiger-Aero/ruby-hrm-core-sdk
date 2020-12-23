@@ -1,5 +1,12 @@
 import { AMOUNT_TYPE, IContract, IGrade, PERSON_STATUS, RATE_UNIT, WAGE_TYPE, WORK_STATUS } from "../../src/domain"
 
+export const skill1 = {
+  id: 'd7191ca9-3b63-4f2c-92cb-0721bc5046d8',
+  option: 'windows',
+  name: 'windows_skill',
+  title: 'скилл окна'
+}
+
 export const specializationFixtureForBase1 = {
   title: 'Доярка',
   name: 'Doyarka',
