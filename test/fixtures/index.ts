@@ -5,3 +5,4 @@ export * from './contractor.fixture';
 export * from './base.fixture';
 export * from './contract.fixture';
 export * from './product.fixture';
+export * from './skill.fixture';

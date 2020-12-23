@@ -27,5 +27,10 @@ export class ContractUpdateDto implements Partial<IContract>, hrm.core.IContract
   @ValidateNested()
   @Type(() => RelationDto)
   @IsOptional()
-  readonly contractor: RelationDto
+  readonly contractor: RelationDto;
+
+  @ValidateNested({ each: true })
+  @Type(() => RelationDto)
+  @IsOptional()
+  readonly skill: RelationDto
 }

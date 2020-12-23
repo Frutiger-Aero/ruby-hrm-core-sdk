@@ -10,3 +10,4 @@ import "./contract.proto";
 import "./contractor.proto";
 import "./common.proto";
 import "./reason.proto";
+import "./skill.proto";

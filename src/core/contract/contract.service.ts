@@ -14,7 +14,7 @@ export class ContractService {
     private readonly wageStore: WageStore
   ) {}
 
-  private relations: string[] = ['product', 'specialization', 'grade', 'wage', 'contractor'];
+  private relations: string[] = ['product', 'specialization', 'grade', 'wage', 'contractor', 'skills'];
 
   /**
    * Создает запись о новом контракте исполнителя

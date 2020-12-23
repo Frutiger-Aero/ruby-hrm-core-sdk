@@ -1,14 +1,13 @@
 import { IBaseModel } from "@qlean/nestjs-typeorm-persistence-search";
-import { IOption } from "./option.interface";
 
 export interface ISkill extends IBaseModel {
   /**
-   * @description Человекочитаемое название опции
+   * @description Человекочитаемое название скилла
    */
   readonly title: string;
 
   /**
-   * @description опция 
+   * @description ссылка на уникальное имя опции 
    */
-  readonly option: IOption;
+  readonly option: string;
 }

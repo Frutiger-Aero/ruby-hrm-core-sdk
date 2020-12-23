@@ -7,6 +7,7 @@ import "./specialization.proto";
 import "./contractor.proto";
 import "./product.proto";
 import "./common.proto";
+import "./skill.proto";
 
 service ContractService {
     rpc Create (ContractCreateRequest) returns (ContractResponse) {}
@@ -22,6 +23,7 @@ message ContractCreateRequest {
     GradeRelation grade = 2;
     WageRelation wage = 3;
     ConractorRelation contractor = 4;
+    repeated SkillRelation skills = 5;
 }
 
 message ContractUpdateRequest {
@@ -30,6 +32,7 @@ message ContractUpdateRequest {
     GradeRelation grade = 3;
     WageRelation wage = 4;
     ConractorRelation contractor = 5;
+    repeated SkillRelation skills = 6;
 }
 
 message Contract {
@@ -44,6 +47,7 @@ message Contract {
     Grade grade = 9;
     WageRelation wage = 10;
     ContractorRelation contractor = 11;
+    repeated SkillRelation skills = 12;
 }
 
 message ContractResponse {

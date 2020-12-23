@@ -13,7 +13,7 @@ import { FreezingReasonModel } from '../src/infrastructure/persistence/reason/fr
 
 describe('Contract (e2e)', () => {
   let contractorApi: ContractorHrmApiAdapter;
-  let id: string;
+  let OuterId: string;
   let app = null;
   let blockingReasonRepo: Repository<BlockingReasonModel> = null;
   let freezingReasonRepo: Repository<FreezingReasonModel> = null;
@@ -75,7 +75,7 @@ describe('Contract (e2e)', () => {
 
       expect(result.data?.id).not.toBeNull();
       expect(typeof result.data?.id).toBe('string');
-      id = result.data.id;
+      OuterId = result.data.id;
     });
   });
 
@@ -94,7 +94,7 @@ describe('Contract (e2e)', () => {
   describe('Update contractor', () => {
     it('Должен изменить исполнителя', async () => {
       const result = await contractorApi.update({
-        id,
+        id: OuterId,
         ...contractorFixture2
       });
 
@@ -108,20 +108,20 @@ describe('Contract (e2e)', () => {
 
   describe('get contractor by id', () => {
     it('Должен отдать исполнителя по id', async () => {
-      const result = await contractorApi.findById({id});
+      const result = await contractorApi.findById({id: OuterId});
       expect(result.data.rating).toEqual(contractorFixture2.rating);
       expect(result.data.workStatus).toEqual(contractorFixture2.workStatus);
       expect(result.data.userId).toEqual(contractorFixture1.userId);
       expect(result.data.status).toEqual(contractorFixture2.status);
       expect(result.data.regionId).toEqual(contractorFixture2.regionId);
-      expect(result.data.id).toEqual(id);
+      expect(result.data.id).toEqual(OuterId);
     });
   });
 
   describe('remove specialization', () => {
     it('Должен мягко удалить исполнителя по id', async () => {
-      const res = await contractorApi.remove({id});
-      expect(res.data.id).toEqual(id);
+      const res = await contractorApi.remove({id: OuterId});
+      expect(res.data.id).toEqual(OuterId);
       expect(res.data.isDeleted).toEqual(true);
       expect(res.data.deletedAt).toBeTruthy();
     });
@@ -129,8 +129,8 @@ describe('Contract (e2e)', () => {
 
   describe('restore contractor', () => {
     it('Должен восстановить исполнителя по id', async () => {
-      const res = await contractorApi.restore({id});
-      expect(res.data.id).toEqual(id);
+      const res = await contractorApi.restore({id: OuterId});
+      expect(res.data.id).toEqual(OuterId);
       expect(res.data.isDeleted).toEqual(false);
     });
   });
@@ -148,44 +148,44 @@ describe('Contract (e2e)', () => {
   describe('block contractor', () => {
     it('Должен изменить статус на blocked', async () => {
       const res = await contractorApi.block({
-        id,
+        id: OuterId,
         reason: {
           id: blockingReasonForBase1.id
         }
       });
       expect(res.data.workStatus).toEqual(WORK_STATUS.BLOCKED);
-      expect(res.data.id).toEqual(id);
+      expect(res.data.id).toEqual(OuterId);
     });
   });
 
   describe('activate contractor', () => {
     it('Должен изменить статус на active', async () => {
       const res = await contractorApi.activate({
-        id
+        id: OuterId
       });
       expect(res.data.workStatus).toEqual(WORK_STATUS.ACTIVE);
-      expect(res.data.id).toEqual(id);
+      expect(res.data.id).toEqual(OuterId);
     });
   });
 
   describe('activate permanently blocked contractor', () => {
     it('Должен выдать ошибку', async () => {
       let error;
-      const {data: {id: contractorId}} = await contractorApi.create(contractorFixture3);
+      const blockedContractor = await contractorApi.create(contractorFixture3);
       await contractorApi.block({
-        id: contractorId,
+        id: blockedContractor.data.id,
         reason: {
           id: blockingReasonForBase2.id
         }
       });
       try {
         await contractorApi.activate({
-          id: contractorId
+          id: blockedContractor.data.id
         });
       } catch (err) {
         error = err.message;
       }
-      const res = await contractorApi.findById({ id: contractorId });
+      const res = await contractorApi.findById({ id: blockedContractor.data.id });
       expect(error).toMatch(/Can\'t activate contractor because of blocking reason/);
       expect(res.data.workStatus).toEqual(WORK_STATUS.BLOCKED);
     });
@@ -194,10 +194,10 @@ describe('Contract (e2e)', () => {
   describe('block with not exited reason', () => {
     it('Должен выдать ошибку', async () => {
       let error;
-      const {data: {id: contractorId}} = await contractorApi.create(contractorFixture4);
+      const {data: {id}} = await contractorApi.create(contractorFixture4);
       try {
         await contractorApi.block({
-          id: contractorId,
+          id,
           reason: {
             id: '8adcc108-0f41-4dcd-9c31-9ae7f4888ceb'
           }
@@ -210,7 +210,7 @@ describe('Contract (e2e)', () => {
   });
 
   describe('freeze contractor', async () => {
-    let contractorId;
+    let freezeContractorId;
     it('Должен вернуть ошибку отсутствия исполнителя', async () => {
       let error;
       try {
@@ -227,10 +227,10 @@ describe('Contract (e2e)', () => {
     });
 
     it('Должен заморозить исполнителя', async () => {
-      const {data: {id}} = await contractorApi.create(contractorFixture5);
-      contractorId = id;
+      const freezeContractor = await contractorApi.create(contractorFixture5);
+      freezeContractorId = freezeContractor.data.id;
       const res = await contractorApi.freeze({ 
-        id,
+        id: freezeContractor.data.id,
         reason: {
           id: freezingReasonForBase1.id
         }
@@ -239,9 +239,8 @@ describe('Contract (e2e)', () => {
     });
 
     it('Должен вернуть замороженного исполнителя', async () => {
-      contractorId = id;
       const res = await contractorApi.freeze({ 
-        id,
+        id: freezeContractorId,
         reason: {
           id: freezingReasonForBase1.id
         }
@@ -250,7 +249,7 @@ describe('Contract (e2e)', () => {
     });
 
     it('Должен разморозить исполнителя', async () => {
-      const res = await contractorApi.activate({ id: contractorId });
+      const res = await contractorApi.activate({ id: freezeContractorId });
       expect(res.data.workStatus).toEqual(WORK_STATUS.ACTIVE);
     });
 
@@ -258,7 +257,7 @@ describe('Contract (e2e)', () => {
       let error;
       try {
         await contractorApi.freeze({ 
-          id: contractorId,
+          id: freezeContractorId,
           reason: {
             id: '430db34b-8e3f-40d9-b2ac-5c1a339a7ff5'
           }

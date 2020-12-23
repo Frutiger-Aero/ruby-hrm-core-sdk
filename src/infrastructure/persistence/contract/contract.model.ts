@@ -1,4 +1,4 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { BaseModel, TModelID } from '@qlean/nestjs-typeorm-persistence-search';
 import { IContract, CONTRACT_STATUS } from '../../../domain';
 import { IsEnum, IsUUID } from 'class-validator';
@@ -7,6 +7,7 @@ import { ProductModel } from '../product/product.model';
 import { SpecializationModel } from '../specialization/specialization.model';
 import { GradeModel } from '../wage/grade.model';
 import { ContractorModel } from '../contractor/contractor.model';
+import { SkillModel } from '../skill/skill.model';
 
 @Entity({
   name: 'contracts',
@@ -23,7 +24,6 @@ export class ContractModel extends BaseModel<IContract> implements IContract {
 
   @Column({ name: 'product_id' })
   readonly productId: string;
-
 
   @ManyToOne(type => SpecializationModel, e => e.contracts)
   @JoinColumn({ name: 'specialization_id' })
@@ -56,4 +56,8 @@ export class ContractModel extends BaseModel<IContract> implements IContract {
 
   @Column({ name: 'contractor_id' })
   readonly contractorId: string;
+
+  @ManyToMany(() => SkillModel)
+  @JoinTable({ name: 'contracts_skills'})
+  readonly skills: SkillModel[]
 }

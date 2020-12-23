@@ -4,6 +4,7 @@ import { IGrade } from './grade.interface';
 import { IProduct } from './product.interface';
 import { ISpecialization } from './specialization.interface';
 import { IContractor } from './contractor.interface';
+import { ISkill } from './skill.interface';
 
 export enum CONTRACT_STATUS {
   /**
@@ -51,4 +52,8 @@ export interface IContract extends IBaseModel {
    */
   contractor: Partial<IContractor>;
 
+  /**
+   * @description скилы, которые необходимы исполнителю для выполнения контракта
+   */
+  skills: ISkill[];
 }
