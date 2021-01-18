@@ -60,4 +60,7 @@ export class ContractModel extends BaseModel<IContract> implements IContract {
   @ManyToMany(() => SkillModel)
   @JoinTable({ name: 'contracts_skills'})
   readonly skills: SkillModel[]
+
+  @Column({ type: 'uuid', nullable: true, name: 'changed_status_reason_id' })
+  readonly changedStatusReasonId: string;
 }

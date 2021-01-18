@@ -8,7 +8,7 @@ import { UuidRequestDto } from '@qlean/nestjs-typeorm-persistence-search';
 import { StatsInterceptor } from '@qlean/nestjs-stats';
 import { PACKAGE_NAME } from '../../constance';
 import { ContractorService } from '../../core';
-import { ActivateDto, BlockDto, ContractorCreateDto, ContractorSearchDto, ContractorUpdateDto, FreezeDto } from '../dto';
+import { BlockDto, ContractorCreateDto, ContractorSearchDto, ContractorUpdateDto } from '../dto';
 import { hrm } from '../../../proto/generated/app.proto';
 import { GRANTS } from '../../sso.options';
 
@@ -106,25 +106,10 @@ export class ContractorController {
 
   @GrpcMethod(PROTO_SVS_NAME)
   @PermissionKey(GRANTS.CONTRACT_WRITE)
-  @UseFilters(RpcExceptionFilter.for(`${ContractorController.name}::freeze`))
-  @UsePipes(new ValidationPipe())
-  async freeze(
-    args: FreezeDto,
-    authTokenBody?: ITokenBody
-    ): Promise<hrm.core.ContractorResponse> {
-    const userId = this.getUserIdFromToken(authTokenBody);
-    const result = await this.svs.freeze({...args, userId});
-    return new hrm.core.ContractorResponse({
-      data: classToPlain(result),
-    });
-  }
-
-  @GrpcMethod(PROTO_SVS_NAME)
-  @PermissionKey(GRANTS.CONTRACT_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${ContractorController.name}::activate`))
   @UsePipes(new ValidationPipe())
   async activate(
-    args: ActivateDto,
+    args: UuidRequestDto,
     authTokenBody?: ITokenBody
     ): Promise<hrm.core.ContractorResponse> {
     const userId = this.getUserIdFromToken(authTokenBody);

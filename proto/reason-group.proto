@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+package hrm.core;
+import "node_modules/@qlean/nestjs-typeorm-persistence-search/proto/common-search.proto";
+
+service BlockingReasonGroupService {
+    rpc Create (BlockingReasonGroupCreateRequest) returns (BlockingReasonGroupResponse) {}
+    rpc Update (BlockingReasonGroupUpdateRequest) returns (BlockingReasonGroupResponse) {}
+    rpc Search (BlockingReasonGroupSearchRequest) returns (BlockingReasonGroupSearchResponse) {}
+    rpc FindById (qlean.common.search.UuidRequest) returns (BlockingReasonGroupResponse) {}
+    rpc Remove (qlean.common.search.UuidRequest) returns (BlockingReasonGroupResponse) {}
+    rpc Restore (qlean.common.search.UuidRequest) returns (BlockingReasonGroupResponse) {}
+}
+
+message BlockingReasonGroupCreateRequest {
+    string name = 1;
+}
+
+message BlockingReasonGroupUpdateRequest {
+    string id = 1;
+    string name = 2;
+}
+
+message BlockingReasonGroupResponse {
+    BlockingReasonGroup data = 1;
+}
+
+message BlockingReasonGroupSearchRequest {
+    int32 page = 1;
+    int32 limit = 2;
+    /* ******************
+     * Элементы массива задают последовательность сортировки
+     * ****************** */
+    repeated qlean.common.search.SortField sort = 3;
+    /* ******************
+     * Элементы массива применяются как OR
+     * ****************** */
+    repeated WhereFields where = 4;
+
+    /* ******************
+     * Поля для критериев фильтрации
+     * Свойства применяются как AND
+     * ****************** */
+    message WhereFields {
+        qlean.common.search.UuidCondition id = 1;
+        qlean.common.search.StringCondition name = 2;
+    }
+}
+
+message BlockingReasonGroupSearchResponse {
+    repeated BlockingReasonGroup data = 1;
+    int32 page = 2;
+    int32 pageCount = 3;
+    int32 limit = 4;
+    int32 count = 5;
+    int32 total = 6;
+}
+
+message BlockingReasonGroup {
+    string id = 1;
+    string name = 2;
+    string createdAt = 3;
+    string updatedAt = 4;
+    bool isDeleted = 5;
+    string deletedAt = 6;
+}
+
+message BlockingReasonGroupRelation {
+    string id = 1;
+    string name = 2;
+}

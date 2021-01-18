@@ -8,8 +8,7 @@ import { CommonApiAdapter } from './common.adapter';
 import ContractorService = hrm.core.ContractorService;
 import UuidRequest = qlean.common.search.UuidRequest;
 import IContractorBlockRequest = hrm.core.IContractorBlockRequest;
-import IContractorActivateRequest = hrm.core.IContractorActivateRequest;
-import IContractorFreezeRequest = hrm.core.IContractorFreezeRequest;
+import IContractorActivateRequest = hrm.core.IContractorBlockRequest;
 import IContractorSearchRequest = hrm.core.IContractorSearchRequest;
 import IContractorCreateRequest = hrm.core.IContractorCreateRequest;
 import IContractorUpdateRequest = hrm.core.IContractorUpdateRequest;
@@ -27,7 +26,6 @@ export {
   IContractorResponse,
   IContractorBlockRequest,
   IContractorActivateRequest,
-  IContractorFreezeRequest,
   IContractor
 };
 
@@ -73,19 +71,8 @@ export class ContractorHrmApiAdapter extends CommonApiAdapter<ContractorService>
     return this.call('restore', args);
   }
 
-
-  @GrpcClientStats({ grpc_method: 'Block', grpc_service: 'ContractService', grpc_type: 'unary'})
+  @GrpcClientStats({ grpc_method: 'Block', grpc_service: 'ContractorService', grpc_type: 'unary'})
   block(args: IContractorBlockRequest): Promise<IContractorResponse> {
     return this.call('block', args);
-  }
-
-  @GrpcClientStats({ grpc_method: 'Freeze', grpc_service: 'ContractService', grpc_type: 'unary'})
-  freeze(args: IContractorFreezeRequest): Promise<IContractorResponse> {
-    return this.call('freeze', args);
-  }
-
-  @GrpcClientStats({ grpc_method: 'Activate', grpc_service: 'ContractService', grpc_type: 'unary'})
-  activate(args: IContractorActivateRequest): Promise<IContractorResponse> {
-    return this.call('activate', args);
   }
 }

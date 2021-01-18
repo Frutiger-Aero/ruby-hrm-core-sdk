@@ -15,14 +15,14 @@ import { GRANTS } from '../../sso.options';
 const PROTO_SVS_NAME = 'WageService';
 
 @Controller(PACKAGE_NAME)
-@UseGuards(PLTJWTGuard)
+// @UseGuards(PLTJWTGuard)
 @UseInterceptors(StatsInterceptor)
 @UseInterceptors(SentryInterceptor)
 export class WageController {
   constructor(private readonly svs: WageService) {}
 
   @GrpcMethod(PROTO_SVS_NAME)
-  @PermissionKey(GRANTS.WAGE_WRITE)
+  // @PermissionKey(GRANTS.WAGE_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${WageController.name}::create`))
   @UsePipes(new ValidationPipe())
   async create(args: WageCreateDto): Promise<hrm.core.WageResponse> {

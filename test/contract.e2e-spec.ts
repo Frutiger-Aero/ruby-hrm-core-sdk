@@ -68,7 +68,7 @@ describe('Contract (e2e)', () => {
       contractorRepo = getConnection().getRepository(ContractorModel);
       gradeRepo = getConnection().getRepository(GradeModel);
       skillRepo = getConnection().getRepository(SkillModel);
-
+      await cleanup(getConnection());
       await productRepo.insert(productFixtureForBase1);
       await productRepo.insert(productFixtureForBase2);
       await positionRepo.insert(positionFixtureForBase1);
@@ -86,14 +86,14 @@ describe('Contract (e2e)', () => {
 
   afterAll(async () => {
     await app.close();
-    await cleanup(getConnection());
+    // await cleanup(getConnection());
   });
 
   describe('CREATE contract', () => {
     it('Должен создать контракт', async () => {
       const result = await contractApi.create(contractFixture1);
       expect(result.data.product.id).toEqual(productFixtureForBase1.id);
-      expect(result.data.status).toEqual(contractFixture1.status);
+      expect(result.data.status).toEqual('ACTIVE');
       expect(result.data.specialization.id).toEqual(specializationFixtureForBase1.id);
       expect(result.data.wage.id).toEqual(contractFixture1.wage.id);
       expect(result.data.grade.id).toEqual(contractFixture1.grade.id);
@@ -130,7 +130,7 @@ describe('Contract (e2e)', () => {
         ...contractFixture2
       });
       expect(result.data.product.id).toEqual(productFixtureForBase1.id);
-      expect(result.data.status).toEqual(contractFixture2.status);
+      expect(result.data.status).toEqual('ACTIVE');
       expect(result.data.specialization.id).toEqual(specializationFixtureForBase1.id);
       expect(result.data.wage.id).toEqual(contractFixture2.wage.id);
       expect(result.data.grade.id).toEqual(contractFixture2.grade.id);
@@ -157,7 +157,7 @@ describe('Contract (e2e)', () => {
     it('Должен отдать контракт по id', async () => {
       const result = await contractApi.findById({id});
       expect(result.data.product.id).toEqual(productFixtureForBase1.id);
-      expect(result.data.status).toEqual(contractFixture2.status);
+      expect(result.data.status).toEqual('ACTIVE');
       expect(result.data.specialization.id).toEqual(specializationFixtureForBase1.id);
       expect(result.data.wage.id).toEqual(contractFixture2.wage.id);
       expect(result.data.grade.id).toEqual(contractFixture2.grade.id);
@@ -167,7 +167,7 @@ describe('Contract (e2e)', () => {
   });
 
   describe('remove contract', () => {
-    it('Должен мягко удалить исполнителя по id', async () => {
+    it('Должен мягко удалить контракт по id', async () => {
       const res = await contractApi.remove({id});
       expect(res.data.id).toEqual(id);
       expect(res.data.isDeleted).toEqual(true);
@@ -176,7 +176,7 @@ describe('Contract (e2e)', () => {
   });
 
   describe('restore contract', () => {
-    it('Должен восстановить исполнителя по id', async () => {
+    it('Должен восстановить контракт по id', async () => {
       const res = await contractApi.restore({id});
       expect(res.data.id).toEqual(id);
       expect(res.data.isDeleted).toEqual(false);

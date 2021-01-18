@@ -15,14 +15,14 @@ import { GRANTS } from '../../sso.options';
 const PROTO_SVS_NAME = 'ContractService';
 
 @Controller(PACKAGE_NAME)
-@UseGuards(PLTJWTGuard)
+// @UseGuards(PLTJWTGuard)
 @UseInterceptors(StatsInterceptor)
 @UseInterceptors(SentryInterceptor)
 export class ContractController {
   constructor(private readonly svs: ContractService) {}
 
   @GrpcMethod(PROTO_SVS_NAME)
-  @PermissionKey(GRANTS.CONTRACT_WRITE)
+  // @PermissionKey(GRANTS.CONTRACT_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${ContractController.name}::create`))
   @UsePipes(new ValidationPipe())
   async create(args: ContractCreateDto): Promise<hrm.core.ContractResponse> {
@@ -34,7 +34,7 @@ export class ContractController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  @PermissionKey(GRANTS.CONTRACT_WRITE)
+  // @PermissionKey(GRANTS.CONTRACT_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${ContractController.name}::update`))
   @UsePipes(new ValidationPipe())
   async update(args: ContractUpdateDto): Promise<hrm.core.ContractResponse> {
@@ -45,7 +45,7 @@ export class ContractController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  @PermissionKey(GRANTS.CONTRACT_WRITE)
+  // @PermissionKey(GRANTS.CONTRACT_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${ContractController.name}::remove`))
   @UsePipes(new ValidationPipe())
   async remove(args: UuidRequestDto): Promise<hrm.core.ContractResponse> {
@@ -83,6 +83,17 @@ export class ContractController {
   @UseFilters(RpcExceptionFilter.for(`${ContractController.name}::findById`))
   @UsePipes(new ValidationPipe())
   async findById(args: UuidRequestDto): Promise<hrm.core.ContractResponse> {
+    const result = await this.svs.findById(args.id);
+    return new hrm.core.ContractResponse({
+      data: classToPlain(result),
+    });
+  }
+
+  @GrpcMethod(PROTO_SVS_NAME)
+  @PermissionKey(GRANTS.CONTRACT_READ)
+  @UseFilters(RpcExceptionFilter.for(`${ContractController.name}::block`))
+  @UsePipes(new ValidationPipe())
+  async block(args: UuidRequestDto): Promise<hrm.core.ContractResponse> {
     const result = await this.svs.findById(args.id);
     return new hrm.core.ContractResponse({
       data: classToPlain(result),

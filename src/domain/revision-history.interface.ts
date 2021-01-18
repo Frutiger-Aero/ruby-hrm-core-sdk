@@ -1,3 +1,5 @@
+import { ENTITY_TYPE } from "./entity-type.enum";
+
 export interface IRevisionHistory {
   /**
    * Идентификатор
@@ -14,6 +16,11 @@ export interface IRevisionHistory {
   readonly entityId: string;
 
   /**
+   * Тип сущности для которой внесли изменения
+   */
+  readonly entityType: ENTITY_TYPE;
+
+  /**
    * Новое значение на которое изменили
    */
   readonly change: string;
@@ -26,5 +33,5 @@ export interface IRevisionHistory {
   /**
    * Дата изменения
    */
-  readonly updatedAt: Date;
+  readonly createdAt: Date;
 }

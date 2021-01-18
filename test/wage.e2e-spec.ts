@@ -102,8 +102,8 @@ describe('Wage (e2e)', () => {
     });
   });
 
-  describe('Update position', () => {
-    it('Должен обновить ставку тариф', async () => {
+  describe('Update wage', () => {
+    it('Должен обновить тариф', async () => {
       const result = await wageApi.update({
         id,
         ...wageFixture2
@@ -155,7 +155,7 @@ describe('Wage (e2e)', () => {
   });
 
   describe('search position', () => {
-    it('Должен вывести список с 1 ставкой', async () => {
+    it('Должен вывести список с 1 тарифом', async () => {
       const res = await wageApi.search({
         limit: 2,
         page: 1

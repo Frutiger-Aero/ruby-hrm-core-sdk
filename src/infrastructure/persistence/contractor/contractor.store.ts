@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { ClassType } from 'class-transformer/ClassTransformer';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -17,5 +17,24 @@ export class ContractorStore extends CrudStore<ContractorModel> {
     protected readonly repository: Repository<ContractorModel>,
   ) {
     super();
+  }
+
+
+  blockingFindById(id: string, entityManager: EntityManager) {
+    return entityManager.getRepository(ContractorModel)
+      .createQueryBuilder("contractors")
+      .useTransaction(true)
+      .setLock("pessimistic_write")
+      .where("contractors.id = :id", { id })
+      .getOne();
+  }
+
+  updateInTransaction(id: string, params: Partial<ContractorModel> ,entityManager: EntityManager) {
+    return entityManager.getRepository(ContractorModel)
+      .createQueryBuilder("contractors")
+      .update()
+      .set(params)
+      .where("contractors.id = :id", { id })
+      .execute()
   }
 }

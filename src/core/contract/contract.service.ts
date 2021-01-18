@@ -21,6 +21,7 @@ export class ContractService {
    */
   async create(args: Partial<IContract>): Promise<IContract> {
     const wage = await this.wageStore.findById(args.wage.id);
+    console.log(args)
     if (!wage) {
       throw new InvalidArgumentException(`wage id=${args.wage.id} doesn't exist`);
     }

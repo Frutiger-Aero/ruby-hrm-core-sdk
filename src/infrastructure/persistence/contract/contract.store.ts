@@ -1,4 +1,4 @@
-import {Repository} from 'typeorm';
+import {EntityManager, Repository} from 'typeorm';
 import {Injectable} from '@nestjs/common';
 import {InjectRepository} from '@nestjs/typeorm';
 import {Logger} from '@qlean/nestjs-logger';
@@ -17,5 +17,14 @@ export class ContractStore extends CrudStore<ContractModel>{
     protected readonly repository: Repository<ContractModel>,
   ) {
     super();
+  }
+
+  updateInTransaction(params: Partial<ContractModel>, payload: Partial<ContractModel>, entityManager: EntityManager ) {
+    return entityManager.getRepository(ContractModel)
+      .createQueryBuilder("contract")
+      .update()
+      .set(payload)
+      .where(params)
+      .execute()
   }
 }

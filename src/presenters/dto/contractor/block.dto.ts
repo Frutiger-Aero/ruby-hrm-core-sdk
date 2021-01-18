@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { IsUUID, ValidateNested } from "class-validator";
+import { IsDateString, IsOptional, IsUUID, ValidateNested } from "class-validator";
 import { hrm } from "../../../../proto/generated/app.proto";
 import { RelationDto } from "../common/relation.dto";
 
@@ -10,4 +10,12 @@ export class BlockDto implements hrm.core.IContractorBlockRequest {
 
   @IsUUID()
   readonly id: string;
+
+  @IsOptional()
+  @IsDateString()
+  readonly startBlockDate: string;
+
+  @IsOptional()
+  @IsDateString()
+  readonly endBlockDate: string;
 }

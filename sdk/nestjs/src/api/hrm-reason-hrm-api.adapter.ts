@@ -5,22 +5,29 @@ import { hrm, qlean } from '../../proto/generated/app.proto';
 import { PACKAGE_API } from './hrm-core.options';
 import { GrpcClientStats } from '@qlean/nestjs-stats';
 import { CommonApiAdapter } from './common.adapter';
-import ReasonService = hrm.core.ReasonService;
+import ReasonService = hrm.core.BlockingReasonService;
 import IBlockingReason = hrm.core.IBlockingReason;
-import IFreezingReason = hrm.core.IFreezingReason;
-import IBlockingReasonsResponse = hrm.core.IBlockingReasonsResponse;
-import IFreezingReasonsResponse = hrm.core.IFreezingReasonsResponse;
+import IBlockingReasonResponse = hrm.core.IBlockingReasonResponse;
+import IBlockingReasonCreateRequest = hrm.core.IBlockingReasonCreateRequest;
+import IBlockingReasonUpdateRequest = hrm.core.IBlockingReasonUpdateRequest;
+import IBlockingReasonSearchRequest = hrm.core.IBlockingReasonSearchRequest;
+import IBlockingReasonSearchResponse = hrm.core.IBlockingReasonSearchResponse;
+import IBlockingReasonGroup = hrm.core.IBlockingReasonGroup;
 
+import UuidRequest = qlean.common.search.UuidRequest;
 
 export {
   IBlockingReason,
-  IFreezingReason,
-  IBlockingReasonsResponse,
-  IFreezingReasonsResponse
+  IBlockingReasonResponse,
+  IBlockingReasonCreateRequest,
+  IBlockingReasonUpdateRequest,
+  IBlockingReasonSearchRequest,
+  IBlockingReasonSearchResponse,
+  IBlockingReasonGroup
 };
 
 @Injectable()
-export class ReasonHrmApiAdapter extends CommonApiAdapter<ReasonService> {
+export class BlockingReasonHrmApiAdapter extends CommonApiAdapter<ReasonService> {
 
   constructor(
     @Inject(PACKAGE_API) client: ClientGrpc,
@@ -31,13 +38,33 @@ export class ReasonHrmApiAdapter extends CommonApiAdapter<ReasonService> {
     super(client, config, api, tokenSource);
   }
 
-  @GrpcClientStats({ grpc_method: 'GetBlockingReasons', grpc_service: 'ReasonService', grpc_type: 'unary'})
-  getBlockingReasons(): Promise<IBlockingReasonsResponse> {
-    return this.call('getBlockingReasons', {});
+  @GrpcClientStats({ grpc_method: 'Search', grpc_service: 'BlockingReasonService', grpc_type: 'unary'})
+  search(args: IBlockingReasonSearchRequest): Promise<IBlockingReasonSearchResponse> {
+    return this.call('search', args);
   }
 
-  @GrpcClientStats({ grpc_method: 'GetFreezingReasons', grpc_service: 'ReasonService', grpc_type: 'unary'})
-  getFreezingReasons(): Promise<IFreezingReasonsResponse> {
-    return this.call('getFreezingReasons', {});
+  @GrpcClientStats({ grpc_method: 'Create', grpc_service: 'BlockingReasonService', grpc_type: 'unary'})
+  create(args: IBlockingReasonCreateRequest): Promise<IBlockingReasonResponse> {
+    return this.call('create', args);
+  }
+
+  @GrpcClientStats({ grpc_method: 'Update', grpc_service: 'BlockingReasonService', grpc_type: 'unary'})
+  update(args: IBlockingReasonUpdateRequest): Promise<IBlockingReasonResponse> {
+    return this.call('update', args);
+  }
+
+  @GrpcClientStats({ grpc_method: 'FindById', grpc_service: 'BlockingReasonService', grpc_type: 'unary'})
+  findById(args: UuidRequest): Promise<IBlockingReasonResponse> {
+    return this.call('findById', args);
+  }
+
+  @GrpcClientStats({ grpc_method: 'Remove', grpc_service: 'BlockingReasonService', grpc_type: 'unary'})
+  remove(args: UuidRequest): Promise<IBlockingReasonResponse> {
+    return this.call('remove', args);
+  }
+
+  @GrpcClientStats({ grpc_method: 'Restore', grpc_service: 'BlockingReasonService', grpc_type: 'unary'})
+  restore(args: UuidRequest): Promise<IBlockingReasonResponse> {
+    return this.call('restore', args);
   }
 }

@@ -1,35 +1,97 @@
 syntax = "proto3";
 
 package hrm.core;
+import "./reason-group.proto";
 
-service ReasonService {
-  rpc GetBlockingReasons (Empty) returns (BlockingReasonsResponse) {}
-  rpc GetFreezingReasons (Empty) returns (FreezingReasonsResponse) {}
+service BlockingReasonService {
+  rpc Create (BlockingReasonCreateRequest) returns (BlockingReasonResponse) {}
+  rpc Update (BlockingReasonUpdateRequest) returns (BlockingReasonResponse) {}
+  rpc Search (BlockingReasonSearchRequest) returns (BlockingReasonSearchResponse) {}
+  rpc Remove (qlean.common.search.UuidRequest) returns (BlockingReasonResponse) {}
+  rpc Restore (qlean.common.search.UuidRequest) returns (BlockingReasonResponse) {}
+  rpc FindById (qlean.common.search.UuidRequest) returns (BlockingReasonResponse) {}
 }
 
-message Empty {
-
+message BlockingReasonResponse {
+  BlockingReason data = 1;
 }
 
-message BlockingReasonsResponse {
+
+message BlockingReasonSearchRequest {
+  int32 page = 1;
+  int32 limit = 2;
+  /* ******************
+    * Элементы массива задают последовательность сортировки
+    * ****************** */
+  repeated qlean.common.search.SortField sort = 3;
+  /* ******************
+    * Элементы массива применяются как OR
+    * ****************** */
+  repeated WhereFields where = 4;
+
+  /* ******************
+    * Поля для критериев фильтрации
+    * Свойства применяются как AND
+    * ****************** */
+  message WhereFields {
+      qlean.common.search.UuidCondition id = 1;
+      bool isDeleted = 2;
+      qlean.common.search.StringCondition type = 3;
+      bool isPermanent = 4;
+      bool isAvailableForContractor = 5;
+      bool isInstant = 6;
+      bool isNeedRetraining = 7;
+      bool isCommonBlock = 8;
+  }
+}
+
+
+message BlockingReasonSearchResponse {
   repeated BlockingReason data = 1;
 }
 
-message FreezingReasonsResponse {
-  repeated FreezingReason data = 1;
+
+message BlockingReasonCreateRequest {
+  string name = 1;
+  string type = 2;
+  bool isAvailableForContractor = 3;
+  bool isInstant = 4;
+  bool isNeedRetraining = 5;
+  bool isCommonBlock = 6;
+  bool isPermanent = 7;
+  BlockingReasonGroupRelation group = 8;
+}
+
+message BlockingReasonUpdateRequest {
+  string id = 1;
+  string name = 2;
+  string type = 3;
+  bool isAvailableForContractor = 4;
+  bool isInstant = 5;
+  bool isNeedRetraining = 6;
+  bool isCommonBlock = 7;
+  bool isPermanent = 8;
+  BlockingReasonGroupRelation group = 9;
 }
 
 message BlockingReason {
   string id = 1;
   string name = 2;
-  bool isRecoverable = 3;
+  string type = 3;
+  bool isAvailableForContractor = 4;
+  bool isInstant = 5;
+  bool isNeedRetraining = 6;
+  bool isCommonBlock = 7;
+  bool isPermanent = 8;
+  BlockingReasonGroupRelation group = 9;
+  string createdAt = 10;
+  string updatedAt = 11;
+  bool isDeleted = 12;
+  string deletedAt = 13;
 }
 
-message FreezingReason {
+message BlockingReasonRelation {
   string id = 1;
   string name = 2;
-}
-
-message ReasonRelation {
-  string id = 1;
+  string type = 3;
 }

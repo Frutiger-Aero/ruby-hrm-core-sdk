@@ -7,3 +7,5 @@ export * from './contractor';
 export * from './contract';
 export * from './reason';
 export * from './skill';
+export * from './revision-history';
+export * from './reason-group';

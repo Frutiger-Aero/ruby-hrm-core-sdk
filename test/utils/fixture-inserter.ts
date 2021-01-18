@@ -1,4 +1,4 @@
-import { AppModule } from '../src/app.module';
+import { AppModule } from '../../src/app.module';
 import { Logger } from '@qlean/nestjs-logger';
 import { NestFactory } from '@nestjs/core';
 import { getConnection } from 'typeorm';

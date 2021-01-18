@@ -9,14 +9,12 @@ import { blockingReasonForBase1, blockingReasonForBase2, contractorFixture1, con
 import { HrmCoreModule } from '../sdk/nestjs/build';
 import { WORK_STATUS } from '../src/domain';
 import { BlockingReasonModel } from '../src/infrastructure/persistence/reason/blocking-reason.model';
-import { FreezingReasonModel } from '../src/infrastructure/persistence/reason/freezing-reason.model';
 
 describe('Contract (e2e)', () => {
   let contractorApi: ContractorHrmApiAdapter;
   let OuterId: string;
   let app = null;
   let blockingReasonRepo: Repository<BlockingReasonModel> = null;
-  let freezingReasonRepo: Repository<FreezingReasonModel> = null;
 
 
   beforeAll(async () => {
@@ -51,11 +49,9 @@ describe('Contract (e2e)', () => {
         clientId: 'testApp',
       });
       blockingReasonRepo = getConnection().getRepository(BlockingReasonModel);
-      freezingReasonRepo = getConnection().getRepository(FreezingReasonModel);
 
       await blockingReasonRepo.insert(blockingReasonForBase1);
       await blockingReasonRepo.insert(blockingReasonForBase2);
-      await freezingReasonRepo.insert(freezingReasonForBase1);
   });
 
   afterAll(async () => {
@@ -158,38 +154,38 @@ describe('Contract (e2e)', () => {
     });
   });
 
-  describe('activate contractor', () => {
-    it('Должен изменить статус на active', async () => {
-      const res = await contractorApi.activate({
-        id: OuterId
-      });
-      expect(res.data.workStatus).toEqual(WORK_STATUS.ACTIVE);
-      expect(res.data.id).toEqual(OuterId);
-    });
-  });
+  // describe('activate contractor', () => {
+  //   it('Должен изменить статус на active', async () => {
+  //     const res = await contractorApi.activate({
+  //       id: OuterId
+  //     });
+  //     expect(res.data.workStatus).toEqual(WORK_STATUS.ACTIVE);
+  //     expect(res.data.id).toEqual(OuterId);
+  //   });
+  // });
 
-  describe('activate permanently blocked contractor', () => {
-    it('Должен выдать ошибку', async () => {
-      let error;
-      const blockedContractor = await contractorApi.create(contractorFixture3);
-      await contractorApi.block({
-        id: blockedContractor.data.id,
-        reason: {
-          id: blockingReasonForBase2.id
-        }
-      });
-      try {
-        await contractorApi.activate({
-          id: blockedContractor.data.id
-        });
-      } catch (err) {
-        error = err.message;
-      }
-      const res = await contractorApi.findById({ id: blockedContractor.data.id });
-      expect(error).toMatch(/Can\'t activate contractor because of blocking reason/);
-      expect(res.data.workStatus).toEqual(WORK_STATUS.BLOCKED);
-    });
-  });
+  // describe('activate permanently blocked contractor', () => {
+  //   it('Должен выдать ошибку', async () => {
+  //     let error;
+  //     const blockedContractor = await contractorApi.create(contractorFixture3);
+  //     await contractorApi.block({
+  //       id: blockedContractor.data.id,
+  //       reason: {
+  //         id: blockingReasonForBase2.id
+  //       }
+  //     });
+  //     try {
+  //       await contractorApi.activate({
+  //         id: blockedContractor.data.id
+  //       });
+  //     } catch (err) {
+  //       error = err.message;
+  //     }
+  //     const res = await contractorApi.findById({ id: blockedContractor.data.id });
+  //     expect(error).toMatch(/Can\'t activate contractor because of blocking reason/);
+  //     expect(res.data.workStatus).toEqual(WORK_STATUS.BLOCKED);
+  //   });
+  // });
 
   describe('block with not exited reason', () => {
     it('Должен выдать ошибку', async () => {
@@ -209,63 +205,63 @@ describe('Contract (e2e)', () => {
     });
   });
 
-  describe('freeze contractor', async () => {
-    let freezeContractorId;
-    it('Должен вернуть ошибку отсутствия исполнителя', async () => {
-      let error;
-      try {
-        await contractorApi.freeze({ 
-          id: '5f7b80aa-4fe7-4ac1-9e27-389baf3c02f8',
-          reason: {
-            id: freezingReasonForBase1.id
-          }
-        });
-      } catch (err) {
-        error = err.message;
-      }
-      expect(error).toMatch(/404: NOT_FOUND - Contractor id=5f7b80aa-4fe7-4ac1-9e27-389baf3c02f8 doesn't exist/);
-    });
+  // describe('freeze contractor', async () => {
+  //   let freezeContractorId;
+  //   it('Должен вернуть ошибку отсутствия исполнителя', async () => {
+  //     let error;
+  //     try {
+  //       await contractorApi.freeze({ 
+  //         id: '5f7b80aa-4fe7-4ac1-9e27-389baf3c02f8',
+  //         reason: {
+  //           id: freezingReasonForBase1.id
+  //         }
+  //       });
+  //     } catch (err) {
+  //       error = err.message;
+  //     }
+  //     expect(error).toMatch(/404: NOT_FOUND - Contractor id=5f7b80aa-4fe7-4ac1-9e27-389baf3c02f8 doesn't exist/);
+  //   });
 
-    it('Должен заморозить исполнителя', async () => {
-      const freezeContractor = await contractorApi.create(contractorFixture5);
-      freezeContractorId = freezeContractor.data.id;
-      const res = await contractorApi.freeze({ 
-        id: freezeContractor.data.id,
-        reason: {
-          id: freezingReasonForBase1.id
-        }
-      });
-      expect(res.data.workStatus).toEqual(WORK_STATUS.FROZEN);
-    });
+    // it('Должен заморозить исполнителя', async () => {
+    //   const freezeContractor = await contractorApi.create(contractorFixture5);
+    //   freezeContractorId = freezeContractor.data.id;
+    //   const res = await contractorApi.freeze({ 
+    //     id: freezeContractor.data.id,
+    //     reason: {
+    //       id: freezingReasonForBase1.id
+    //     }
+    //   });
+    //   expect(res.data.workStatus).toEqual(WORK_STATUS.FROZEN);
+    // });
 
-    it('Должен вернуть замороженного исполнителя', async () => {
-      const res = await contractorApi.freeze({ 
-        id: freezeContractorId,
-        reason: {
-          id: freezingReasonForBase1.id
-        }
-      });
-      expect(res.data.workStatus).toEqual(WORK_STATUS.FROZEN);
-    });
+    // it('Должен вернуть замороженного исполнителя', async () => {
+    //   const res = await contractorApi.freeze({ 
+    //     id: freezeContractorId,
+    //     reason: {
+    //       id: freezingReasonForBase1.id
+    //     }
+    //   });
+    //   expect(res.data.workStatus).toEqual(WORK_STATUS.FROZEN);
+    // });
 
-    it('Должен разморозить исполнителя', async () => {
-      const res = await contractorApi.activate({ id: freezeContractorId });
-      expect(res.data.workStatus).toEqual(WORK_STATUS.ACTIVE);
-    });
+    // it('Должен разморозить исполнителя', async () => {
+    //   const res = await contractorApi.activate({ id: freezeContractorId });
+    //   expect(res.data.workStatus).toEqual(WORK_STATUS.ACTIVE);
+    // });
 
-    it('Должен вернуть ошибку отсутствия причины', async () => {
-      let error;
-      try {
-        await contractorApi.freeze({ 
-          id: freezeContractorId,
-          reason: {
-            id: '430db34b-8e3f-40d9-b2ac-5c1a339a7ff5'
-          }
-        });
-      } catch (err) {
-        error = err.message;
-      }
-      expect(error).toMatch(/404: NOT_FOUND - Reason id=430db34b-8e3f-40d9-b2ac-5c1a339a7ff5 doesn't exist/);
-    });
-  });
+  //   it('Должен вернуть ошибку отсутствия причины', async () => {
+  //     let error;
+  //     try {
+  //       await contractorApi.freeze({ 
+  //         id: freezeContractorId,
+  //         reason: {
+  //           id: '430db34b-8e3f-40d9-b2ac-5c1a339a7ff5'
+  //         }
+  //       });
+  //     } catch (err) {
+  //       error = err.message;
+  //     }
+  //     expect(error).toMatch(/404: NOT_FOUND - Reason id=430db34b-8e3f-40d9-b2ac-5c1a339a7ff5 doesn't exist/);
+  //   });
+  // });
 });

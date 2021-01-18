@@ -9,6 +9,7 @@ import { ContractorPersistenceModule } from './contractor';
 import { ReasonPersistenceModule } from './reason';
 import { RevisionHistoryModule } from './revision-history';
 import { SkillPersistenceModule } from './skill';
+import { ReasonGroupPersistenceModule } from './reason-group';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import { SkillPersistenceModule } from './skill';
     ContractorPersistenceModule,
     ReasonPersistenceModule,
     SkillPersistenceModule,
-    RevisionHistoryModule
+    RevisionHistoryModule,
+    ReasonGroupPersistenceModule
   ],
   exports: [
     TypeOrmModule,
@@ -35,7 +37,8 @@ import { SkillPersistenceModule } from './skill';
     ContractorPersistenceModule,
     ReasonPersistenceModule,
     RevisionHistoryModule,
-    SkillPersistenceModule
+    SkillPersistenceModule,
+    ReasonGroupPersistenceModule
   ],
 })
 export class PersistenceModule {}

@@ -3,17 +3,19 @@ import { mergeMap } from 'rxjs/operators';
 import { Injectable } from '@nestjs/common';
 import { AlreadyExistsException, FailedPreconditionException, InvalidArgumentException, NotFoundException } from '@qlean/nestjs-exceptions';
 import { IFindAndTotalResponse, IFindPaginateCriteria, TModelID } from '@qlean/nestjs-typeorm-persistence-search';
-import { ContractorStore, ReasonStore } from '../../infrastructure';
+import { ContractorStore, ReasonStore,RevisionHistoryStore } from '../../infrastructure';
 import { IContractor, WORK_STATUS } from '../../domain';
 import { IActivateContractor, IBlockContractor, IFreezeContractor } from '../interfaces';
-import { RevisionHistoryStore } from '../../infrastructure/persistence/revision-history';
+import { EntityManager, getManager } from 'typeorm';
+import { BlockContractorService } from './block.service';
 
 @Injectable()
 export class ContractorService {
   constructor(
     private readonly store: ContractorStore,
     private readonly reasonStore: ReasonStore,
-    private readonly revisionHistoryStore: RevisionHistoryStore
+    private readonly revisionHistoryStore: RevisionHistoryStore,
+    private readonly blockService: BlockContractorService
   ) {}
 
   private relations: string[] = [];
@@ -87,8 +89,12 @@ export class ContractorService {
   }
 
   async block(args: IBlockContractor): Promise<IContractor> {
+    return this.blockService.execute(args);
+
+    const manager = await getManager();
+
     const {userId, reason: {id: reasonId}, id: contractorId } = args;
-    const reason = await this.reasonStore.getBlockingReasonById(reasonId);
+    const reason = await this.reasonStore.findById(reasonId);
     if (!reason) {
       throw new NotFoundException(`Reason id=${reasonId} doesn't exist`);
     }
@@ -119,8 +125,8 @@ export class ContractorService {
       return contractor;
     }
     if (contractor.workStatus === WORK_STATUS.BLOCKED && contractor.changedStatusReasonId) {
-      const reason = await this.reasonStore.getBlockingReasonById(contractor.changedStatusReasonId);
-      if (!reason.isRecoverable) {
+      const reason = await this.reasonStore.findById(contractor.changedStatusReasonId);
+      if (reason.isPermanent) {
         throw new FailedPreconditionException('Can\'t activate contractor because of blocking reason');
       }
     }
@@ -136,7 +142,7 @@ export class ContractorService {
 
   async freeze(args: IFreezeContractor): Promise<IContractor> {
     const {userId, reason: {id: reasonId}, id: contractorId } = args;
-    const reason = await this.reasonStore.getFreezingReasonById(reasonId);
+    const reason = await this.reasonStore.findById(reasonId);
     if (!reason) {
       throw new NotFoundException(`Reason id=${reasonId} doesn't exist`);
     }

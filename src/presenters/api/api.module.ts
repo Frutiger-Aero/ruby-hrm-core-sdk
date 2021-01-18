@@ -10,6 +10,7 @@ import { ContractorController } from './contractor.controller';
 import { ContractController } from './contract.controller';
 import { ReasonsController } from './reason.controller';
 import { SkillController } from './skill.controller';
+import { ReasonGroupController } from './reason-group.controller';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { SkillController } from './skill.controller';
     ContractorController,
     ReasonsController,
     ContractController,
+    ReasonGroupController,
     SkillController
   ],
   providers: [],

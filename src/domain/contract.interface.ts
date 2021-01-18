@@ -56,4 +56,6 @@ export interface IContract extends IBaseModel {
    * @description скилы, которые необходимы исполнителю для выполнения контракта
    */
   skills: ISkill[];
+
+  changedStatusReasonId: string;
 }

@@ -7,8 +7,9 @@ import { PositionHrmApiAdapter } from './hrm-position-hrm-api.adapter';
 import { SpecializationHrmApiAdapter } from './hrm-specialization-hrm-api.adapter';
 import { WageHrmApiAdapter } from './hrm-wage-hrm-api.adapter';
 import { ProductHrmApiAdapter } from './hrm-product-hrm-api.adapter';
-import { ReasonHrmApiAdapter } from './hrm-reason-hrm-api.adapter';
+import { BlockingReasonHrmApiAdapter } from './hrm-reason-hrm-api.adapter';
 import { SkillHrmApiAdapter } from './hrm-skill-hrm-api.adapter';
+import { BlockingReasonGroupHrmApiAdapter } from './hrm-reason-group-hrm-api.adapter';
 
 @Module({
   imports: [
@@ -27,8 +28,9 @@ import { SkillHrmApiAdapter } from './hrm-skill-hrm-api.adapter';
     WageHrmApiAdapter,
     ContractHrmApiAdapter,
     ProductHrmApiAdapter,
-    ReasonHrmApiAdapter,
-    SkillHrmApiAdapter
+    BlockingReasonHrmApiAdapter,
+    SkillHrmApiAdapter,
+    BlockingReasonGroupHrmApiAdapter
   ],
   providers: [
     {
@@ -46,8 +48,9 @@ import { SkillHrmApiAdapter } from './hrm-skill-hrm-api.adapter';
     WageHrmApiAdapter,
     ContractHrmApiAdapter,
     ProductHrmApiAdapter,
-    ReasonHrmApiAdapter,
-    SkillHrmApiAdapter
+    BlockingReasonHrmApiAdapter,
+    SkillHrmApiAdapter,
+    BlockingReasonGroupHrmApiAdapter
   ],
 })
 export class HrmCoreModule {}

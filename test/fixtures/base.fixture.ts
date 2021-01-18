@@ -165,3 +165,13 @@ export const contractorForBase2 = {
   status: PERSON_STATUS.CREATED,
   workStatus: WORK_STATUS.ACTIVE
 }
+
+export const reasonGroupForBase1 = {
+  id: '04ec58e7-6d4b-4214-acd3-ca55774bfe91',
+  name: 'reasonGroupForBase2'
+}
+
+export const reasonGroupForBase2 = {
+  id: 'cb4b43dd-141f-4cf8-9ca7-2576505ea4ac',
+  name: 'reasonGroupForBase2'
+}

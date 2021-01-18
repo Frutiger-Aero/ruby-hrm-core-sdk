@@ -12,6 +12,7 @@ import IContractCreateRequest = hrm.core.IContractCreateRequest;
 import IContractUpdateRequest = hrm.core.IContractUpdateRequest;
 import IContractSearchResponse = hrm.core.IContractSearchResponse;
 import IContractResponse = hrm.core.IContractResponse;
+import IContractBlockRequest = hrm.core.IContractBlockRequest;
 import IContract = hrm.core.IContract;
 
 
@@ -65,5 +66,10 @@ export class ContractHrmApiAdapter extends CommonApiAdapter<ContractService> {
   @GrpcClientStats({ grpc_method: 'Restore', grpc_service: 'ContractService', grpc_type: 'unary'})
   restore(args: UuidRequest): Promise<IContractResponse> {
     return this.call('restore', args);
+  }
+
+  @GrpcClientStats({ grpc_method: 'Block', grpc_service: 'ContractService', grpc_type: 'unary'})
+  block(args: IContractBlockRequest): Promise<IContractResponse> {
+    return this.call('block', args);
   }
 }

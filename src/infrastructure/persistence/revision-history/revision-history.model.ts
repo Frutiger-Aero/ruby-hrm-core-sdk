@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { IRevisionHistory } from '../../../domain';
-import { IsDate, IsString, IsUUID } from 'class-validator';
+import { ENTITY_TYPE, IRevisionHistory } from '../../../domain';
+import { IsDate, IsEnum, IsString, IsUUID } from 'class-validator';
 import { Transform } from 'class-transformer';
 
 @Entity({
@@ -27,6 +27,9 @@ export class RevisionHistoryModel implements IRevisionHistory {
   @Column({ type: 'uuid', name: 'entity_id' })
   readonly entityId: string;
 
+  @IsEnum(ENTITY_TYPE)
+  @Column({ type: 'character varying', name: 'entity_type' })
+  readonly entityType: ENTITY_TYPE;
   /**
    * Новое значение на которое изменили
    */
@@ -42,6 +45,6 @@ export class RevisionHistoryModel implements IRevisionHistory {
    */
   @IsDate()
   @Transform((value: Date) => value.toISOString(), { toPlainOnly: true })
-  @UpdateDateColumn({ type: 'timestamp with time zone',  name: 'updated_at' })
-  readonly updatedAt: Date;
+  @UpdateDateColumn({ type: 'timestamp with time zone',  name: 'created_at' })
+  readonly createdAt: Date;
 }

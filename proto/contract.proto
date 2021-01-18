@@ -6,6 +6,7 @@ import "./product.proto";
 import "./specialization.proto";
 import "./contractor.proto";
 import "./product.proto";
+import "./reason.proto";
 import "./common.proto";
 import "./skill.proto";
 
@@ -16,23 +17,29 @@ service ContractService {
     rpc FindById (qlean.common.search.UuidRequest) returns (ContractResponse) {}
     rpc Remove (qlean.common.search.UuidRequest) returns (ContractResponse) {}
     rpc Restore (qlean.common.search.UuidRequest) returns (ContractResponse) {}
+    rpc Block (ContractBlockRequest) returns (ContractResponse) {}
+}
+
+message ContractBlockRequest {
+    string id = 1;
+    BlockingReasonRelation reason = 2;
+    string startBlockDate = 3;
+    string endBlockDate = 4;
 }
 
 message ContractCreateRequest {
-    string status = 1;
-    GradeRelation grade = 2;
-    WageRelation wage = 3;
-    ConractorRelation contractor = 4;
-    repeated SkillRelation skills = 5;
+    GradeRelation grade = 1;
+    WageRelation wage = 2;
+    ConractorRelation contractor = 3;
+    repeated SkillRelation skills = 4;
 }
 
 message ContractUpdateRequest {
     string id = 1;
-    string status = 2;
-    GradeRelation grade = 3;
-    WageRelation wage = 4;
-    ConractorRelation contractor = 5;
-    repeated SkillRelation skills = 6;
+    GradeRelation grade = 2;
+    WageRelation wage = 3;
+    ConractorRelation contractor = 4;
+    repeated SkillRelation skills = 5;
 }
 
 message Contract {
@@ -90,8 +97,6 @@ message ContractSearchResponse {
     int32 count = 5;
     int32 total = 6;
 }
-
-
 
 message ContractRelation {
     string id = 1;
