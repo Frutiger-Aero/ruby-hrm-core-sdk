@@ -1,21 +1,22 @@
 import { Type } from "class-transformer";
 import { IsDateString, IsOptional, IsUUID, ValidateNested } from "class-validator";
 import { hrm } from "../../../../proto/generated/app.proto";
+import { IContract } from "../../../domain"
 import { RelationDto } from "../common/relation.dto";
 
-export class ContractorBlockDto implements hrm.core.IContractorBlockRequest {
-  @ValidateNested()
-  @Type(() => RelationDto)
-  readonly reason: RelationDto;
-
+export class ContractBlockDto implements Partial<IContract>, hrm.core.IContractorBlockRequest {
   @IsUUID()
   readonly id: string;
 
-  @IsOptional()
   @IsDateString()
+  @IsOptional()
   readonly startBlockDate: string;
 
-  @IsOptional()
   @IsDateString()
+  @IsOptional()
   readonly endBlockDate: string;
+
+  @ValidateNested()
+  @Type(() => RelationDto)
+  readonly reason: RelationDto;
 }

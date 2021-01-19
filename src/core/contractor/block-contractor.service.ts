@@ -1,28 +1,27 @@
 import { Injectable } from "@nestjs/common";
 import { NotFoundException } from "@qlean/nestjs-exceptions";
 import { EntityManager, getManager } from "typeorm";
-import { CONTRACT_STATUS, ENTITY_TYPE, WORK_STATUS } from "../../domain";
-import { ContractorStore, ContractStore, ReasonStore, RevisionHistoryStore} from '../../infrastructure';
+import * as moment from 'moment';
+
+import { ContractorStore, ContractStore, RevisionHistoryStore} from '../../infrastructure';
+
 import { ContractModel } from "../../infrastructure/persistence/contract/contract.model";
 import { IBlockContractor } from "../interfaces";
+import { CONTRACT_STATUS, ENTITY_TYPE, IBlockingReason, WORK_STATUS } from "../../domain";
 
 @Injectable()
 export class BlockContractorService {
   constructor(
     private readonly contractorStore: ContractorStore,
     private readonly contractStore: ContractStore,
-    private readonly reasonStore: ReasonStore,
     private readonly revisionHistoryStore: RevisionHistoryStore
   ){}
 
-  async execute(args: IBlockContractor) {
-    const { id: contractorId, reason: { id: reasonId }, userId } = args;
+  async execute(args: IBlockContractor, reason: IBlockingReason) {
+    const { id: contractorId } = args;
+    const { id: reasonId } = reason;
     const manager = await getManager();
 
-    const reason = this.reasonStore.findById(reasonId);
-    if (!reason) {
-      throw new NotFoundException(`Reason id=${reasonId} doesn't exist`);
-    }
     return manager.transaction('REPEATABLE READ', async (entityManager: EntityManager) => {
       const contractor = await this.contractorStore.blockingFindById(contractorId, entityManager);
       if (!contractor) {
@@ -37,13 +36,13 @@ export class BlockContractorService {
 
       // Здесь также должна быть отсылка задач во внешние сервисы
 
-      this.log(args, contracts);
+      this.log(args, WORK_STATUS.BLOCKED, contracts);
 
       return this.contractorStore.blockingFindById(contractorId, entityManager); 
     });
   }
 
-  private log(args: IBlockContractor, contracts: ContractModel[]) {
+  private log(args: IBlockContractor, type: WORK_STATUS, contracts: ContractModel[]) {
     const { id: contractorId, reason: { id: reasonId }, userId } = args;
 
     this.revisionHistoryStore.create({
@@ -51,14 +50,14 @@ export class BlockContractorService {
       entityType: ENTITY_TYPE.CONTRACTOR,
       reasonId,
       userId,
-      change: WORK_STATUS.BLOCKED,
+      change: type,
     });
     Promise.all(contracts.map(contract => this.revisionHistoryStore.create({
       entityId: contract.id,
       entityType: ENTITY_TYPE.CONTRACTOR,
       reasonId,
       userId,
-      change: CONTRACT_STATUS.BLOCKED
+      change: type
     })));
   }
 }

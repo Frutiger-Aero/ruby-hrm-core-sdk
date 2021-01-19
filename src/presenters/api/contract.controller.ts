@@ -1,6 +1,6 @@
 import { classToPlain } from 'class-transformer';
 import { Controller, UseFilters, UsePipes, UseGuards, UseInterceptors } from '@nestjs/common';
-import { PermissionKey, PLTJWTGuard } from '@qlean/sso-utils-sdk';
+import { ITokenBody, PermissionKey, PLTJWTGuard } from '@qlean/sso-utils-sdk';
 import { GrpcMethod } from '@nestjs/microservices';
 import { SentryInterceptor } from '@qlean/nestjs-sentry';
 import { RpcExceptionFilter, ValidationPipe } from '@qlean/nestjs-exceptions';
@@ -8,7 +8,7 @@ import { UuidRequestDto } from '@qlean/nestjs-typeorm-persistence-search';
 import { StatsInterceptor } from '@qlean/nestjs-stats';
 import { PACKAGE_NAME } from '../../constance';
 import { ContractService } from '../../core';
-import { ContractCreateDto, ContractSearchDto, ContractUpdateDto } from '../dto';
+import { ContractCreateDto, ContractorBlockDto, ContractSearchDto, ContractUpdateDto } from '../dto';
 import { hrm } from '../../../proto/generated/app.proto';
 import { GRANTS } from '../../sso.options';
 
@@ -25,8 +25,13 @@ export class ContractController {
   // @PermissionKey(GRANTS.CONTRACT_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${ContractController.name}::create`))
   @UsePipes(new ValidationPipe())
-  async create(args: ContractCreateDto): Promise<hrm.core.ContractResponse> {
-    const result = await this.svs.create(args);
+  async create(
+    args: ContractCreateDto,
+    authTokenBody?: ITokenBody
+  ): Promise<hrm.core.ContractResponse> {
+    const userId = this.getUserIdFromToken(authTokenBody);
+
+    const result = await this.svs.create(args, userId);
 
     return new hrm.core.ContractResponse({
       data: classToPlain(result),
@@ -93,10 +98,18 @@ export class ContractController {
   @PermissionKey(GRANTS.CONTRACT_READ)
   @UseFilters(RpcExceptionFilter.for(`${ContractController.name}::block`))
   @UsePipes(new ValidationPipe())
-  async block(args: UuidRequestDto): Promise<hrm.core.ContractResponse> {
-    const result = await this.svs.findById(args.id);
+  async block(
+    args: ContractorBlockDto,
+    authTokenBody?: ITokenBody
+  ): Promise<hrm.core.ContractResponse> {
+    const userId = this.getUserIdFromToken(authTokenBody);
+    const result = await this.svs.block({...args, userId});
     return new hrm.core.ContractResponse({
       data: classToPlain(result),
     });
+  }
+
+  private getUserIdFromToken(authTokenBody: ITokenBody) {
+    return 'f3ca9207-71b8-4812-92cd-80e771dbf223' //TODO: сделать вытаскивание из token
   }
 }

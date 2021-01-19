@@ -1,17 +1,24 @@
-import { ok } from 'assert';
 import { from } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { Injectable } from '@nestjs/common';
-import { IFindAndTotalResponse, IFindPaginateCriteria, TDeepPartial, TModelID } from '@qlean/nestjs-typeorm-persistence-search';
+
+import { CreateContractService } from './create-contract.service';
+import { BlockContractService } from './block-contract.service';
 import { ContractStore, WageStore } from '../../infrastructure';
+
+import { IFindAndTotalResponse, IFindPaginateCriteria, TDeepPartial, TModelID } from '@qlean/nestjs-typeorm-persistence-search';
 import { IContract } from '../../domain';
 import { InvalidArgumentException } from '@qlean/nestjs-exceptions';
+import { IBlockContract } from '../interfaces';
+
 
 @Injectable()
 export class ContractService {
   constructor(
     private readonly store: ContractStore,
-    private readonly wageStore: WageStore
+    private readonly wageStore: WageStore,
+    private readonly createContractService: CreateContractService,
+    private readonly blockContractService: BlockContractService
   ) {}
 
   private relations: string[] = ['product', 'specialization', 'grade', 'wage', 'contractor', 'skills'];
@@ -19,9 +26,8 @@ export class ContractService {
   /**
    * Создает запись о новом контракте исполнителя
    */
-  async create(args: Partial<IContract>): Promise<IContract> {
+  async create(args: Partial<IContract>, userId: string) {
     const wage = await this.wageStore.findById(args.wage.id);
-    console.log(args)
     if (!wage) {
       throw new InvalidArgumentException(`wage id=${args.wage.id} doesn't exist`);
     }
@@ -34,9 +40,8 @@ export class ContractService {
         id: wage.product.id
       }
     }
-    return from(this.store.create(model))
-      .pipe(mergeMap(({ id }) => this.findById(id)))
-      .toPromise();
+    return this.createContractService.execute(model, userId); 
+
   }
 
   /**
@@ -98,5 +103,9 @@ export class ContractService {
       ...args,
       relations: this.relations,
     });
+  }
+
+  async block(args: IBlockContract) {
+    return this.blockContractService.execute(args);
   }
 }

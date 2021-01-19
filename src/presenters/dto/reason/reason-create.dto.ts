@@ -2,7 +2,7 @@ import { Type } from 'class-transformer';
 import { IsBoolean, IsEnum, IsString, Length, ValidateNested } from 'class-validator';
 import { hrm } from '../../../../proto/generated/app.proto';
 import { BLOCKING_TYPE, IBlockingReason } from '../../../domain';
-import { RelationDto } from '../contract';
+import { RelationDto } from '../common';
 
 export class BlockingReasonCreateDto implements Partial<IBlockingReason>, hrm.core.IBlockingReasonCreateRequest {
   @IsString()

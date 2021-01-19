@@ -5,7 +5,7 @@ import { AppModule } from '../src/app.module';
 import { grpcClientOptions } from '../src/grpc-client.options';
 import { cleanup } from './utils';
 import { getConnection, Repository } from 'typeorm';
-import { blockingReasonForBase1, blockingReasonForBase2, contractorFixture1, contractorFixture2, contractorFixture3, contractorFixture4, contractorFixture5, freezingReasonForBase1 } from './fixtures';
+import { blockingReasonForBase1, contractorFixture1, contractorFixture2, contractorFixture4, contractorFixture5, freezingReasonForBase1, freezingReasonForBase2 } from './fixtures';
 import { HrmCoreModule } from '../sdk/nestjs/build';
 import { WORK_STATUS } from '../src/domain';
 import { BlockingReasonModel } from '../src/infrastructure/persistence/reason/blocking-reason.model';
@@ -51,7 +51,9 @@ describe('Contract (e2e)', () => {
       blockingReasonRepo = getConnection().getRepository(BlockingReasonModel);
 
       await blockingReasonRepo.insert(blockingReasonForBase1);
-      await blockingReasonRepo.insert(blockingReasonForBase2);
+      await blockingReasonRepo.insert(freezingReasonForBase1);
+      await blockingReasonRepo.insert(freezingReasonForBase2);
+
   });
 
   afterAll(async () => {

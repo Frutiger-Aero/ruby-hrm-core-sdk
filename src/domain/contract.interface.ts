@@ -25,7 +25,7 @@ export interface IContract extends IBaseModel {
   /**
    * @description Рабочий статус исполнителя в рамках текущего договора
    */
-  status: CONTRACT_STATUS;
+  status?: CONTRACT_STATUS;
 
   /**
    * @description Текущий тариф исполнителя

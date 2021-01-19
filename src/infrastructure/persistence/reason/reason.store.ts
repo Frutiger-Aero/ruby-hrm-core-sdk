@@ -7,8 +7,8 @@ import { CrudStore, SearchHelper } from '@qlean/nestjs-typeorm-persistence-searc
 import { ClassType } from 'class-transformer/ClassTransformer';
 
 @Injectable()
-export class ReasonStore extends CrudStore<BlockingReasonModel>{
-  protected readonly logger = new Logger(ReasonStore.name);
+export class BlockingReasonStore extends CrudStore<BlockingReasonModel>{
+  protected readonly logger = new Logger(BlockingReasonStore.name);
   protected readonly helper = new SearchHelper<BlockingReasonModel>();
   protected readonly model: ClassType<BlockingReasonModel> = BlockingReasonModel;
 

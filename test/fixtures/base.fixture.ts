@@ -1,4 +1,4 @@
-import { AMOUNT_TYPE, IContract, IGrade, PERSON_STATUS, RATE_UNIT, WAGE_TYPE, WORK_STATUS } from "../../src/domain"
+import { AMOUNT_TYPE, BLOCKING_TYPE, IBlockingReason, IContract, IGrade, PERSON_STATUS, RATE_UNIT, WAGE_TYPE, WORK_STATUS } from "../../src/domain"
 
 export const skill1 = {
   id: 'd7191ca9-3b63-4f2c-92cb-0721bc5046d8',
@@ -115,21 +115,34 @@ export const gradeFixtureForBase2 : Partial<IGrade> =  {
   ]
 }
 
-export const blockingReasonForBase1 = {
+export const blockingReasonForBase1: Partial<IBlockingReason> = {
   id: 'a6586b34-0bbe-41e8-a4d0-7c6d9469d07d',
-  name: 'testing recoverable reason',
-  isRecoverable: true
-}
-
-export const blockingReasonForBase2 = {
-  id: '4c124635-e40c-43e8-9013-4d4f7e627670',
-  name: 'testing not recoverable reason',
-  isRecoverable: false
+  name: 'testing permanent blocking reason',
+  isPermanent: true,
+  isInstant: true,
+  isCommonBlock: true,
+  type: BLOCKING_TYPE.BLOCK,
+  isNeedRetraining: false,
 }
 
 export const freezingReasonForBase1 = {
-  id: 'c14a337c-c6ec-49ad-a7e8-d94afe65c398',
-  name: 'testing reason',
+  id: '4c124635-e40c-43e8-9013-4d4f7e627670',
+  name: 'testing freezing reason',
+  isPermanent: false,
+  isInstant: true,
+  isCommonBlock: true,
+  type: BLOCKING_TYPE.FREEZE,
+  isNeedRetraining: false,
+}
+
+export const freezingReasonForBase2 = {
+  id: 'a6586b34-0bbe-41e8-a4d0-7c6d9469d07d',
+  name: 'testing permanent blocking reason',
+  isPermanent: true,
+  isInstant: true,
+  isCommonBlock: true,
+  type: BLOCKING_TYPE.BLOCK,
+  isNeedRetraining: false,
 }
 
 export const contractForBase: Partial<IContract> = {

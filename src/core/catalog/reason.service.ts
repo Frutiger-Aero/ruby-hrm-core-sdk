@@ -1,13 +1,13 @@
 import { Injectable } from "@nestjs/common";
 import { IFindAndTotalResponse, IFindPaginateCriteria, TModelID } from "@qlean/nestjs-typeorm-persistence-search";
 import { IBlockingReason } from "../../domain";
-import { ReasonStore } from "../../infrastructure/persistence/reason";
+import { BlockingReasonStore } from "../../infrastructure/persistence/reason";
 
 @Injectable()
 export class ReasonService {
   private relations = [];
   constructor(
-    private readonly reasonStore: ReasonStore
+    private readonly reasonStore: BlockingReasonStore
   ) {}
   async create(args: Partial<IBlockingReason>): Promise<IBlockingReason> {
     const { id } = await this.reasonStore.create(args);

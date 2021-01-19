@@ -1,7 +1,7 @@
 
 import { Type } from 'class-transformer';
 import { IsString, IsOptional, IsUUID, Length, IsEnum, IsBoolean, ValidateNested } from 'class-validator';
-import { RelationDto } from '..';
+import { RelationDto } from '../common';
 import { hrm } from '../../../../proto/generated/app.proto';
 import { BLOCKING_TYPE, IBlockingReason } from '../../../domain';
 

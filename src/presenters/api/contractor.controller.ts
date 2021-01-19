@@ -8,7 +8,7 @@ import { UuidRequestDto } from '@qlean/nestjs-typeorm-persistence-search';
 import { StatsInterceptor } from '@qlean/nestjs-stats';
 import { PACKAGE_NAME } from '../../constance';
 import { ContractorService } from '../../core';
-import { BlockDto, ContractorCreateDto, ContractorSearchDto, ContractorUpdateDto } from '../dto';
+import { ContractorBlockDto, ContractorCreateDto, ContractorSearchDto, ContractorUpdateDto } from '../dto';
 import { hrm } from '../../../proto/generated/app.proto';
 import { GRANTS } from '../../sso.options';
 
@@ -94,7 +94,7 @@ export class ContractorController {
   @UseFilters(RpcExceptionFilter.for(`${ContractorController.name}::block`))
   @UsePipes(new ValidationPipe())
   async block(
-    args: BlockDto,
+    args: ContractorBlockDto,
     authTokenBody?: ITokenBody
     ): Promise<hrm.core.ContractorResponse> {
     const userId = this.getUserIdFromToken(authTokenBody);

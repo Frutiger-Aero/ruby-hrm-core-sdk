@@ -2,9 +2,10 @@ import {EntityManager, Repository} from 'typeorm';
 import {Injectable} from '@nestjs/common';
 import {InjectRepository} from '@nestjs/typeorm';
 import {Logger} from '@qlean/nestjs-logger';
-import {CrudStore, SearchHelper} from '@qlean/nestjs-typeorm-persistence-search';
+import {CrudStore, SearchHelper, TDeepPartial} from '@qlean/nestjs-typeorm-persistence-search';
 import {ClassType} from 'class-transformer/ClassTransformer';
 import {ContractModel} from './contract.model';
+import { IContract } from '../../../domain';
 
 @Injectable()
 export class ContractStore extends CrudStore<ContractModel>{
@@ -26,5 +27,22 @@ export class ContractStore extends CrudStore<ContractModel>{
       .set(payload)
       .where(params)
       .execute()
+  }
+
+  findByIdInTransaction(id: string, entityManager: EntityManager) {
+    return entityManager.findOne(ContractModel, id);
+  }
+
+  createInTransaction(params: TDeepPartial<IContract>, entityManager: EntityManager) {
+    return entityManager.save(params);
+  }
+
+  blockingFindById(id: string, entityManager: EntityManager) {
+    return entityManager.getRepository(ContractModel)
+      .createQueryBuilder("contracts")
+      .useTransaction(true)
+      .setLock("pessimistic_write")
+      .where("contracts.id = :id", { id })
+      .getOne();
   }
 }
