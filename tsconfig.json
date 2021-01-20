@@ -16,8 +16,7 @@
     "sdk",
     "dist",
     "test",
-    "utils",
-    "migrations"
+    "utils"
   ],
   "include": ["src/**/*"]
 }
