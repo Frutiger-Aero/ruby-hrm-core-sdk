@@ -1,140 +1,149 @@
 before_script:
-  - |
-    [[ "$TRACE" ]] && set -x && ls -lAh && env
-    export TILLER_NAMESPACE="${KUBE_NAMESPACE}"
-    if [[ -n "${CI_COMMIT_TAG}" ]] && [[ -n "${RELEASE_REGISTRY_IMAGE}" ]] && [[ -n "${RELEASE_REGISTRY_TAG}" ]]; then
-      # Так как в ci.yml нельзя никаких условий в задании переменных иметь, определяем для сборки по тэгам параметры тут
-      export REGISTRY_IMAGE="${RELEASE_REGISTRY_IMAGE}"
-      export REGISTRY_TAG="${RELEASE_REGISTRY_TAG}"
+- |
+  [[ "$TRACE" ]] && set -x && ls -lAh && env
+  export TILLER_NAMESPACE="${KUBE_NAMESPACE}"
+  if [[ -n "${CI_COMMIT_TAG}" ]] && [[ -n "${RELEASE_REGISTRY_IMAGE}" ]] && [[ -n "${RELEASE_REGISTRY_TAG}" ]]; then
+    # Так как в ci.yml нельзя никаких условий в задании переменных иметь, определяем для сборки по тэгам параметры тут
+    export REGISTRY_IMAGE="${RELEASE_REGISTRY_IMAGE}"
+    export REGISTRY_TAG="${RELEASE_REGISTRY_TAG}"
+  fi
+
+  function docker_login() {
+    echo "$REGISTRY_PASSWORD" | docker login -u $REGISTRY_USER --password-stdin $REGISTRY_ADDR
+  }
+
+  function build() {
+    if [[ ! -f Dockerfile ]]; then
+      echo "Please put Dockerfile to project"
+      exit 1
     fi
 
-    function build() {
-      if [[ ! -f Dockerfile ]]; then
-        echo "Please put Dockerfile to project"
-        exit 1
-      fi
+    echo "Building Dockerfile-based application..."
+    docker_login
+    docker pull "$REGISTRY_IMAGE:latest" || true
+    docker build \
+      --build-arg NPM_TOKEN="$NPM_TOKEN" \
+      --build-arg GITLAB_GO_TOKEN="$GITLAB_GO_TOKEN" \
+      --cache-from "$REGISTRY_IMAGE:latest" \
+      -t "$REGISTRY_IMAGE:$REGISTRY_TAG" \
+      -t "$REGISTRY_IMAGE:latest" .
+    docker push "$REGISTRY_IMAGE:$REGISTRY_TAG"
+    docker push "$REGISTRY_IMAGE:latest"
+    echo "done."
+  }
 
-      echo "Building Dockerfile-based application..."
-      echo "$REGISTRY_PASSWORD" | docker login -u $REGISTRY_USER --password-stdin $REGISTRY_ADDR
-      docker pull "$REGISTRY_IMAGE:latest" || true
-      docker build --cache-from "$REGISTRY_IMAGE:latest" \
-        -t "$REGISTRY_IMAGE:$REGISTRY_TAG" \
-        -t "$REGISTRY_IMAGE:latest" .
-      docker push "$REGISTRY_IMAGE:$REGISTRY_TAG"
-      docker push "$REGISTRY_IMAGE:latest"
-      echo "done."
-    }
+  function release() {
+    echo "Updating docker images ..."
+    echo "$REGISTRY_PASSWORD" | docker login -u $REGISTRY_USER  --password-stdin $REGISTRY_ADDR
+    echo "$CI_JOB_TOKEN"      | docker login -u gitlab-ci-token --password-stdin $CI_REGISTRY
+    docker pull "$REGISTRY_IMAGE:$REGISTRY_TAG"
+    docker tag "$REGISTRY_IMAGE:$REGISTRY_TAG" "$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG"
+    docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG"
+    echo ""
+  }
 
-    function release() {
-      echo "Updating docker images ..."
-      echo "$REGISTRY_PASSWORD" | docker login -u $REGISTRY_USER  --password-stdin $REGISTRY_ADDR
-      echo "$CI_JOB_TOKEN"      | docker login -u gitlab-ci-token --password-stdin $CI_REGISTRY
-      docker pull "$REGISTRY_IMAGE:$REGISTRY_TAG"
-      docker tag "$REGISTRY_IMAGE:$REGISTRY_TAG" "$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG"
-      docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG"
-      echo ""
-    }
+  function ensure_namespace() {
+    kubectl get namespace "$KUBE_NAMESPACE" || kubectl create namespace "$KUBE_NAMESPACE"
+  }
 
-    function ensure_namespace() {
-      kubectl get namespace "$KUBE_NAMESPACE" || kubectl create namespace "$KUBE_NAMESPACE"
-    }
+  function ensure_rbac() {
+    kubectl -n "$KUBE_NAMESPACE" get sa "${CI_PROJECT_NAME}-tiller" || kubectl  -n "$KUBE_NAMESPACE" create sa "${CI_PROJECT_NAME}-tiller"
+    kubectl -n "$KUBE_NAMESPACE" get sa "app" || kubectl  -n "$KUBE_NAMESPACE" create sa "app"
+    kubectl -n "$KUBE_NAMESPACE" get rolebinding "${CI_PROJECT_NAME}-tiller" || kubectl -n "$KUBE_NAMESPACE" create rolebinding "${CI_PROJECT_NAME}-tiller" --clusterrole tiller-manager --serviceaccount=$KUBE_NAMESPACE:"${CI_PROJECT_NAME}-tiller"
+  }
 
-    function ensure_rbac() {
-      kubectl -n "$KUBE_NAMESPACE" get sa "${CI_PROJECT_NAME}-tiller" || kubectl  -n "$KUBE_NAMESPACE" create sa "${CI_PROJECT_NAME}-tiller"
-      kubectl -n "$KUBE_NAMESPACE" get sa "app" || kubectl  -n "$KUBE_NAMESPACE" create sa "app"
-      kubectl -n "$KUBE_NAMESPACE" get rolebinding "${CI_PROJECT_NAME}-tiller" || kubectl -n "$KUBE_NAMESPACE" create rolebinding "${CI_PROJECT_NAME}-tiller" --clusterrole tiller-manager --serviceaccount=$KUBE_NAMESPACE:"${CI_PROJECT_NAME}-tiller"
-    }
+  function ensure_shared_files() {
+    set -x
+    kubectl -n "$KUBE_NAMESPACE" create secret docker-registry gitlab-registry --docker-server=gitlab.qleanlabs.ru:4567 --docker-username="${REGISTRY_USER}" --docker-password="${REGISTRY_PASSWORD}" --docker-email=gke-registry@qleanlabs.ru --dry-run=true -o yaml | kubectl apply --force=true -f -
 
-    function ensure_shared_files() {
-      set -x
-      kubectl -n "$KUBE_NAMESPACE" create secret docker-registry gitlab-registry --docker-server=gitlab.qleanlabs.ru:4567 --docker-username=${REGISTRY_USER} --docker-password=${REGISTRY_PASSWORD} --docker-email=gke-registry@qleanlabs.ru --dry-run=true -o yaml | kubectl apply --force=true -f -
+    #for s in $(kubectl -n shared get secrets -o name | grep -v "token"); do
+    #  kubectl -n shared get $s --export -o yaml | kubectl -n "$KUBE_NAMESPACE" apply -f -
+    #done
 
-      for s in $(kubectl -n shared get secrets -o name | grep -v "token"); do
-        kubectl -n shared get $s --export -o yaml | kubectl -n "$KUBE_NAMESPACE" apply -f -
-      done
+    for s in $(kubectl -n shared get configmaps -o name); do
+      kubectl -n shared get $s --export -o yaml | kubectl -n "$KUBE_NAMESPACE" apply -f -
+    done
 
-      for s in $(kubectl -n shared get configmaps -o name); do
-        kubectl -n shared get $s --export -o yaml | kubectl -n "$KUBE_NAMESPACE" apply -f -
-      done
+    #kubectl -n shared get secrets -o name | grep -v "token" | xargs -I {} kubectl -n shared get {} --export -o yaml | kubectl -n "$KUBE_NAMESPACE" apply -f -
+    #kubectl -n shared get configmaps -o name | xargs -I {} kubectl -n shared get {} --export -o yaml | kubectl -n "$KUBE_NAMESPACE" apply -f -
+  }
 
-      #kubectl -n shared get secrets -o name | grep -v "token" | xargs -I {} kubectl -n shared get {} --export -o yaml | kubectl -n "$KUBE_NAMESPACE" apply -f -
-      #kubectl -n shared get configmaps -o name | xargs -I {} kubectl -n shared get {} --export -o yaml | kubectl -n "$KUBE_NAMESPACE" apply -f -
-    }
+  function install_tiller() {
+    echo "Checking Tiller..."
+    helm init --service-account "${CI_PROJECT_NAME}-tiller" --upgrade --force-upgrade 
+    kubectl rollout status -n "$TILLER_NAMESPACE" -w "deployment/tiller-deploy"
+    if ! helm version --debug; then
+      echo "Failed to init Tiller."
+      return 1
+    fi
+    echo ""
+  }
 
-    function install_tiller() {
-      echo "Checking Tiller..."
-      helm init --service-account "${CI_PROJECT_NAME}-tiller" --upgrade
-      kubectl rollout status -n "$TILLER_NAMESPACE" -w "deployment/tiller-deploy"
-      if ! helm version --debug; then
-        echo "Failed to init Tiller."
-        return 1
-      fi
-      echo ""
-    }
+  function deployToK8s() {
+    echo ${KUBE_NAMESPACE//\//-}
+    echo "CI_PROJECT_NAME=$CI_PROJECT_NAME"
+    echo "CI_PROJECT_DIR=$CI_PROJECT_DIR"
+    echo "CI_PROJECT_NAMESPACE=$CI_PROJECT_NAMESPACE"
+    test -n "${HELM_RELEASE_NAME}" || HELM_RELEASE_NAME=${CI_COMMIT_REF_SLUG}
+    test -n "${HELM_TIMEOUT}" || HELM_TIMEOUT=300
+    track="${1-stable}"
+    set -x
+    ENV_NAME=${CI_ENVIRONMENT_NAME}
+    if echo "${CI_ENVIRONMENT_NAME}" | grep "/" > /dev/null ; then
+      ENV_NAME=`dirname "${CI_ENVIRONMENT_NAME}"`
+    fi
+    helm repo add cm "${CM_REPO_URL}"
+    helm dep up helm/app
+    helm upgrade --install \
+      --wait \
+      --force \
+      --set app-template.image.repository="$REGISTRY_IMAGE" \
+      --set app-template.image.tag="$REGISTRY_TAG" \
+      --set app-template.app.name="$CI_PROJECT_NAME" \
+      --set app-template.app.branch="$CI_COMMIT_REF_SLUG" \
+      --set app-template.app.env="$ENV_NAME" \
+      --set app-template.app.version="$REGISTRY_TAG" \
+      --set app-template.extraEnv.BRANCH="$CI_COMMIT_REF_SLUG" \
+      --set app-template.extraEnv.HELM_RELEASE_NAME="$HELM_RELEASE_NAME" \
+      --namespace="$KUBE_NAMESPACE" \
+      --version="$CI_PIPELINE_ID-$CI_JOB_ID" \
+      --timeout="${HELM_TIMEOUT}" \
+      -f "helm/$ENV_NAME.values.yaml" \
+      "${HELM_RELEASE_NAME:0:53}" \
+      helm/app
+  }
 
-    function deployToK8s() {
-      echo ${KUBE_NAMESPACE//\//-}
-      echo "CI_PROJECT_NAME=$CI_PROJECT_NAME"
-      echo "CI_PROJECT_DIR=$CI_PROJECT_DIR"
-      echo "CI_PROJECT_NAMESPACE=$CI_PROJECT_NAMESPACE"
-      test -n "${HELM_RELEASE_NAME}" || HELM_RELEASE_NAME=${CI_COMMIT_REF_SLUG}
-      test -n "${HELM_TIMEOUT}" || HELM_TIMEOUT=300
-      track="${1-stable}"
-      set -x
-      ENV_NAME=${CI_ENVIRONMENT_NAME}
-      if echo "${CI_ENVIRONMENT_NAME}" | grep "/" > /dev/null ; then
-        ENV_NAME=`dirname "${CI_ENVIRONMENT_NAME}"`
-      fi
-      helm repo add cm "${CM_REPO_URL}"
-      helm dep up helm/app
-      helm upgrade --install \
-        --wait \
-        --force \
-        --set app-template.image.repository="$REGISTRY_IMAGE" \
-        --set app-template.image.tag="$REGISTRY_TAG" \
-        --set app-template.app.name="$CI_PROJECT_NAME" \
-        --set app-template.app.branch="$HELM_RELEASE_NAME" \
-        --set app-template.app.env="$ENV_NAME" \
-        --set app-template.app.version="$REGISTRY_TAG" \
-        --set app-template.extraEnv.BRANCH="$HELM_RELEASE_NAME" \
-        --namespace="$KUBE_NAMESPACE" \
-        --version="$CI_PIPELINE_ID-$CI_JOB_ID" \
-        --timeout="${HELM_TIMEOUT}" \
-        -f "helm/$ENV_NAME.values.yaml" \
-        "${HELM_RELEASE_NAME:0:53}" \
-        helm/app
-    }
+  function stop_stage() {
+    test -n "${HELM_RELEASE_NAME}" || HELM_RELEASE_NAME=${CI_COMMIT_REF_SLUG}
+    set -x
+    helm delete --purge "${HELM_RELEASE_NAME:0:53}"
+    REGISTRY_API_URL="https://$REGISTRY_ADDR/api/repositories/gitlab/$CI_PROJECT_PATH/$CI_COMMIT_REF_SLUG"
+    curl -fsS -u "$REGISTRY_USER:$REGISTRY_PASSWORD" -XDELETE \
+      "`echo $REGISTRY_API_URL | tr '[:upper:]' '[:lower:]'`" \
+      && echo "Repository $REGISTRY_IMAGE is deleted." || true
+  }
 
-    function stop_stage() {
-      test -n "${HELM_RELEASE_NAME}" || HELM_RELEASE_NAME=${CI_COMMIT_REF_SLUG}
-      set -x
-      helm delete --purge "${HELM_RELEASE_NAME:0:53}"
-      curl -fsS -u "$REGISTRY_USER:$REGISTRY_PASSWORD" -XDELETE \
-        "https://$REGISTRY_ADDR/api/repositories/gitlab/$CI_PROJECT_PATH/$CI_COMMIT_REF_SLUG" \
-        && echo "Repository $REGISTRY_IMAGE is deleted." || true
-    }
+  function send_changelog() {
+    result_code=$?
+    bot_url="https://changebot.cloud.qlean.ru/notify"
+    app_url="$PROD_URL"
+    if echo "${CI_ENVIRONMENT_NAME}" | grep stag > /dev/null; then
+      bot_url="https://changelog-bot-master.stage.cloud.qlean.ru/notify"
+      app_url="$STAGE_URL"
+    fi
 
-    function send_changelog() {
-      result_code=$?
-      bot_url="https://changebot.cloud.qlean.ru/notify"
-      app_url="$PROD_URL"
-      if echo "${CI_ENVIRONMENT_NAME}" | grep stag > /dev/null; then
-        bot_url="https://master-changelog-bot.stage.cloud.qlean.ru/notify"
-        app_url="$STAGE_URL"
-      fi
+    curl -q -X POST -H "Content-Type: application/json" \
+      -d  "{\"current_hash\":\"${CI_COMMIT_BEFORE_SHA}\",\"new_hash\":\"${CI_COMMIT_SHA}\",\"username\":\"${GITLAB_USER_NAME}\",\"project_id\":\"${CI_PROJECT_ID}\", \"provider\":\"gitlab\", \"cvs_url\": \"https://${CI_SERVER_HOST}\", \"env\":\"${CI_ENVIRONMENT_NAME}\", \"result_code\":${result_code}, \"url\":\"$app_url\"}" \
+      "${bot_url}"
+    return $result_code
+  }
 
-      curl -q -X POST -H "Content-Type: application/json" \
-        -d  "{\"current_hash\":\"${CI_COMMIT_BEFORE_SHA}\",\"new_hash\":\"${CI_COMMIT_SHA}\",\"username\":\"${GITLAB_USER_NAME}\",\"project_id\":\"${CI_PROJECT_ID}\", \"provider\":\"gitlab\", \"cvs_url\": \"https://${CI_SERVER_HOST}\", \"env\":\"${CI_ENVIRONMENT_NAME}\", \"result_code\":${result_code}, \"url\":\"$app_url\"}" \
-        "${bot_url}"
-      return $result_code
-    }
-
-    function clean_vault() {
-      # Will delete keys in path VAULT_KEYPATH in vault VAULT_ADDR
-      JWT=`cat /run/secrets/kubernetes.io/serviceaccount/token`
-      export VAULT_TOKEN=`vault write -tls-skip-verify auth/kubernetes/login role=cleaner jwt="$JWT" | awk '$1 == "token" {print $2}'`
-      vault kv list -tls-skip-verify "$VAULT_KEYPATH" \
-        | tail -n +3 \
-        | xargs -I %% \
-          vault kv metadata delete -tls-skip-verify "$VAULT_KEYPATH/%%" || true
-    }
+  function clean_vault() {
+    # Will delete keys in path VAULT_KEYPATH in vault VAULT_ADDR
+    JWT=`cat /run/secrets/kubernetes.io/serviceaccount/token`
+    export VAULT_TOKEN=`vault write -tls-skip-verify auth/kubernetes/login role=cleaner jwt="$JWT" | awk '$1 == "token" {print $2}'`
+    vault kv list -tls-skip-verify "$VAULT_KEYPATH" \
+      | tail -n +3 \
+      | xargs -I %% \
+        vault kv metadata delete -tls-skip-verify "$VAULT_KEYPATH/%%" || true
+  }

@@ -18,8 +18,7 @@ variables:
   GIT_STRATEGY: none
   KUBECONFIG: ""
 
-  REGISTRY_ADDR: registry.manage.cloud.qlean.ru
-  REGISTRY_USER: gitlab
+  REGISTRY_ADDR: eu.gcr.io/qlean-242314
   REGISTRY_IMAGE: $REGISTRY_ADDR/gitlab/$CI_PROJECT_PATH/$CI_COMMIT_REF_SLUG
   REGISTRY_TAG: $CI_COMMIT_SHA
   RELEASE_REGISTRY_IMAGE: $REGISTRY_ADDR/gitlab/$CI_PROJECT_PATH
@@ -59,6 +58,19 @@ test unit:
     - platform
   script:
     - cd /opt/app; npm run test
+  only:
+    - branches
+
+test unit:
+  stage: testing
+  image: $RELEASE_REGISTRY_IMAGE:$RELEASE_REGISTRY_TAG
+  tags:
+    - staging
+    - platform
+  script:
+    - cd /opt/app; npm run test
+  only:
+    - tags
 
 deploy to staging:
   tags:
@@ -92,7 +104,7 @@ stop_stage:
     KUBE_NAMESPACE: app-${CI_PROJECT_NAME}
     HELM_RELEASE_NAME: ${CI_PROJECT_NAME}-${CI_COMMIT_REF_SLUG}
     VAULT_ADDR: https://vault.stage.cloud.qlean.ru
-    VAULT_KEYPATH: secret/platform/${CI_PROJECT_NAME}/${CI_COMMIT_REF_SLUG}
+    VAULT_KEYPATH: secret/platform/${CI_PROJECT_NAME}/${CI_PROJECT_NAME}-${CI_COMMIT_REF_SLUG}
   image: registry.manage.cloud.qlean.ru/gitlab/platform/utils/k8s-client
   script:
     - test "${CI_COMMIT_REF_SLUG}" = "master" || clean_vault
@@ -102,7 +114,7 @@ stop_stage:
     action: stop
   when: manual
 
-deploy to production:
+.deploy to production:
   stage: production
   <<: *prod-only
   tags:
@@ -128,5 +140,5 @@ deploy to production:
 # this will include global before_script definition
 include:
   - project: 'platform/libraries/app-boilerplate'
-    ref: inf-412
+    ref: master
     file: '/before-script.yml'
