@@ -45,4 +45,11 @@ export class ContractStore extends CrudStore<ContractModel>{
       .where("contracts.id = :id", { id })
       .getOne();
   }
+
+  findByContractorIdInTransaction(contractorId: string, entityManager: EntityManager) {
+    return entityManager.getRepository(ContractModel)
+    .createQueryBuilder("contracts")
+    .where(`contracts.contractor_id = '${contractorId}'`)
+    .getMany()
+  }
 }

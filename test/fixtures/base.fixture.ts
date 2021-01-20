@@ -123,6 +123,7 @@ export const blockingReasonForBase1: Partial<IBlockingReason> = {
   isCommonBlock: true,
   type: BLOCKING_TYPE.BLOCK,
   isNeedRetraining: false,
+  isAvailableForContractor: true
 }
 
 export const freezingReasonForBase1 = {
@@ -133,32 +134,20 @@ export const freezingReasonForBase1 = {
   isCommonBlock: true,
   type: BLOCKING_TYPE.FREEZE,
   isNeedRetraining: false,
+  isAvailableForContractor: true
 }
 
 export const freezingReasonForBase2 = {
-  id: 'a6586b34-0bbe-41e8-a4d0-7c6d9469d07d',
-  name: 'testing permanent blocking reason',
-  isPermanent: true,
+  id: '1ccd89fd-06af-4916-b242-e70c7eaa8631',
+  name: 'testing non permanent blocking reason',
+  isPermanent: false,
   isInstant: true,
   isCommonBlock: true,
   type: BLOCKING_TYPE.BLOCK,
   isNeedRetraining: false,
-}
+  isAvailableForContractor: true
 
-export const contractForBase: Partial<IContract> = {
-  id: 'bf6557b8-7a92-4dd3-8d13-2f1e8e592e1e',
-  grade: {
-    id: gradeFixtureForBase1.id
-  },
-  product: {
-    id: productFixtureForBase1.id
-  },
-  specialization: {
-    id: specializationFixtureForBase1.id
-  },
-  wage: {
-    id: wageFixtureForBase1.id
-  }
+
 }
 
 export const contractorForBase1 = {
@@ -179,9 +168,87 @@ export const contractorForBase2 = {
   workStatus: WORK_STATUS.ACTIVE
 }
 
+export const contractForBase1: Partial<IContract> = {
+  id: 'bf6557b8-7a92-4dd3-8d13-2f1e8e592e1e',
+  grade: {
+    id: gradeFixtureForBase1.id
+  },
+  product: {
+    id: productFixtureForBase1.id
+  },
+  specialization: {
+    id: specializationFixtureForBase1.id
+  },
+  wage: {
+    id: wageFixtureForBase1.id
+  },
+  contractor: {
+    id: contractorForBase1.id
+  }
+}
+
+
+export const contractForBase2: Partial<IContract> = {
+  id: 'c46a2d64-3f50-414d-844c-de7719e5cc7d',
+  grade: {
+    id: gradeFixtureForBase1.id
+  },
+  product: {
+    id: productFixtureForBase1.id
+  },
+  specialization: {
+    id: specializationFixtureForBase1.id
+  },
+  wage: {
+    id: wageFixtureForBase1.id
+  },
+  contractor: {
+    id: contractorForBase1.id
+  }
+}
+
+export const contractForBase3: Partial<IContract> = {
+  id: 'da31093c-41fa-4b71-bfd4-94645c686062',
+  grade: {
+    id: gradeFixtureForBase1.id
+  },
+  product: {
+    id: productFixtureForBase1.id
+  },
+  specialization: {
+    id: specializationFixtureForBase1.id
+  },
+  wage: {
+    id: wageFixtureForBase1.id
+  },
+  contractor: {
+    id: contractorForBase2.id
+  }
+}
+
+
+export const contractForBase4: Partial<IContract> = {
+  id: '76d1adec-20dd-45e2-9d89-fb0c7b8f073d',
+  grade: {
+    id: gradeFixtureForBase1.id
+  },
+  product: {
+    id: productFixtureForBase1.id
+  },
+  specialization: {
+    id: specializationFixtureForBase1.id
+  },
+  wage: {
+    id: wageFixtureForBase1.id
+  },
+  contractor: {
+    id: contractorForBase2.id
+  }
+}
+
 export const reasonGroupForBase1 = {
   id: '04ec58e7-6d4b-4214-acd3-ca55774bfe91',
-  name: 'reasonGroupForBase2'
+  name: 'reasonGroupForBase2',
 }
 
 export const reasonGroupForBase2 = {

@@ -5,16 +5,32 @@ import { AppModule } from '../src/app.module';
 import { grpcClientOptions } from '../src/grpc-client.options';
 import { cleanup } from './utils';
 import { getConnection, Repository } from 'typeorm';
-import { blockingReasonForBase1, contractorFixture1, contractorFixture2, contractorFixture4, contractorFixture5, freezingReasonForBase1, freezingReasonForBase2 } from './fixtures';
+import { blockingReasonForBase1, contractForBase1, contractForBase2, contractForBase3, contractForBase4, contractorFixture1, contractorFixture2, contractorFixture4, contractorForBase1, contractorForBase2, freezingReasonForBase1, freezingReasonForBase2, gradeFixtureForBase1, gradeFixtureForBase2, positionFixtureForBase1, positionFixtureForBase2, productFixtureForBase1, productFixtureForBase2, skill1, specializationFixtureForBase1, specializationFixtureForBase2, wageFixtureForBase1, wageFixtureForBase2 } from './fixtures';
 import { HrmCoreModule } from '../sdk/nestjs/build';
-import { WORK_STATUS } from '../src/domain';
+import { CONTRACT_STATUS, WORK_STATUS } from '../src/domain';
 import { BlockingReasonModel } from '../src/infrastructure/persistence/reason/blocking-reason.model';
+import { SpecializationModel } from '../src/infrastructure/persistence/specialization/specialization.model';
+import { ProductModel } from '../src/infrastructure/persistence/product/product.model';
+import { PositionModel } from '../src/infrastructure/persistence/position/position.model';
+import { WageModel } from '../src/infrastructure/persistence/wage/wage.model';
+import { ContractorModel } from '../src/infrastructure/persistence/contractor/contractor.model';
+import { GradeModel } from '../src/infrastructure/persistence/wage/grade.model';
+import { SkillModel } from '../src/infrastructure/persistence/skill/skill.model';
+import { ContractModel } from '../src/infrastructure/persistence/contract/contract.model';
 
 describe('Contract (e2e)', () => {
   let contractorApi: ContractorHrmApiAdapter;
   let OuterId: string;
   let app = null;
   let blockingReasonRepo: Repository<BlockingReasonModel> = null;
+  let specializationRepo:Repository<SpecializationModel> = null;
+  let productRepo:Repository<ProductModel> = null;
+  let positionRepo: Repository<PositionModel> = null;
+  let wageRepo: Repository<WageModel> = null;
+  let gradeRepo: Repository<GradeModel> = null;
+  let skillRepo: Repository<SkillModel> = null;
+  let contractRepo: Repository<ContractModel> = null;
+  let contractorRepo: Repository<ContractorModel> = null;
 
 
   beforeAll(async () => {
@@ -49,11 +65,39 @@ describe('Contract (e2e)', () => {
         clientId: 'testApp',
       });
       blockingReasonRepo = getConnection().getRepository(BlockingReasonModel);
+      specializationRepo = getConnection().getRepository(SpecializationModel);
+      productRepo = getConnection().getRepository(ProductModel);
+      positionRepo = getConnection().getRepository(PositionModel);
+      wageRepo = getConnection().getRepository(WageModel);
+      gradeRepo = getConnection().getRepository(GradeModel);
+      skillRepo = getConnection().getRepository(SkillModel);
+      contractRepo = getConnection().getRepository(ContractModel);
+      contractorRepo = getConnection().getRepository(ContractorModel);
+      await cleanup(getConnection());
 
       await blockingReasonRepo.insert(blockingReasonForBase1);
       await blockingReasonRepo.insert(freezingReasonForBase1);
       await blockingReasonRepo.insert(freezingReasonForBase2);
 
+      await productRepo.insert(productFixtureForBase1);
+      await productRepo.insert(productFixtureForBase2);
+      await positionRepo.insert(positionFixtureForBase1);
+      await positionRepo.insert(positionFixtureForBase2);
+      await specializationRepo.insert(specializationFixtureForBase1);
+      await specializationRepo.insert(specializationFixtureForBase2);
+      await wageRepo.insert(wageFixtureForBase1);
+      await wageRepo.insert(wageFixtureForBase2);
+      await gradeRepo.insert(gradeFixtureForBase1);
+      await gradeRepo.insert(gradeFixtureForBase2);
+      await skillRepo.insert(skill1);
+
+      await contractorRepo.insert(contractorForBase1);
+      await contractorRepo.insert(contractorForBase2);
+
+      await contractRepo.insert(contractForBase1);
+      await contractRepo.insert(contractForBase2);
+      await contractRepo.insert(contractForBase3);
+      await contractRepo.insert(contractForBase4);
   });
 
   afterAll(async () => {
@@ -64,9 +108,8 @@ describe('Contract (e2e)', () => {
   describe('CREATE contractor', () => {
     it('Должен создать исполнителя', async () => {
       const result = await contractorApi.create(contractorFixture1);
-
       expect(result.data.rating).toEqual(contractorFixture1.rating);
-      expect(result.data.workStatus).toEqual(contractorFixture1.workStatus);
+      expect(result.data.workStatus).toEqual(WORK_STATUS.ACTIVE);
       expect(result.data.userId).toEqual(contractorFixture1.userId);
       expect(result.data.status).toEqual(contractorFixture1.status);
       expect(result.data.regionId).toEqual(contractorFixture1.regionId);
@@ -136,58 +179,32 @@ describe('Contract (e2e)', () => {
   describe('search contractor', () => {
     it('Должен вывести список исполнителей', async () => {
       const res = await contractorApi.search({
-        limit: 2,
+        limit: 10,
         page: 1
       });
-      expect(res.data.length).toEqual(1);
+      expect(res.data.length).toEqual(3);
     });
   });
 
   describe('block contractor', () => {
     it('Должен изменить статус на blocked', async () => {
       const res = await contractorApi.block({
-        id: OuterId,
+        id: contractorForBase1.id,
         reason: {
           id: blockingReasonForBase1.id
         }
       });
+      expect(res.data.contracts).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            status : CONTRACT_STATUS.BLOCKED
+          })
+        ])
+      )
       expect(res.data.workStatus).toEqual(WORK_STATUS.BLOCKED);
-      expect(res.data.id).toEqual(OuterId);
+      expect(res.data.id).toEqual(contractorForBase1.id);
     });
   });
-
-  // describe('activate contractor', () => {
-  //   it('Должен изменить статус на active', async () => {
-  //     const res = await contractorApi.activate({
-  //       id: OuterId
-  //     });
-  //     expect(res.data.workStatus).toEqual(WORK_STATUS.ACTIVE);
-  //     expect(res.data.id).toEqual(OuterId);
-  //   });
-  // });
-
-  // describe('activate permanently blocked contractor', () => {
-  //   it('Должен выдать ошибку', async () => {
-  //     let error;
-  //     const blockedContractor = await contractorApi.create(contractorFixture3);
-  //     await contractorApi.block({
-  //       id: blockedContractor.data.id,
-  //       reason: {
-  //         id: blockingReasonForBase2.id
-  //       }
-  //     });
-  //     try {
-  //       await contractorApi.activate({
-  //         id: blockedContractor.data.id
-  //       });
-  //     } catch (err) {
-  //       error = err.message;
-  //     }
-  //     const res = await contractorApi.findById({ id: blockedContractor.data.id });
-  //     expect(error).toMatch(/Can\'t activate contractor because of blocking reason/);
-  //     expect(res.data.workStatus).toEqual(WORK_STATUS.BLOCKED);
-  //   });
-  // });
 
   describe('block with not exited reason', () => {
     it('Должен выдать ошибку', async () => {
@@ -207,63 +224,76 @@ describe('Contract (e2e)', () => {
     });
   });
 
-  // describe('freeze contractor', async () => {
-  //   let freezeContractorId;
-  //   it('Должен вернуть ошибку отсутствия исполнителя', async () => {
-  //     let error;
-  //     try {
-  //       await contractorApi.freeze({ 
-  //         id: '5f7b80aa-4fe7-4ac1-9e27-389baf3c02f8',
-  //         reason: {
-  //           id: freezingReasonForBase1.id
-  //         }
-  //       });
-  //     } catch (err) {
-  //       error = err.message;
-  //     }
-  //     expect(error).toMatch(/404: NOT_FOUND - Contractor id=5f7b80aa-4fe7-4ac1-9e27-389baf3c02f8 doesn't exist/);
-  //   });
+  describe('block already blocked contractor', async () => {
+    it('Статусы не должны поменяться', async () => {
+      const res = await contractorApi.block({
+        id: contractorForBase1.id,
+        reason: {
+          id: blockingReasonForBase1.id
+        }
+      });
+      expect(res.data.contracts).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            status : CONTRACT_STATUS.BLOCKED
+          })
+        ])
+      )
+      expect(res.data.workStatus).toEqual(WORK_STATUS.BLOCKED);
+      expect(res.data.id).toEqual(contractorForBase1.id);
+    });
+  });
 
-    // it('Должен заморозить исполнителя', async () => {
-    //   const freezeContractor = await contractorApi.create(contractorFixture5);
-    //   freezeContractorId = freezeContractor.data.id;
-    //   const res = await contractorApi.freeze({ 
-    //     id: freezeContractor.data.id,
-    //     reason: {
-    //       id: freezingReasonForBase1.id
-    //     }
-    //   });
-    //   expect(res.data.workStatus).toEqual(WORK_STATUS.FROZEN);
-    // });
 
-    // it('Должен вернуть замороженного исполнителя', async () => {
-    //   const res = await contractorApi.freeze({ 
-    //     id: freezeContractorId,
-    //     reason: {
-    //       id: freezingReasonForBase1.id
-    //     }
-    //   });
-    //   expect(res.data.workStatus).toEqual(WORK_STATUS.FROZEN);
-    // });
+  describe('block not existed contractor', async () => {
+    it('Должен вернуть ошибку отсутствия исполнителя', async () => {
+      let error;
+      try {
+        await contractorApi.block({ 
+          id: '5f7b80aa-4fe7-4ac1-9e27-389baf3c02f8',
+          reason: {
+            id: freezingReasonForBase1.id
+          }
+        });
+      } catch (err) {
+        error = err.message;
+      }
+      expect(error).toMatch(/404: NOT_FOUND - Contractor id=5f7b80aa-4fe7-4ac1-9e27-389baf3c02f8 doesn't exist/);
+    });
+  });
+  describe('freeze contractor', async () => {
+    it('Должен заморозить исполнителя и все его контракты', async () => {
+      const res = await contractorApi.block({ 
+        id: contractorForBase2.id,
+        reason: {
+          id: freezingReasonForBase1.id
+        }
+      });
+      expect(res.data.workStatus).toEqual(WORK_STATUS.FROZEN);
+      expect(res.data.contracts).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            status : CONTRACT_STATUS.FROZEN
+          })
+        ])
+      )
+    });
 
-    // it('Должен разморозить исполнителя', async () => {
-    //   const res = await contractorApi.activate({ id: freezeContractorId });
-    //   expect(res.data.workStatus).toEqual(WORK_STATUS.ACTIVE);
-    // });
-
-  //   it('Должен вернуть ошибку отсутствия причины', async () => {
-  //     let error;
-  //     try {
-  //       await contractorApi.freeze({ 
-  //         id: freezeContractorId,
-  //         reason: {
-  //           id: '430db34b-8e3f-40d9-b2ac-5c1a339a7ff5'
-  //         }
-  //       });
-  //     } catch (err) {
-  //       error = err.message;
-  //     }
-  //     expect(error).toMatch(/404: NOT_FOUND - Reason id=430db34b-8e3f-40d9-b2ac-5c1a339a7ff5 doesn't exist/);
-  //   });
-  // });
+    it('Должен отдать уже замороженного исполнителя исполнителя и все его замороженные контракты', async () => {
+      const res = await contractorApi.block({ 
+        id: contractorForBase2.id,
+        reason: {
+          id: freezingReasonForBase1.id
+        }
+      });
+      expect(res.data.workStatus).toEqual(WORK_STATUS.FROZEN);
+      expect(res.data.contracts).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            status : CONTRACT_STATUS.FROZEN
+          })
+        ])
+      )
+    });
+  });
 });

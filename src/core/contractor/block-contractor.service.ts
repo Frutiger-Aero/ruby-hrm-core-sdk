@@ -27,10 +27,13 @@ export class BlockContractorService {
       if (!contractor) {
         throw new NotFoundException(`Contractor id=${contractorId} doesn\'t exist`);
       }
+      const contracts = await this.contractStore.findByContractorIdInTransaction(contractor.id, entityManager);
       if (contractor.workStatus === WORK_STATUS.BLOCKED) {
-        return contractor;
+        return {
+          ...contractor,
+          contracts: await this.contractStore.findByCriteria({ where: [{ contractorId: contractor.id }]})
+        };
       }
-      const contracts = await this.contractStore.findByCriteria({ where: [{ contractorId: contractor.id }]});
       await this.contractorStore.updateInTransaction( contractorId, { workStatus: WORK_STATUS.BLOCKED, changedStatusReasonId: reasonId }, entityManager);
       await this.contractStore.updateInTransaction({ contractorId }, { status: CONTRACT_STATUS.BLOCKED }, entityManager);
 
@@ -38,7 +41,11 @@ export class BlockContractorService {
 
       this.log(args, WORK_STATUS.BLOCKED, contracts);
 
-      return this.contractorStore.blockingFindById(contractorId, entityManager); 
+      const blockedContractor = await this.contractorStore.blockingFindById(contractorId, entityManager);
+      return {
+        ...blockedContractor,
+        contracts: await this.contractStore.findByContractorIdInTransaction(contractor.id, entityManager)
+      }
     });
   }
 

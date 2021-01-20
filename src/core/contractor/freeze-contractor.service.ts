@@ -30,10 +30,13 @@ export class FreezeContractorService {
       if (contractor.workStatus === WORK_STATUS.BLOCKED) {
         throw new FailedPreconditionException(`Contractor id=${contractorId} is blocked!`);
       }
+      const contracts = await this.contractStore.findByContractorIdInTransaction(contractor.id, entityManager);
       if (contractor.workStatus === WORK_STATUS.FROZEN) {
-        return contractor;
+        return {
+          ...contractor,
+          contracts
+        };
       }
-      const contracts = await this.contractStore.findByCriteria({ where: [{ contractorId: contractor.id }]});
       await this.contractorStore.updateInTransaction( contractorId, { workStatus: WORK_STATUS.FROZEN, changedStatusReasonId: reasonId }, entityManager);
       await this.contractStore.updateInTransaction({ contractorId }, { status: CONTRACT_STATUS.FROZEN }, entityManager);
 
@@ -41,7 +44,11 @@ export class FreezeContractorService {
 
       this.log(args, WORK_STATUS.FROZEN, contracts);
 
-      return this.contractorStore.blockingFindById(contractorId, entityManager);
+      const frozenCoontractor = await this.contractorStore.blockingFindById(contractorId, entityManager);
+      return {
+        ...frozenCoontractor,
+        contracts: await this.contractStore.findByContractorIdInTransaction(contractor.id, entityManager)
+      }
     }); 
   }
 
