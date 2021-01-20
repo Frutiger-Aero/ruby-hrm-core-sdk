@@ -28,11 +28,11 @@ variables:
 
 # задачи на стадии production
 # можно выполнять только на ветке master
-prod-only: &prod-only
+.prod-only: &prod-only
   only:
     refs:
       - master
-stage-only: &stage-only
+.stage-only: &stage-only
   only:
     refs:
       - branches
@@ -134,7 +134,6 @@ deploy to production:
     - ensure_shared_files
     - install_tiller
     - deployToK8s && send_changelog || send_changelog
-  when: manual
 
 # ---------------------------------------------------------------------------
 # this will include global before_script definition
