@@ -63,7 +63,6 @@ describe('Reason (e2e)', () => {
       const result = await reasonApi.create(reasonFixture1);
       expect(result.data?.id).not.toBeNull();
       expect(typeof result.data?.id).toBe('string');
-      console.log(result)
       id = result.data.id;
     });
   });

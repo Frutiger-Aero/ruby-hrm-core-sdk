@@ -9,6 +9,8 @@ import { IContract } from '../../../domain';
 
 @Injectable()
 export class ContractStore extends CrudStore<ContractModel>{
+  private relations: string[] = ['product', 'specialization', 'grade', 'wage', 'contractor', 'skills'];
+
   protected readonly logger = new Logger(ContractStore.name);
   protected readonly helper = new SearchHelper<ContractModel>();
   protected readonly model: ClassType<ContractModel> = ContractModel;
@@ -30,11 +32,11 @@ export class ContractStore extends CrudStore<ContractModel>{
   }
 
   findByIdInTransaction(id: string, entityManager: EntityManager) {
-    return entityManager.findOne(ContractModel, id);
+    return entityManager.findOne(ContractModel, id, {relations: this.relations });
   }
 
-  createInTransaction(params: TDeepPartial<IContract>, entityManager: EntityManager) {
-    return entityManager.save(params);
+  async createInTransaction(params: TDeepPartial<IContract>, entityManager: EntityManager) {
+    return entityManager.save(ContractModel, params);
   }
 
   blockingFindById(id: string, entityManager: EntityManager) {

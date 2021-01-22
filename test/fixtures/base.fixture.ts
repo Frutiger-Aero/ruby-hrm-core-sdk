@@ -1,4 +1,4 @@
-import { AMOUNT_TYPE, BLOCKING_TYPE, IBlockingReason, IContract, IGrade, PERSON_STATUS, RATE_UNIT, WAGE_TYPE, WORK_STATUS } from "../../src/domain"
+import { AMOUNT_TYPE, BLOCKING_TYPE, CONTRACT_STATUS, IBlockingReason, IContract, IGrade, PERSON_STATUS, RATE_UNIT, WAGE_TYPE, WORK_STATUS } from "../../src/domain"
 
 export const skill1 = {
   id: 'd7191ca9-3b63-4f2c-92cb-0721bc5046d8',
@@ -126,6 +126,17 @@ export const blockingReasonForBase1: Partial<IBlockingReason> = {
   isAvailableForContractor: true
 }
 
+export const blockingReasonForBase2: Partial<IBlockingReason> = {
+  id: '9f660de3-abd7-434e-9366-1c1610054149',
+  name: 'testing permanent and non common blocking reason',
+  isPermanent: true,
+  isInstant: true,
+  isCommonBlock: false,
+  type: BLOCKING_TYPE.BLOCK,
+  isNeedRetraining: false,
+  isAvailableForContractor: true
+}
+
 export const freezingReasonForBase1 = {
   id: '4c124635-e40c-43e8-9013-4d4f7e627670',
   name: 'testing freezing reason',
@@ -163,6 +174,15 @@ export const contractorForBase2 = {
   id: '793fe32a-1ec6-4e9e-a0b1-64c9ec2970a4',
   rating: 2.2,
   userId: '5a1a2208-d6f5-4547-8542-b01770c82103',
+  regionId: 'a25b9a1d-1a2d-4549-9344-4394297eafb8',
+  status: PERSON_STATUS.CREATED,
+  workStatus: WORK_STATUS.ACTIVE
+}
+
+export const contractorForBase3 = {
+  id: '89519d18-5c3d-4bf3-9968-9659032184a2',
+  rating: 2.2,
+  userId: '2bf1ee82-b642-4636-a764-aff07e717e2d',
   regionId: 'a25b9a1d-1a2d-4549-9344-4394297eafb8',
   status: PERSON_STATUS.CREATED,
   workStatus: WORK_STATUS.ACTIVE
@@ -243,6 +263,45 @@ export const contractForBase4: Partial<IContract> = {
   },
   contractor: {
     id: contractorForBase2.id
+  }
+}
+
+export const frozenContractForBase: Partial<IContract> = {
+  id: '46a9d924-b1c8-4027-8ee9-da18aeacff6a',
+  status: CONTRACT_STATUS.FROZEN,
+  grade: {
+    id: gradeFixtureForBase1.id
+  },
+  product: {
+    id: productFixtureForBase1.id
+  },
+  specialization: {
+    id: specializationFixtureForBase1.id
+  },
+  wage: {
+    id: wageFixtureForBase1.id
+  },
+  contractor: {
+    id: contractorForBase3.id
+  }
+}
+
+export const contractForBase5: Partial<IContract> = {
+  id: 'dea7e6ff-53fa-4f95-9221-b067595c7a04',
+  grade: {
+    id: gradeFixtureForBase1.id
+  },
+  product: {
+    id: productFixtureForBase1.id
+  },
+  specialization: {
+    id: specializationFixtureForBase1.id
+  },
+  wage: {
+    id: wageFixtureForBase1.id
+  },
+  contractor: {
+    id: contractorForBase3.id
   }
 }
 

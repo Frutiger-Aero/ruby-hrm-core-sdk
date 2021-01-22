@@ -57,7 +57,7 @@ export class ContractModel extends BaseModel<IContract> implements IContract {
   @Column({ name: 'contractor_id' })
   readonly contractorId: string;
 
-  @ManyToMany(() => SkillModel)
+  @ManyToMany(() => SkillModel,{ cascade: true })
   @JoinTable({ name: 'contracts_skills'})
   readonly skills: SkillModel[]
 

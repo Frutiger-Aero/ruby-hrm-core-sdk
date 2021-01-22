@@ -1,8 +1,7 @@
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 import { BaseModel } from '@qlean/nestjs-typeorm-persistence-search';
 import { IsString } from 'class-validator';
 import { ISkill } from '../../../domain/skill.interface';
-import { ContractModel } from '../contract/contract.model';
 
 @Entity({
   name: 'skills',
