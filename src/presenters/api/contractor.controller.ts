@@ -15,7 +15,7 @@ import { GRANTS } from '../../sso.options';
 const PROTO_SVS_NAME = 'ContractorService';
 
 @Controller(PACKAGE_NAME)
-// @UseGuards(PLTJWTGuard)
+@UseGuards(PLTJWTGuard)
 @UseInterceptors(StatsInterceptor)
 @UseInterceptors(SentryInterceptor)
 export class ContractorController {

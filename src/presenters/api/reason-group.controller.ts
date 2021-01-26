@@ -15,7 +15,7 @@ import { BlockingReasonGroupCreateDto, BlockingReasonGroupSearchDto, BlockingRea
 const PROTO_SVS_NAME = 'BlockingReasonGroupService';
 
 @Controller(PACKAGE_NAME)
-// @UseGuards(PLTJWTGuard)
+@UseGuards(PLTJWTGuard)
 @UseInterceptors(StatsInterceptor)
 @UseInterceptors(SentryInterceptor)
 export class ReasonGroupController {
@@ -23,7 +23,7 @@ export class ReasonGroupController {
 
   }
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey(GRANTS.CONTRACT_WRITE)
+  @PermissionKey(GRANTS.CONTRACT_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${ReasonGroupController.name}::create`))
   @UsePipes(new ValidationPipe())
   async create(args: BlockingReasonGroupCreateDto): Promise<hrm.core.BlockingReasonGroupResponse> {
@@ -35,7 +35,7 @@ export class ReasonGroupController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey(GRANTS.CONTRACT_WRITE)
+  @PermissionKey(GRANTS.CONTRACT_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${ReasonGroupController.name}::update`))
   @UsePipes(new ValidationPipe())
   async update(args: BlockingReasonGroupUpdateDto): Promise<hrm.core.BlockingReasonGroupResponse> {
@@ -46,7 +46,7 @@ export class ReasonGroupController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  // @PermissionKey(GRANTS.CONTRACT_WRITE)
+  @PermissionKey(GRANTS.CONTRACT_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${ReasonGroupController.name}::remove`))
   @UsePipes(new ValidationPipe())
   async remove(args: UuidRequestDto): Promise<hrm.core.BlockingReasonGroupResponse> {
