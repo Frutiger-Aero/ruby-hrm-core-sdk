@@ -105,6 +105,6 @@ message ContractorSearchRequest {
   }
 }
 
-message ConractorRelation {
+message ContractorRelation {
   string id = 1;
 }
