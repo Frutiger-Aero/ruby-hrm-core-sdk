@@ -1,5 +1,5 @@
 import { OnModuleInit } from "@nestjs/common";
-import { IAuthConfig, TokenSource } from "@qlean/sso-sdk";
+import { IAuthConfig, TokenSource } from "@qlean/sso-utils-sdk";
 import { prepareError } from '../utils';
 import { ClientGrpc } from "@nestjs/microservices";
 

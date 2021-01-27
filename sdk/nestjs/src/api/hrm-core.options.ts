@@ -3,7 +3,7 @@ import { ok } from 'assert';
 import * as grpc from 'grpc';
 import { ClientOptions, Transport } from '@nestjs/microservices';
 import { InvalidArgumentException } from '@qlean/nestjs-exceptions';
-import { IAuthConfig } from '@qlean/sso-sdk';
+import { IAuthConfig } from '@qlean/sso-utils-sdk';
 
 const {
   PLT_JWT_URL,

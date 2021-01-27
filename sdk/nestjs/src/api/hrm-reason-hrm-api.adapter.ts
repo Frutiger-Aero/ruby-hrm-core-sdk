@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
-import { IAuthConfig, TokenSource } from '@qlean/sso-sdk';
+import { IAuthConfig, TokenSource } from '@qlean/sso-utils-sdk';
 import { hrm, qlean } from '../../proto/generated/app.proto';
 import { PACKAGE_API } from './hrm-core.options';
 import { GrpcClientStats } from '@qlean/nestjs-stats';

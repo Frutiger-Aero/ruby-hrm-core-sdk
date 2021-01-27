@@ -1,6 +1,6 @@
 import { Metadata } from 'grpc';
 import { Token, SIGNING_ALGORITHM, ITokenSource, IAuthConfig } from '@qlean/sso-utils-sdk';
-import { JWKSSource } from '@qlean/sso-sdk/build/plt-sso-sdk/plt-jwt.guard/jwks-source.service';
+import { JWKSSource } from '@qlean/sso-utils-sdk/build/plt-sso-sdk/plt-jwt.guard/jwks-source.service';
 
 import { env } from 'process';
 
