@@ -30,7 +30,7 @@ message ContractBlockRequest {
 message ContractCreateRequest {
     GradeRelation grade = 1;
     WageRelation wage = 2;
-    ConractorRelation contractor = 3;
+    ContractorRelation contractor = 3;
     repeated SkillRelation skills = 4;
 }
 
@@ -38,7 +38,7 @@ message ContractUpdateRequest {
     string id = 1;
     GradeRelation grade = 2;
     WageRelation wage = 3;
-    ConractorRelation contractor = 4;
+    ContractorRelation contractor = 4;
     repeated SkillRelation skills = 5;
 }
 
