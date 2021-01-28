@@ -23,7 +23,7 @@ export class ReasonsController {
 
   }
   @GrpcMethod(PROTO_SVS_NAME)
-  @PermissionKey(GRANTS.CONTRACT_WRITE)
+  @PermissionKey(GRANTS.CATALOG_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${ReasonsController.name}::create`))
   @UsePipes(new ValidationPipe())
   async create(args: BlockingReasonCreateDto): Promise<hrm.core.BlockingReasonResponse> {
@@ -35,7 +35,7 @@ export class ReasonsController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  @PermissionKey(GRANTS.CONTRACT_WRITE)
+  @PermissionKey(GRANTS.CATALOG_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${ReasonsController.name}::update`))
   @UsePipes(new ValidationPipe())
   async update(args: BlockingReasonUpdateDto): Promise<hrm.core.BlockingReasonResponse> {
@@ -46,7 +46,7 @@ export class ReasonsController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  @PermissionKey(GRANTS.CONTRACT_WRITE)
+  @PermissionKey(GRANTS.CATALOG_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${ReasonsController.name}::remove`))
   @UsePipes(new ValidationPipe())
   async remove(args: UuidRequestDto): Promise<hrm.core.BlockingReasonResponse> {
@@ -57,7 +57,7 @@ export class ReasonsController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  @PermissionKey(GRANTS.CONTRACT_WRITE)
+  @PermissionKey(GRANTS.CATALOG_WRITE)
   @UseFilters(RpcExceptionFilter.for(`${ReasonsController.name}::restore`))
   @UsePipes(new ValidationPipe())
   async restore(args: UuidRequestDto): Promise<hrm.core.BlockingReasonResponse> {
@@ -68,7 +68,7 @@ export class ReasonsController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  @PermissionKey(GRANTS.CONTRACT_READ)
+  @PermissionKey(GRANTS.CATALOG_READ)
   @UseFilters(RpcExceptionFilter.for(`${ReasonsController.name}::search`))
   @UsePipes(new ValidationPipe())
   async search(args: BlockingReasonSearchDto): Promise<hrm.core.BlockingReasonSearchResponse> {
@@ -80,7 +80,7 @@ export class ReasonsController {
   }
 
   @GrpcMethod(PROTO_SVS_NAME)
-  @PermissionKey(GRANTS.CONTRACT_READ)
+  @PermissionKey(GRANTS.CATALOG_READ)
   @UseFilters(RpcExceptionFilter.for(`${ReasonsController.name}::findById`))
   @UsePipes(new ValidationPipe())
   async findById(args: UuidRequestDto): Promise<hrm.core.BlockingReasonResponse> {
