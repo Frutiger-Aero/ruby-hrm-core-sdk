@@ -7,6 +7,6 @@ import { IBlockingReasonGroup } from "../../../domain";
   name: 'blocking-reasons-groups',
 })
 export class BlockingReasonGroupModel extends BaseModel<IBlockingReasonGroup> implements IBlockingReasonGroup {
-  @Column()
+  @Column({length: 128, unique: true})
   readonly name: string;
 }

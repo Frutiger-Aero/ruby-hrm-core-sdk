@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { AlreadyExistsException } from "@qlean/nestjs-exceptions";
 import { IFindAndTotalResponse, IFindPaginateCriteria, TModelID } from "@qlean/nestjs-typeorm-persistence-search";
 import { IBlockingReasonGroup } from "../../domain";
 import { ReasonGroupStore } from "../../infrastructure";
@@ -10,16 +11,31 @@ export class ReasonGroupService {
     private readonly reasonGroupStore: ReasonGroupStore
   ) {}
   async create(args: Partial<IBlockingReasonGroup>): Promise<IBlockingReasonGroup> {
-    const { id } = await this.reasonGroupStore.create(args);
-    return this.findById(id);
+    try {
+      const { id } = await this.reasonGroupStore.create(args);
+      return this.findById(id);
+    } catch (error) {
+      this.catchError(error, args);
+    }
   }
 
   /**
    * Обновляет запись о существующем продукте
    */
   async update(args: Partial<IBlockingReasonGroup>): Promise<IBlockingReasonGroup> {
-    await this.reasonGroupStore.update({ id: args.id }, args);
-    return this.findById(args.id);
+    try {
+      await this.reasonGroupStore.update({ id: args.id }, args);
+      return this.findById(args.id);
+    } catch (error) {
+      this.catchError(error, args);
+    }
+  }
+
+  private catchError(error, args) {
+    if (error.message.includes('duplicate key value')) {
+      throw new AlreadyExistsException(`Reason group with name ${args.name} already exists`);
+    }
+    throw error;
   }
 
   /**
