@@ -5,7 +5,7 @@ import { BlockingReasonStore } from "../../infrastructure/persistence/reason";
 
 @Injectable()
 export class ReasonService {
-  private relations = [];
+  private relations = ['group'];
   constructor(
     private readonly reasonStore: BlockingReasonStore
   ) {}
