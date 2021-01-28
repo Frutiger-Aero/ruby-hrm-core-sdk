@@ -27,7 +27,7 @@ export class WhereFieldsDto extends BaseWhereFieldsDto
 
   @IsOptional()
   @IsBoolean()
-  readonly isPermanent?: boolean;
+  readonly isRecoverable?: boolean;
 
   @IsOptional()
   @IsBoolean()

@@ -1,6 +1,6 @@
 {
   "name": "@qlean/hrm-core-sdk",
-  "version": "1.3.2",
+  "version": "1.4.1",
   "description": "Пакет для работы с исполнителем.",
   "main": "build/index.js",
   "types": "build/index.d.ts",

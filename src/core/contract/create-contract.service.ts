@@ -46,7 +46,7 @@ export class CreateContractService {
   private async isContractorPermanentlyBlocked(contractor: ContractorModel) {
     const reason = await this.blockingReasonStore.findById(contractor.changedStatusReasonId);
 
-    if (reason.isPermanent) {
+    if (reason.isRecoverable) {
       this.logger.warn('Contractor permanently blocked!', {contractor});
       throw new FailedPreconditionException('Contractor permanently blocked!');
     }

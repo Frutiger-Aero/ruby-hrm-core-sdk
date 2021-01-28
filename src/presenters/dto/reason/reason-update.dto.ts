@@ -36,7 +36,7 @@ export class BlockingReasonUpdateDto implements Partial<IBlockingReason>, hrm.co
 
   @IsBoolean()
   @IsOptional()
-  readonly isPermanent?: boolean;
+  readonly isRecoverable?: boolean;
 
   /** BlockingReasonCreateRequest group */
   @ValidateNested({ each: true })

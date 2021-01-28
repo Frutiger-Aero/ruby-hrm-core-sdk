@@ -15,8 +15,8 @@ export class BlockingReasonModel extends BaseModel<IBlockingReason> implements I
   @Column({ type: 'character varying' })
   readonly type: BLOCKING_TYPE;
 
-  @Column({ name: 'is_permanent' })
-  readonly isPermanent: boolean;
+  @Column({ name: 'is_recoverable' })
+  readonly isRecoverable: boolean;
 
   @Column({ name: 'is_available_for_contractor' })
   readonly isAvailableForContractor: boolean;

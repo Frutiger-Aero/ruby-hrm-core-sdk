@@ -37,7 +37,7 @@ message BlockingReasonSearchRequest {
       qlean.common.search.UuidCondition id = 1;
       bool isDeleted = 2;
       qlean.common.search.StringCondition type = 3;
-      bool isPermanent = 4;
+      bool isRecoverable = 4;
       bool isAvailableForContractor = 5;
       bool isInstant = 6;
       bool isNeedRetraining = 7;
@@ -63,7 +63,7 @@ message BlockingReasonCreateRequest {
   bool isInstant = 4;
   bool isNeedRetraining = 5;
   bool isCommonBlock = 6;
-  bool isPermanent = 7;
+  bool isRecoverable = 7;
   BlockingReasonGroupRelation group = 8;
 }
 
@@ -75,7 +75,7 @@ message BlockingReasonUpdateRequest {
   bool isInstant = 5;
   bool isNeedRetraining = 6;
   bool isCommonBlock = 7;
-  bool isPermanent = 8;
+  bool isRecoverable = 8;
   BlockingReasonGroupRelation group = 9;
 }
 
@@ -87,7 +87,7 @@ message BlockingReason {
   bool isInstant = 5;
   bool isNeedRetraining = 6;
   bool isCommonBlock = 7;
-  bool isPermanent = 8;
+  bool isRecoverable = 8;
   BlockingReasonGroupRelation group = 9;
   string createdAt = 10;
   string updatedAt = 11;

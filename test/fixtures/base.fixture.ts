@@ -117,8 +117,8 @@ export const gradeFixtureForBase2 : Partial<IGrade> =  {
 
 export const blockingReasonForBase1: Partial<IBlockingReason> = {
   id: 'a6586b34-0bbe-41e8-a4d0-7c6d9469d07d',
-  name: 'testing permanent blocking reason',
-  isPermanent: true,
+  name: 'testing permanent blocking reason1',
+  isRecoverable: true,
   isInstant: true,
   isCommonBlock: true,
   type: BLOCKING_TYPE.BLOCK,
@@ -128,8 +128,8 @@ export const blockingReasonForBase1: Partial<IBlockingReason> = {
 
 export const blockingReasonForBase2: Partial<IBlockingReason> = {
   id: '9f660de3-abd7-434e-9366-1c1610054149',
-  name: 'testing permanent and non common blocking reason',
-  isPermanent: true,
+  name: 'testing permanent and non common blocking reason2',
+  isRecoverable: true,
   isInstant: true,
   isCommonBlock: false,
   type: BLOCKING_TYPE.BLOCK,
@@ -139,8 +139,8 @@ export const blockingReasonForBase2: Partial<IBlockingReason> = {
 
 export const freezingReasonForBase1 = {
   id: '4c124635-e40c-43e8-9013-4d4f7e627670',
-  name: 'testing freezing reason',
-  isPermanent: false,
+  name: 'testing freezing reason1',
+  isRecoverable: false,
   isInstant: true,
   isCommonBlock: true,
   type: BLOCKING_TYPE.FREEZE,
@@ -150,8 +150,8 @@ export const freezingReasonForBase1 = {
 
 export const freezingReasonForBase2 = {
   id: '1ccd89fd-06af-4916-b242-e70c7eaa8631',
-  name: 'testing non permanent blocking reason',
-  isPermanent: false,
+  name: 'testing non permanent blocking reason2',
+  isRecoverable: false,
   isInstant: true,
   isCommonBlock: true,
   type: BLOCKING_TYPE.BLOCK,
@@ -307,7 +307,7 @@ export const contractForBase5: Partial<IContract> = {
 
 export const reasonGroupForBase1 = {
   id: '04ec58e7-6d4b-4214-acd3-ca55774bfe91',
-  name: 'reasonGroupForBase2',
+  name: 'reasonGroupForBase1',
 }
 
 export const reasonGroupForBase2 = {

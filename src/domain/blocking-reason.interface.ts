@@ -14,7 +14,7 @@ export interface IBlockingReason extends IBaseModel {
   /**
    * Перманентная ли блокировка, влияет на возможность снять блокировку
    */
-  readonly isPermanent: boolean;
+  readonly isRecoverable: boolean;
 
   /**
    * Доступность для исполнителя. Может ли исполнитель заблокировать себя по этой причине

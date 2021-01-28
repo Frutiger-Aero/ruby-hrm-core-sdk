@@ -78,7 +78,7 @@ describe('Reason (e2e)', () => {
       expect(res.data.isCommonBlock).toEqual(reasonFixture2.isCommonBlock);
       expect(res.data.isInstant).toEqual(reasonFixture2.isInstant);
       expect(res.data.isNeedRetraining).toEqual(reasonFixture2.isNeedRetraining);
-      expect(res.data.isPermanent).toEqual(reasonFixture2.isPermanent);
+      expect(res.data.isRecoverable).toEqual(reasonFixture2.isRecoverable);
       expect(res.data.type).toEqual(reasonFixture2.type);
       expect(res.data.id).toEqual(id);
     });
@@ -93,7 +93,7 @@ describe('Reason (e2e)', () => {
       expect(res.data.isInstant).toEqual(reasonFixture2.isInstant);
       expect(res.data.isNeedRetraining).toEqual(reasonFixture2.isNeedRetraining);
       expect(res.data.type).toEqual(reasonFixture2.type);
-      expect(res.data.isPermanent).toEqual(reasonFixture2.isPermanent);
+      expect(res.data.isRecoverable).toEqual(reasonFixture2.isRecoverable);
       expect(res.data.id).toEqual(id);
     });
   });

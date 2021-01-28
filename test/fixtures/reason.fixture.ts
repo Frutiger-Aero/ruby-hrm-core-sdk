@@ -8,7 +8,7 @@ export const reasonFixture1: IBlockingReasonCreateRequest = {
   isCommonBlock: true,
   isInstant: true,
   isNeedRetraining: true,
-  isPermanent: true,
+  isRecoverable: true,
   name: 'reasonFixture1', 
   type: BLOCKING_TYPE.BLOCK
 }
@@ -19,7 +19,7 @@ export const reasonFixture2: IBlockingReasonCreateRequest = {
   isCommonBlock: false,
   isInstant: false,
   isNeedRetraining: false,
-  isPermanent: false,
+  isRecoverable: false,
   name: 'reasonFixture2', 
   type: BLOCKING_TYPE.FREEZE
 }
