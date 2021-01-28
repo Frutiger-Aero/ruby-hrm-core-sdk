@@ -50,6 +50,9 @@ message BlockingReasonSearchResponse {
   repeated BlockingReason data = 1;
   int32 page = 2;
   int32 limit = 3;
+  int32 pageCount = 4;
+  int32 count = 5;
+  int32 total = 6;
 }
 
 
