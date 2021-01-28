@@ -48,6 +48,8 @@ message BlockingReasonSearchRequest {
 
 message BlockingReasonSearchResponse {
   repeated BlockingReason data = 1;
+  int32 page = 2;
+  int32 limit = 3;
 }
 
 
