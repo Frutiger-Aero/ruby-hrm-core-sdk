@@ -1,4 +1,4 @@
-import { IsString, Length } from 'class-validator';
+import { IsArray, IsString, Length } from 'class-validator';
 import { hrm } from '../../../../proto/generated/app.proto';
 import { ISkill } from '../../../domain';
 
@@ -11,7 +11,6 @@ export class SkillCreateDto implements Partial<ISkill>, hrm.core.ISkillCreateReq
   @Length(0, 128)
   readonly name: string;
 
-  @IsString()
-  @Length(0, 258)
-  readonly option: string;
+  @IsString({each: true})
+  readonly option: string[];
 }

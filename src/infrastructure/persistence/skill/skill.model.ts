@@ -15,6 +15,6 @@ export class SkillModel extends BaseModel<ISkill> implements ISkill {
   @Column({ length: 128, unique: true })
   readonly name: string;
 
-  @Column({ length: 128 })
-  readonly option: string;
+  @Column('varchar', { array: true })
+  readonly option: string[];
 }

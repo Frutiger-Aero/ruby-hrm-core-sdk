@@ -9,5 +9,5 @@ export interface ISkill extends IBaseModel {
   /**
    * @description ссылка на уникальное имя опции 
    */
-  readonly option: string;
+  readonly option: string[];
 }

@@ -16,8 +16,7 @@ export class SkillUpdateDto implements Partial<ISkill>, hrm.core.ISkillUpdateReq
   @Length(0, 128)
   readonly name: string;
 
-  @IsString()
   @IsOptional()
-  @Length(0, 258)
-  readonly option: string;
+  @IsString({each: true})
+  readonly option: string[];
 }

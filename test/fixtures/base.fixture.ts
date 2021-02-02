@@ -2,7 +2,7 @@ import { AMOUNT_TYPE, BLOCKING_TYPE, CONTRACT_STATUS, IBlockingReason, IContract
 
 export const skill1 = {
   id: 'd7191ca9-3b63-4f2c-92cb-0721bc5046d8',
-  option: 'windows',
+  option: ['windows'],
   name: 'windows_skill',
   title: 'скилл окна'
 }
