@@ -10,6 +10,5 @@ import "./contract.proto";
 import "./contractor.proto";
 import "./common.proto";
 import "./skill.proto";
-import "./product.proto";
 import "./reason-group.proto";
 

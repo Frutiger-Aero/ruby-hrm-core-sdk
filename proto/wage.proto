@@ -18,7 +18,7 @@ service WageService {
 
 message WageCreateRequest {
     string name = 1;
-    ProductRelation product = 2;
+    string productSlug = 2;
     SpecializationRelation specialization = 3;
     repeated Grade grades = 4;
     string regionId = 5;
@@ -28,7 +28,7 @@ message WageCreateRequest {
 message WageUpdateRequest {
     string id = 1;
     string name = 2;
-    ProductRelation product = 3;
+    string productSlug = 3;
     SpecializationRelation specialization = 4;
     repeated Grade grades = 5;
     string regionId = 6;
@@ -63,7 +63,7 @@ message WageSearchRequest {
         bool isDeleted = 5;
 
         qlean.common.search.StringCondition name = 6;
-        qlean.common.search.UuidCondition productId = 7;
+        qlean.common.search.StringCondition productSlug = 7;
         qlean.common.search.UuidCondition specializationId = 8;
         qlean.common.search.UuidCondition regionId = 9;
     }

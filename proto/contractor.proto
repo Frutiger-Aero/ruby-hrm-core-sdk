@@ -4,7 +4,6 @@ package hrm.core;
 import "node_modules/@qlean/nestjs-typeorm-persistence-search/proto/common-search.proto";
 import "./specialization.proto";
 import "./position.proto";
-import "./product.proto";
 import "./wage.proto";
 import "./reason.proto";
 import "./common.proto";
@@ -37,7 +36,7 @@ message Contractor {
 message ContractRelation {
   string id = 1;
   string status = 2;
-  ProductRelation product = 3;
+  string productSlug = 3;
   SpecializationRelation specialization = 4;
   Grade grade = 5;
   WageRelation wage = 6;

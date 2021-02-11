@@ -30,5 +30,11 @@ message Relation {
   string id = 1;
 }
 
+message Product {
+  string id = 1;
+  string title = 2;
+  string name = 3;
+}
+
 
 

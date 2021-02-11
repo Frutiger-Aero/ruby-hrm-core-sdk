@@ -2,7 +2,6 @@ syntax = "proto3";
 
 package hrm.core;
 import "node_modules/@qlean/nestjs-typeorm-persistence-search/proto/common-search.proto";
-import "./product.proto";
 import "./specialization.proto";
 import "./reason.proto";
 import "./common.proto";
@@ -51,7 +50,7 @@ message Contract {
     bool isDeleted = 4;
     string deletedAt = 5;
     string status = 6;
-    ProductRelation product = 7;
+    Product product = 7;
     SpecializationRelation specialization = 8;
     Grade grade = 9;
     WageRelation wage = 10;
@@ -87,7 +86,7 @@ message ContractSearchRequest {
     message WhereFields {
         qlean.common.search.UuidCondition id = 1;
         qlean.common.search.StringCondition status = 2;
-        qlean.common.search.UuidCondition productId = 3;
+        qlean.common.search.StringCondition productSlug = 3;
         bool isDeleted = 4;
         qlean.common.search.UuidCondition specializationId = 5;
         qlean.common.search.UuidCondition gradeId = 6;
