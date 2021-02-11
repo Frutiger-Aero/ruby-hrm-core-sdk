@@ -7,7 +7,7 @@ import "./position.proto";
 import "./product.proto";
 import "./wage.proto";
 import "./reason.proto";
-import "./contract.proto";
+import "./common.proto";
 
 service ContractorService {
   rpc Create (ContractorCreateRequest) returns (ContractorResponse) {}
@@ -18,6 +18,30 @@ service ContractorService {
   rpc Restore (qlean.common.search.UuidRequest) returns (ContractorResponse) {}
   rpc Block (ContractorBlockRequest) returns (ContractorResponse) {}
   rpc Activate(qlean.common.search.UuidRequest) returns (ContractorResponse) {}
+}
+
+message Contractor {
+  string id = 1;
+  string userId = 2;
+  string status = 3;
+  string workStatus = 4;
+  double rating = 5;
+  repeated ContractRelation contracts = 6;
+  string regionId = 7;
+  string createdAt = 8;
+  string updatedAt = 9;
+  bool isDeleted = 10;
+  string deletedAt = 11;
+}
+
+message ContractRelation {
+  string id = 1;
+  string status = 2;
+  ProductRelation product = 3;
+  SpecializationRelation specialization = 4;
+  Grade grade = 5;
+  WageRelation wage = 6;
+  repeated SkillRelation skills = 7;
 }
 
 message ContractorBlockRequest {
@@ -36,29 +60,6 @@ message ContractorCreateRequest {
 }
 
 message ContractorUpdateRequest {
-  string id = 1;
-  string userId = 2;
-  string status = 3;
-  string workStatus = 4;
-  double rating = 5;
-  string regionId = 6;
-}
-
-message Contractor {
-  string id = 1;
-  string userId = 2;
-  string status = 3;
-  string workStatus = 4;
-  double rating = 5;
-  repeated Contract contracts = 6;
-  string regionId = 7;
-  string createdAt = 8;
-  string updatedAt = 9;
-  bool isDeleted = 10;
-  string deletedAt = 11;
-}
-
-message ContractorRelation {
   string id = 1;
   string userId = 2;
   string status = 3;
@@ -103,8 +104,4 @@ message ContractorSearchRequest {
       qlean.common.search.StringCondition workStatus = 4;
       qlean.common.search.StringCondition status = 5;
   }
-}
-
-message ContractorRelation {
-  string id = 1;
 }

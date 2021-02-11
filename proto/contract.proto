@@ -4,8 +4,6 @@ package hrm.core;
 import "node_modules/@qlean/nestjs-typeorm-persistence-search/proto/common-search.proto";
 import "./product.proto";
 import "./specialization.proto";
-import "./contractor.proto";
-import "./product.proto";
 import "./reason.proto";
 import "./common.proto";
 import "./skill.proto";
@@ -30,7 +28,7 @@ message ContractBlockRequest {
 message ContractCreateRequest {
     GradeRelation grade = 1;
     WageRelation wage = 2;
-    ContractorRelation contractor = 3;
+    Relation contractor = 3;
     repeated SkillRelation skills = 4;
 }
 
@@ -38,8 +36,12 @@ message ContractUpdateRequest {
     string id = 1;
     GradeRelation grade = 2;
     WageRelation wage = 3;
-    ContractorRelation contractor = 4;
+    Relation contractor = 4;
     repeated SkillRelation skills = 5;
+}
+
+message ContractResponse {
+    Contract data = 1;
 }
 
 message Contract {
@@ -57,8 +59,13 @@ message Contract {
     repeated SkillRelation skills = 12;
 }
 
-message ContractResponse {
-    Contract data = 1;
+message ContractorRelation {
+    string id = 1;
+    string userId = 2;
+    string status = 3;
+    string workStatus = 4;
+    double rating = 5;
+    string regionId = 6;
 }
 
 message ContractSearchRequest {
@@ -96,8 +103,4 @@ message ContractSearchResponse {
     int32 limit = 4;
     int32 count = 5;
     int32 total = 6;
-}
-
-message ContractRelation {
-    string id = 1;
 }
