@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package hrm.core;
 import "node_modules/@qlean/nestjs-typeorm-persistence-search/proto/common-search.proto";
+import "./common";
 
 service SkillService {
     rpc Create (SkillCreateRequest) returns (SkillResponse) {}
@@ -15,14 +16,14 @@ service SkillService {
 message SkillCreateRequest {
     string title = 1;
     string name = 2;
-    repeated string option = 3;
+    repeated string optionsSlugs = 3;
 }
 
 message SkillUpdateRequest {
     string id = 1;
     string title = 2;
     string name = 3;
-    repeated string option = 4;
+    repeated string optionsSlugs = 4;
 }
 
 message SkillResponse {
@@ -53,7 +54,6 @@ message SkillSearchRequest {
         qlean.common.search.DateCondition createdAt = 5;
         qlean.common.search.DateCondition updatedAt = 6;
         qlean.common.search.DateCondition deletedAt = 7;
-        qlean.common.search.StringCondition option = 8;
     }
 }
 
@@ -70,7 +70,7 @@ message Skill {
     string id = 1;
     string title = 2;
     string name = 3;
-    repeated string option = 4;
+    repeated Option options = 4;
     string createdAt = 5;
     string updatedAt = 6;
     bool isDeleted = 7;
@@ -81,5 +81,5 @@ message SkillRelation {
     string id = 1;
     string title = 2;
     string name = 3;
-    repeated string option = 4;
+    repeated string optionsSlugs = 4;
 }
