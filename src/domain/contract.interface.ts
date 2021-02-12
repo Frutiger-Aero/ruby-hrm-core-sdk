@@ -38,9 +38,9 @@ export interface IContract extends IBaseModel {
   grade: Partial<IGrade>;
 
   /**
-   * @description Продукт в рамках тарифа
+   * @description Слаг продукта в рамках тарифа
    */
-  product: Partial<IProduct>;
+  productSlug: string;
 
   /**
    * @description Специализация в рамках тарифа
@@ -58,4 +58,8 @@ export interface IContract extends IBaseModel {
   skills: ISkill[];
 
   changedStatusReasonId: string;
+}
+
+export interface IContractResponse extends IContract {
+  readonly product: IProduct
 }

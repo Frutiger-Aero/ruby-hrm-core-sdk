@@ -50,22 +50,18 @@ export const wageFixtureForBase1 = {
   specialization: {
     id: specializationFixtureForBase1.id
   },
-  product: {
-    id: productFixtureForBase1.id
-  },
+  productSlug: 'cleaning_flat_standard',
   type: WAGE_TYPE.INDIVIDUAL
 }
 
 export const wageFixtureForBase2 = {
   id: '4c331df6-df0d-4fc6-b1b7-d08cf7f12f49',
-  name: 'Тариф доставка',
+  name: 'Тариф окна',
   regionId: '948050cf-9273-48d6-a111-178d029caefd',
   specialization: {
     id: specializationFixtureForBase2.id
   },
-  product: {
-    id: productFixtureForBase2.id
-  },
+  productSlug: 'cleaning_flat_windows', 
   type: WAGE_TYPE.INDIVIDUAL
 }
 
@@ -193,9 +189,7 @@ export const contractForBase1: Partial<IContract> = {
   grade: {
     id: gradeFixtureForBase1.id
   },
-  product: {
-    id: productFixtureForBase1.id
-  },
+  productSlug: 'cleaning_flat_standard',
   specialization: {
     id: specializationFixtureForBase1.id
   },
@@ -213,9 +207,7 @@ export const contractForBase2: Partial<IContract> = {
   grade: {
     id: gradeFixtureForBase1.id
   },
-  product: {
-    id: productFixtureForBase1.id
-  },
+  productSlug: 'cleaning_flat_standard',
   specialization: {
     id: specializationFixtureForBase1.id
   },
@@ -232,9 +224,7 @@ export const contractForBase3: Partial<IContract> = {
   grade: {
     id: gradeFixtureForBase1.id
   },
-  product: {
-    id: productFixtureForBase1.id
-  },
+  productSlug: 'cleaning_flat_standard',
   specialization: {
     id: specializationFixtureForBase1.id
   },
@@ -252,9 +242,7 @@ export const contractForBase4: Partial<IContract> = {
   grade: {
     id: gradeFixtureForBase1.id
   },
-  product: {
-    id: productFixtureForBase1.id
-  },
+  productSlug: 'cleaning_flat_standard',
   specialization: {
     id: specializationFixtureForBase1.id
   },
@@ -272,9 +260,7 @@ export const frozenContractForBase: Partial<IContract> = {
   grade: {
     id: gradeFixtureForBase1.id
   },
-  product: {
-    id: productFixtureForBase1.id
-  },
+  productSlug: 'cleaning_flat_windows',
   specialization: {
     id: specializationFixtureForBase1.id
   },
@@ -291,9 +277,7 @@ export const contractForBase5: Partial<IContract> = {
   grade: {
     id: gradeFixtureForBase1.id
   },
-  product: {
-    id: productFixtureForBase1.id
-  },
+  productSlug: 'cleaning_flat_windows',
   specialization: {
     id: specializationFixtureForBase1.id
   },

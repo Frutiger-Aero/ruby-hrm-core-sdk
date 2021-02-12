@@ -4,7 +4,6 @@ import { IsEnum, IsString, IsUUID } from 'class-validator';
 import { IWage, WAGE_TYPE } from '../../../domain';
 import { SpecializationModel } from '../specialization/specialization.model';
 import { ContractModel } from '../contract/contract.model';
-import { ProductModel } from '../product/product.model';
 import { GradeModel } from './grade.model';
 
 @Entity({
@@ -27,13 +26,8 @@ export class WageModel extends BaseModel<IWage> implements IWage {
   @Index('idx-wages-specialization_id')
   readonly specialization: SpecializationModel;
 
-  @ManyToOne(type => ProductModel, e => e.wages, {
-    eager: true,
-    nullable: false,
-  })
-  @JoinColumn({ name: 'product_id' })
-  @Index('idx-wages-product_id')
-  readonly product: ProductModel;
+  @Column({ name: 'product_slug' })
+  readonly productSlug: string;
 
   @OneToMany(type => GradeModel, e => e.wage, {
     eager: true,

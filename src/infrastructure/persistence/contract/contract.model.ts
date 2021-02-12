@@ -3,7 +3,6 @@ import { BaseModel, TModelID } from '@qlean/nestjs-typeorm-persistence-search';
 import { IContract, CONTRACT_STATUS } from '../../../domain';
 import { IsEnum, IsUUID } from 'class-validator';
 import { WageModel } from '../wage/wage.model';
-import { ProductModel } from '../product/product.model';
 import { SpecializationModel } from '../specialization/specialization.model';
 import { GradeModel } from '../wage/grade.model';
 import { ContractorModel } from '../contractor/contractor.model';
@@ -17,13 +16,8 @@ export class ContractModel extends BaseModel<IContract> implements IContract {
   @Column({ type: 'character varying', default: CONTRACT_STATUS.ACTIVE })
   readonly status: CONTRACT_STATUS;
 
-  @ManyToOne(type => ProductModel, e => e.contracts)
-  @JoinColumn({ name: 'product_id' })
-  @Index('idx-contracts-product_id')
-  readonly product: ProductModel;
-
-  @Column({ name: 'product_id' })
-  readonly productId: string;
+  @Column({ name: 'product_slug' })
+  readonly productSlug: string;
 
   @ManyToOne(type => SpecializationModel, e => e.contracts)
   @JoinColumn({ name: 'specialization_id' })

@@ -3,7 +3,6 @@ import { hrm } from '../../../../proto/generated/app.proto';
 import { IWage, WAGE_TYPE } from '../../../domain';
 import { Type } from 'class-transformer';
 import { GradeDto } from '../common';
-import { ProductRelationDto } from '../product';
 import { SpecializationRelationDto } from '../specialization';
 
 export class WageUpdateDto implements Partial<IWage>, hrm.core.IWageUpdateRequest {
@@ -15,9 +14,9 @@ export class WageUpdateDto implements Partial<IWage>, hrm.core.IWageUpdateReques
   @Length(0, 128)
   readonly name: string;
 
-  @ValidateNested()
-  @Type(() => ProductRelationDto)
-  readonly product: ProductRelationDto;
+  @IsString()
+  @Length(0, 128)
+  readonly productSlug: string;
 
   @ValidateNested()
   @Type(() => SpecializationRelationDto)

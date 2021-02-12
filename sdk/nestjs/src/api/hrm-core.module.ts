@@ -6,7 +6,6 @@ import { ContractorHrmApiAdapter } from './hrm-contractor-hrm-api.adapter';
 import { PositionHrmApiAdapter } from './hrm-position-hrm-api.adapter';
 import { SpecializationHrmApiAdapter } from './hrm-specialization-hrm-api.adapter';
 import { WageHrmApiAdapter } from './hrm-wage-hrm-api.adapter';
-import { ProductHrmApiAdapter } from './hrm-product-hrm-api.adapter';
 import { BlockingReasonHrmApiAdapter } from './hrm-reason-hrm-api.adapter';
 import { SkillHrmApiAdapter } from './hrm-skill-hrm-api.adapter';
 import { BlockingReasonGroupHrmApiAdapter } from './hrm-reason-group-hrm-api.adapter';
@@ -27,7 +26,6 @@ import { BlockingReasonGroupHrmApiAdapter } from './hrm-reason-group-hrm-api.ada
     PositionHrmApiAdapter,
     WageHrmApiAdapter,
     ContractHrmApiAdapter,
-    ProductHrmApiAdapter,
     BlockingReasonHrmApiAdapter,
     SkillHrmApiAdapter,
     BlockingReasonGroupHrmApiAdapter
@@ -47,7 +45,6 @@ import { BlockingReasonGroupHrmApiAdapter } from './hrm-reason-group-hrm-api.ada
     PositionHrmApiAdapter,
     WageHrmApiAdapter,
     ContractHrmApiAdapter,
-    ProductHrmApiAdapter,
     BlockingReasonHrmApiAdapter,
     SkillHrmApiAdapter,
     BlockingReasonGroupHrmApiAdapter

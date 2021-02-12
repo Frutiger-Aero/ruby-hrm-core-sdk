@@ -18,7 +18,7 @@ export interface IWage extends IBaseModel {
   /**
    * @description Продукт в рамках тарифа
    */
-  readonly product: Partial<IProduct>;
+  readonly productSlug: string;
 
   /**
    * @description Специализация в рамках тарифа

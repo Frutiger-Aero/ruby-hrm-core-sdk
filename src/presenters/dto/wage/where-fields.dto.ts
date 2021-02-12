@@ -18,8 +18,8 @@ export class WhereFieldsDto extends BaseWhereFieldsDto
 
   @IsOptional()
   @ValidateNested()
-  @Type(() => UuidConditionDto)
-  readonly productId?: UuidConditionDto;
+  @Type(() => StringConditionDto)
+  readonly productSlug?: StringConditionDto;
 
   @IsOptional()
   @ValidateNested()

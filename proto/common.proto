@@ -23,7 +23,7 @@ message Compensation {
   string id = 1;
   int32 amount = 2;
   string type = 3;
-  Option option = 4;
+  string option = 4;
 }
 
 message Relation {
