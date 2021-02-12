@@ -12,7 +12,7 @@ export class SkillModel extends BaseModel<ISkill> implements ISkill {
   readonly title: string;
 
   @IsString()
-  @Column({ unique: true })
+  @Column({ unique: true, length: 128 })
   readonly name: string;
 
   @Column('varchar', { array: true })
