@@ -12,5 +12,5 @@ export class SkillCreateDto implements Partial<ISkill>, hrm.core.ISkillCreateReq
   readonly name: string;
 
   @IsString({each: true})
-  readonly option: string[];
+  readonly optionsSlugs: string[];
 }

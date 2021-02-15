@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { WagePersistenceModule } from '../../infrastructure';
+import { InfrastructureModule } from '../../infrastructure';
 import { WageService } from './wage.service';
 
 @Module({
-  imports: [ WagePersistenceModule ],
+  imports: [ InfrastructureModule ],
   exports: [ WageService],
   providers: [ WageService],
 })

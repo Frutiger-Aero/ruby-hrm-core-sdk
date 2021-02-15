@@ -1,8 +1,8 @@
-import { AMOUNT_TYPE, BLOCKING_TYPE, CONTRACT_STATUS, IBlockingReason, IContract, IGrade, PERSON_STATUS, RATE_UNIT, WAGE_TYPE, WORK_STATUS } from "../../src/domain"
+import { AMOUNT_TYPE, BLOCKING_TYPE, CONTRACT_STATUS, IBlockingReason, IContract, IGrade, ISkill, PERSON_STATUS, RATE_UNIT, WAGE_TYPE, WORK_STATUS } from "../../src/domain"
 
-export const skill1 = {
+export const skill1: Partial<ISkill> = {
   id: 'd7191ca9-3b63-4f2c-92cb-0721bc5046d8',
-  option: ['windows'],
+  optionsSlugs: ['windows'],
   name: 'windows_skill',
   title: 'скилл окна'
 }
@@ -19,17 +19,6 @@ export const specializationFixtureForBase2 = {
   id: '206a9635-70bf-4bd8-a83e-de568225b589'
 }
 
-export const productFixtureForBase1 = {
-  title: 'Уборка',
-  name: 'Uborka',
-  id: '608dd6da-9eed-4114-8ea9-f8ddb635f7e8'
-}
-
-export const productFixtureForBase2 = {
-  title: 'Спил деревьев',
-  name: 'spil_buchnul',
-  id: 'a484c282-c752-42f9-8917-86ef1452d6a9'
-}
 
 export const positionFixtureForBase1 = {
   title: 'Уборщик',

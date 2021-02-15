@@ -4,34 +4,51 @@ import { mergeMap } from 'rxjs/operators';
 import { Injectable } from '@nestjs/common';
 import { InvalidArgumentException, NotFoundException } from '@qlean/nestjs-exceptions';
 import { IFindAndTotalResponse, IFindPaginateCriteria, TModelID } from '@qlean/nestjs-typeorm-persistence-search';
-import { WageStore } from '../../infrastructure';
-import { IWage } from '../../domain';
+import { ProductStore, WageStore } from '../../infrastructure';
+import { IWage, IWageResponse } from '../../domain';
 
 @Injectable()
 export class WageService {
   constructor(
     private readonly store: WageStore,
+    private readonly productStore: ProductStore
   ) {}
 
-  private relations: string[] = [];
+  private relations: string[] = ['grades'];
 
   /**
    * Создает запись о новой должностной позиции
    */
-  async create(args: Partial<IWage>): Promise<IWage> {
-    return from(this.store.create(args))
-      .pipe(mergeMap(({ id }) => this.findById(id)))
-      .toPromise();
+  async create(args: Partial<IWage>): Promise<IWageResponse> {
+    const product =  await this.productStore.findBySlug(args.productSlug);
+    if (!product) {
+      throw new InvalidArgumentException(`Product ${args.productSlug} doesn't exist`);
+    }
+    const { id } = await this.store.create(args);
+    const wage = await this.findById(id);
+    return {
+      ...wage,
+      product
+    }
   }
 
   /**
    * Обновляет запись о существующей должностной позиции
    */
-  async update(args: Partial<IWage>): Promise<IWage> {
-
-    return from(this.store.update({ id: args.id }, args))
-      .pipe(mergeMap(() => this.findById(args.id)))
-      .toPromise();
+  async update(args: Partial<IWage>): Promise<IWageResponse> {
+    let product;
+    if (args.productSlug) {
+      product = await this.productStore.findBySlug(args.productSlug);
+      if (!product) {
+        throw new InvalidArgumentException(`Product ${args.productSlug} doesn't exist`);
+      }
+    }
+    await this.store.update({ id: args.id }, args);
+    const wage = await this.findById(args.id);
+    return {
+      ...wage,
+      product: product ? product : await this.productStore.findBySlug(args.productSlug)
+    }
   }
 
   /**

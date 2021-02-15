@@ -28,16 +28,18 @@ export class ContractService {
    * Создает запись о новом контракте исполнителя
    */
   async create(args: Partial<IContract>, userId: string) {
+    console.log('create args', args)
     const wage = await this.wageStore.findById(args.wage.id);
     if (!wage) {
       throw new InvalidArgumentException(`wage id=${args.wage.id} doesn't exist`);
     }
-    const product = await this.productStore.findBySlug(args.productSlug);
+    const product = await this.productStore.findBySlug(wage.productSlug);
     const model: TDeepPartial<IContract> = {
       ...args,
       specialization: {
         id: wage.specialization.id
-      }
+      },
+      productSlug: wage.productSlug
     }
     const contract = await this.createContractService.execute(model, userId); 
     return {
@@ -53,13 +55,6 @@ export class ContractService {
     const model: TDeepPartial<IContract> = {
       ...args
     }
-    let product;
-    if (args.productSlug) {
-      product = await this.productStore.findBySlug(args.productSlug);
-      if (!product) {
-        throw new InvalidArgumentException(`wage id=${args.wage.id} doesn't exist`);
-      }
-    }
 
     if (args.wage) {
       const wage = await this.wageStore.findById(args.wage.id);
@@ -74,7 +69,7 @@ export class ContractService {
     const contract = await this.findById(args.id);
     return {
       ...contract,
-      product: product ? product : await this.productStore.findBySlug(args.productSlug)
+      product: await this.productStore.findBySlug(contract.productSlug)
     }
   }
 

@@ -8,8 +8,6 @@ import { getConnection, Repository } from 'typeorm';
 import { 
   positionFixtureForBase1,
   positionFixtureForBase2,
-  productFixtureForBase1,
-  productFixtureForBase2,
   specializationFixtureForBase1,
   specializationFixtureForBase2,
   wageFixture1,
@@ -17,7 +15,6 @@ import {
 } from './fixtures';
 import { HrmCoreModule } from '../sdk/nestjs/build';
 import { SpecializationModel } from '../src/infrastructure/persistence/specialization/specialization.model';
-import { ProductModel } from '../src/infrastructure/persistence/product/product.model';
 import { PositionModel } from '../src/infrastructure/persistence/position/position.model';
 
 describe('Wage (e2e)', () => {
@@ -25,7 +22,6 @@ describe('Wage (e2e)', () => {
   let id: string;
   let app = null;
   let specializationRepo:Repository<SpecializationModel> = null;
-  let productRepo:Repository<ProductModel> = null;
   let positionRepo: Repository<PositionModel> = null;
 
   beforeAll(async () => {
@@ -61,11 +57,8 @@ describe('Wage (e2e)', () => {
       });
 
       specializationRepo = getConnection().getRepository(SpecializationModel);
-      productRepo = getConnection().getRepository(ProductModel);
       positionRepo = getConnection().getRepository(PositionModel);
       const inserts = [
-        productRepo.insert(productFixtureForBase1),
-        productRepo.insert(productFixtureForBase2),
         positionRepo.insert(positionFixtureForBase1),
         positionRepo.insert(positionFixtureForBase2),
         specializationRepo.insert(specializationFixtureForBase1),
@@ -100,6 +93,20 @@ describe('Wage (e2e)', () => {
 
       id = result.data.id;
     });
+
+    it('Должен отдать ошибку отсутствия продукта', async () => {
+      let error;
+      const notExistedProductSlug = 'test_for_error';
+      try {
+        await wageApi.create({
+          ...wageFixture1,
+          productSlug: notExistedProductSlug
+        });
+      } catch (err) {
+        error = err;
+      }
+      expect(error.message).toMatch(`400: INVALID_ARGUMENT - Product ${notExistedProductSlug} doesn't exist`);
+    });
   });
 
   describe('Update wage', () => {
@@ -121,6 +128,20 @@ describe('Wage (e2e)', () => {
       expect(result.data.specialization.id).toEqual(wageFixture2.specialization.id);
       
     });
+    it('Должен отдать ошибку отсутствия продукта', async () => {
+      let error;
+      const notExistedProductSlug = 'test_for_error';
+      try {
+        await wageApi.update({
+          id,
+          ...wageFixture1,
+          productSlug: notExistedProductSlug
+        });
+      } catch (err) {
+        error = err;
+      }
+      expect(error.message).toMatch(`400: INVALID_ARGUMENT - Product ${notExistedProductSlug} doesn't exist`);
+    })
   });
 
   describe('Remove wage', () => {

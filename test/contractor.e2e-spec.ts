@@ -5,12 +5,11 @@ import { AppModule } from '../src/app.module';
 import { grpcClientOptions } from '../src/grpc-client.options';
 import { cleanup } from './utils';
 import { getConnection, Repository } from 'typeorm';
-import { blockingReasonForBase1, contractForBase1, contractForBase2, contractForBase3, contractForBase4, contractorFixture1, contractorFixture2, contractorFixture4, contractorForBase1, contractorForBase2, freezingReasonForBase1, freezingReasonForBase2, gradeFixtureForBase1, gradeFixtureForBase2, positionFixtureForBase1, positionFixtureForBase2, productFixtureForBase1, productFixtureForBase2, skill1, specializationFixtureForBase1, specializationFixtureForBase2, wageFixtureForBase1, wageFixtureForBase2 } from './fixtures';
+import { blockingReasonForBase1, contractForBase1, contractForBase2, contractForBase3, contractForBase4, contractorFixture1, contractorFixture2, contractorFixture4, contractorForBase1, contractorForBase2, freezingReasonForBase1, freezingReasonForBase2, gradeFixtureForBase1, gradeFixtureForBase2, positionFixtureForBase1, positionFixtureForBase2, skill1, specializationFixtureForBase1, specializationFixtureForBase2, wageFixtureForBase1, wageFixtureForBase2 } from './fixtures';
 import { HrmCoreModule } from '../sdk/nestjs/build';
 import { CONTRACT_STATUS, WORK_STATUS } from '../src/domain';
 import { BlockingReasonModel } from '../src/infrastructure/persistence/reason/blocking-reason.model';
 import { SpecializationModel } from '../src/infrastructure/persistence/specialization/specialization.model';
-import { ProductModel } from '../src/infrastructure/persistence/product/product.model';
 import { PositionModel } from '../src/infrastructure/persistence/position/position.model';
 import { WageModel } from '../src/infrastructure/persistence/wage/wage.model';
 import { ContractorModel } from '../src/infrastructure/persistence/contractor/contractor.model';
@@ -24,7 +23,6 @@ describe('Contract (e2e)', () => {
   let app = null;
   let blockingReasonRepo: Repository<BlockingReasonModel> = null;
   let specializationRepo:Repository<SpecializationModel> = null;
-  let productRepo:Repository<ProductModel> = null;
   let positionRepo: Repository<PositionModel> = null;
   let wageRepo: Repository<WageModel> = null;
   let gradeRepo: Repository<GradeModel> = null;
@@ -66,7 +64,6 @@ describe('Contract (e2e)', () => {
       });
       blockingReasonRepo = getConnection().getRepository(BlockingReasonModel);
       specializationRepo = getConnection().getRepository(SpecializationModel);
-      productRepo = getConnection().getRepository(ProductModel);
       positionRepo = getConnection().getRepository(PositionModel);
       wageRepo = getConnection().getRepository(WageModel);
       gradeRepo = getConnection().getRepository(GradeModel);
@@ -79,8 +76,6 @@ describe('Contract (e2e)', () => {
       await blockingReasonRepo.insert(freezingReasonForBase1);
       await blockingReasonRepo.insert(freezingReasonForBase2);
 
-      await productRepo.insert(productFixtureForBase1);
-      await productRepo.insert(productFixtureForBase2);
       await positionRepo.insert(positionFixtureForBase1);
       await positionRepo.insert(positionFixtureForBase2);
       await specializationRepo.insert(specializationFixtureForBase1);

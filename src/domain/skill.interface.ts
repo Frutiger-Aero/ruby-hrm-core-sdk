@@ -1,6 +1,7 @@
 import { IBaseModel } from "@qlean/nestjs-typeorm-persistence-search";
 
 export interface ISkill extends IBaseModel {
+  readonly name: string;
   /**
    * @description Человекочитаемое название скилла
    */
@@ -9,5 +10,5 @@ export interface ISkill extends IBaseModel {
   /**
    * @description ссылка на уникальное имя опции 
    */
-  readonly option: string[];
+  readonly optionsSlugs: string[];
 }

@@ -9,7 +9,7 @@ import { IContract } from '../../../domain';
 
 @Injectable()
 export class ContractStore extends CrudStore<ContractModel>{
-  private relations: string[] = ['product', 'specialization', 'grade', 'wage', 'contractor', 'skills'];
+  private relations: string[] = ['specialization', 'grade', 'wage', 'contractor', 'skills'];
 
   protected readonly logger = new Logger(ContractStore.name);
   protected readonly helper = new SearchHelper<ContractModel>();

@@ -24,5 +24,5 @@ export class WhereFieldsDto extends BaseWhereFieldsDto
   @IsOptional()
   @ValidateNested()
   @Type(() => StringConditionDto)
-  readonly option?: StringConditionDto;
+  readonly optionsSlugs?: StringConditionDto;
 }

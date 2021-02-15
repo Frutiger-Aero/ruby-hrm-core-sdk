@@ -5,10 +5,9 @@ import { AppModule } from '../src/app.module';
 import { grpcClientOptions } from '../src/grpc-client.options';
 import { cleanup } from './utils';
 import { getConnection, Repository } from 'typeorm';
-import { blockingReasonForBase1, blockingReasonForBase2, contractFixture1, contractFixture2, contractForBase1, contractForBase2, contractForBase3, contractForBase4, contractForBase5, contractorForBase1, contractorForBase2, contractorForBase3, freezingReasonForBase1, freezingReasonForBase2, frozenContractForBase, gradeFixtureForBase1, gradeFixtureForBase2, positionFixtureForBase1, positionFixtureForBase2, productFixtureForBase1, productFixtureForBase2, skill1, specializationFixtureForBase1, specializationFixtureForBase2, wageFixtureForBase1, wageFixtureForBase2 } from './fixtures';
+import { blockingReasonForBase1, blockingReasonForBase2, contractFixture1, contractFixture2, contractForBase1, contractForBase2, contractForBase3, contractForBase4, contractForBase5, contractorForBase1, contractorForBase2, contractorForBase3, freezingReasonForBase1, freezingReasonForBase2, frozenContractForBase, gradeFixtureForBase1, gradeFixtureForBase2, positionFixtureForBase1, positionFixtureForBase2, skill1, specializationFixtureForBase1, specializationFixtureForBase2, wageFixtureForBase1, wageFixtureForBase2 } from './fixtures';
 import { HrmCoreModule } from '../sdk/nestjs/build';
 import { PositionModel } from '../src/infrastructure/persistence/position/position.model';
-import { ProductModel } from '../src/infrastructure/persistence/product/product.model';
 import { SpecializationModel } from '../src/infrastructure/persistence/specialization/specialization.model';
 import { ContractorModel } from '../src/infrastructure/persistence/contractor/contractor.model';
 import { WageModel } from '../src/infrastructure/persistence/wage/wage.model';
@@ -24,7 +23,6 @@ describe('Contract (e2e)', () => {
   let app = null;
 
   let specializationRepo:Repository<SpecializationModel> = null;
-  let productRepo:Repository<ProductModel> = null;
   let positionRepo: Repository<PositionModel> = null;
   let wageRepo: Repository<WageModel> = null;
   let gradeRepo: Repository<GradeModel> = null;
@@ -67,7 +65,6 @@ describe('Contract (e2e)', () => {
 
 
       specializationRepo = getConnection().getRepository(SpecializationModel);
-      productRepo = getConnection().getRepository(ProductModel);
       positionRepo = getConnection().getRepository(PositionModel);
       wageRepo = getConnection().getRepository(WageModel);
       contractorRepo = getConnection().getRepository(ContractorModel);
@@ -76,8 +73,6 @@ describe('Contract (e2e)', () => {
       blockingReasonRepo = getConnection().getRepository(BlockingReasonModel);
       contractRepo = getConnection().getRepository(ContractModel);
 
-      await productRepo.insert(productFixtureForBase1);
-      await productRepo.insert(productFixtureForBase2);
       await positionRepo.insert(positionFixtureForBase1);
       await positionRepo.insert(positionFixtureForBase2);
       await specializationRepo.insert(specializationFixtureForBase1);
@@ -115,7 +110,7 @@ describe('Contract (e2e)', () => {
   describe('CREATE contract', () => {
     it('Должен создать контракт', async () => {
       const result = await contractApi.create(contractFixture1);
-      expect(result.data.product.id).toEqual(productFixtureForBase1.id);
+      expect(result.data.product.name).toEqual(wageFixtureForBase1.productSlug);
       expect(result.data.status).toEqual('ACTIVE');
       expect(result.data.specialization.id).toEqual(specializationFixtureForBase1.id);
       expect(result.data.wage.id).toEqual(contractFixture1.wage.id);
@@ -152,7 +147,7 @@ describe('Contract (e2e)', () => {
         id,
         ...contractFixture2
       });
-      expect(result.data.product.id).toEqual(productFixtureForBase1.id);
+      expect(result.data.product.name).toEqual(wageFixtureForBase1.productSlug);
       expect(result.data.status).toEqual('ACTIVE');
       expect(result.data.specialization.id).toEqual(specializationFixtureForBase1.id);
       expect(result.data.wage.id).toEqual(contractFixture2.wage.id);
@@ -179,7 +174,7 @@ describe('Contract (e2e)', () => {
   describe('get contract by id', () => {
     it('Должен отдать контракт по id', async () => {
       const result = await contractApi.findById({id});
-      expect(result.data.product.id).toEqual(productFixtureForBase1.id);
+      expect(result.data.product.name).toEqual(wageFixtureForBase1.productSlug);
       expect(result.data.status).toEqual('ACTIVE');
       expect(result.data.specialization.id).toEqual(specializationFixtureForBase1.id);
       expect(result.data.wage.id).toEqual(contractFixture2.wage.id);
