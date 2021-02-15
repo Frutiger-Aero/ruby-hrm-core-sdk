@@ -17,3 +17,4 @@ export * from './skill.interface';
 export * from './status-type.enum';
 export * from './entity-type.enum';
 export * from './blocking-reason-group.interface';
+export * from './option.interface';

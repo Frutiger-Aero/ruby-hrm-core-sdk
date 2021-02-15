@@ -56,12 +56,10 @@ describe('Skill (e2e)', () => {
       const result = await skillApi.create(skillFixture1);
       expect(result.data?.id).not.toBeNull();
       expect(typeof result.data?.id).toBe('string');
+      expect(result.data.options.map(opt => opt.name)).toEqual(skillFixture1.optionsSlugs)
 
       id = result.data.id;
     });
-  });
-
-  describe('CREATE duplicate name skill', () => {
     it('Должен выбросить ошибку на дубль', async () => {
       let error;
       try {
@@ -70,6 +68,20 @@ describe('Skill (e2e)', () => {
         error = err;
       }
       expect(error.message).toMatch(/ALREADY_EXISTS/);
+    });
+    it('Должен выбросить ошибку на отсутствующие опции', async () => {
+      let error;
+      const badOptionSlugs = ['test', 'test1']
+      try {
+        await skillApi.create({
+          ...skillFixture1,
+          name: 'testwewrwerwrew',
+          optionsSlugs: badOptionSlugs
+        });
+      } catch (err) {
+        error = err;
+      }
+      expect(error.message).toMatch(`400: INVALID_ARGUMENT - options ${badOptionSlugs.join(',')} don't exist`);
     });
   });
 
@@ -81,11 +93,9 @@ describe('Skill (e2e)', () => {
       });
       expect(res.data.title).toEqual(skillFixture2.title);
       expect(res.data.name).toEqual(skillFixture2.name);
+      expect(res.data.options.map(opt => opt.name)).toEqual(skillFixture2.optionsSlugs)
       expect(res.data.id).toEqual(id);
     });
-  });
-
-  describe('Update duplicate name skill', () => {
     it('Должен выбросить ошибку на дубль', async () => {
       let error;
       await skillApi.create(skillFixture1);
@@ -99,6 +109,19 @@ describe('Skill (e2e)', () => {
       }
       expect(error.message).toMatch(/ALREADY_EXISTS/);
     });
+    it('Должен выбросить ошибку на отсутствующие опции', async () => {
+      let error;
+      const badOptionSlugs = ['test', 'test1']
+      try {
+        await skillApi.update({
+          id,
+          optionsSlugs: badOptionSlugs
+        });
+      } catch (err) {
+        error = err;
+      }
+      expect(error.message).toMatch(`400: INVALID_ARGUMENT - options ${badOptionSlugs.join(',')} don't exist`);
+    });
   });
 
   describe('get skill by id', () => {
@@ -106,6 +129,7 @@ describe('Skill (e2e)', () => {
       const res = await skillApi.findById({id});
       expect(res.data.title).toEqual(skillFixture2.title);
       expect(res.data.name).toEqual(skillFixture2.name);
+      expect(res.data.options.map(opt => opt.name)).toEqual(skillFixture2.optionsSlugs)
       expect(res.data.id).toEqual(id);
     });
   });
@@ -128,7 +152,7 @@ describe('Skill (e2e)', () => {
   });
 
   describe('search skill', () => {
-    it('Должен мягко удалить скилл по id', async () => {
+    it('Должен вывести список скилов', async () => {
       const res = await skillApi.search({
         limit: 2,
         page: 1

@@ -47,7 +47,7 @@ export class WageService {
     const wage = await this.findById(args.id);
     return {
       ...wage,
-      product: product ? product : await this.productStore.findBySlug(args.productSlug)
+      product: product || await this.productStore.findBySlug(args.productSlug)
     }
   }
 
