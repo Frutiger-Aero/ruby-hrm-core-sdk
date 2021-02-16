@@ -30,8 +30,8 @@ export class CompensationModel implements ICompensation {
   readonly type: AMOUNT_TYPE;
 
   @IsString()
-  @Column({ length: 256 })
-  readonly option: string;
+  @Column({ length: 256, name: 'option_slug' })
+  readonly optionSlug: string;
 
   @ManyToOne(type => GradeModel, e => e.compensations, {
     nullable: false,

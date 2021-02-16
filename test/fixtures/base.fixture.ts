@@ -71,7 +71,7 @@ export const gradeFixtureForBase1: Partial<IGrade> = {
     {
       id: 'b27158db-d48b-4bb4-a0e4-c8ea0c9f7ce7',
       amount: 32,
-      option: 'honor',
+      optionSlug: 'carpet_cleaning',
       type: AMOUNT_TYPE.FIXED
     }
   ]
@@ -94,7 +94,7 @@ export const gradeFixtureForBase2 : Partial<IGrade> =  {
     {
       id: 'eb0a9510-91e1-482d-a3a0-fc7cf5ccd127',
       amount: 65,
-      option: 'compensation_option',
+      optionSlug: 'clean_furniture',
       type: AMOUNT_TYPE.PERCENT
     }
   ]

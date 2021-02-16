@@ -9,6 +9,21 @@ message Grade {
   repeated Compensation compensations = 4;
 }
 
+message GradeCreateRequest {
+  string id = 1;
+  PositionRelation position = 2;
+  Rate rate = 3;
+  repeated CompensationCreateRequest compensations = 4;
+}
+
+message CompensationCreateRequest {
+  string id = 1;
+  int32 amount = 2;
+  string type = 3;
+  string optionSlug = 4;
+}
+
+
 message GradeRelation {
   string id = 1;
 }
@@ -23,7 +38,7 @@ message Compensation {
   string id = 1;
   int32 amount = 2;
   string type = 3;
-  string option = 4;
+  Option option = 4;
 }
 
 message Relation {

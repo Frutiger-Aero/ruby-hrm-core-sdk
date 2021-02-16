@@ -14,5 +14,5 @@ export class CompensationDto implements Partial<ICompensation>, hrm.core.ICompen
   readonly type: AMOUNT_TYPE;
 
   @IsString()
-  readonly option: string;
+  readonly optionSlug: string;
 }

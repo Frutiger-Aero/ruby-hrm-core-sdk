@@ -4,14 +4,16 @@ import { mergeMap } from 'rxjs/operators';
 import { Injectable } from '@nestjs/common';
 import { InvalidArgumentException, NotFoundException } from '@qlean/nestjs-exceptions';
 import { IFindAndTotalResponse, IFindPaginateCriteria, TModelID } from '@qlean/nestjs-typeorm-persistence-search';
-import { ProductStore, WageStore } from '../../infrastructure';
-import { IWage, IWageResponse } from '../../domain';
+import { OptionStore, ProductStore, WageStore } from '../../infrastructure';
+import { IOption, IProduct, IWage, IWageResponse } from '../../domain';
+import { WageModel } from '../../infrastructure/persistence/wage/wage.model';
 
 @Injectable()
 export class WageService {
   constructor(
     private readonly store: WageStore,
-    private readonly productStore: ProductStore
+    private readonly productStore: ProductStore,
+    private readonly optionsStore: OptionStore
   ) {}
 
   private relations: string[] = ['grades'];
@@ -24,19 +26,20 @@ export class WageService {
     if (!product) {
       throw new InvalidArgumentException(`Product ${args.productSlug} doesn't exist`);
     }
+    const options = await this.getOptionsAndCheck(args);
     const { id } = await this.store.create(args);
     const wage = await this.findById(id);
-    return {
-      ...wage,
-      product
-    }
+    return this.createResponseModel(wage, options, product)
   }
+
+  
 
   /**
    * Обновляет запись о существующей должностной позиции
    */
   async update(args: Partial<IWage>): Promise<IWageResponse> {
     let product;
+    await this.getOptionsAndCheck(args);
     if (args.productSlug) {
       product = await this.productStore.findBySlug(args.productSlug);
       if (!product) {
@@ -45,10 +48,8 @@ export class WageService {
     }
     await this.store.update({ id: args.id }, args);
     const wage = await this.findById(args.id);
-    return {
-      ...wage,
-      product: product || await this.productStore.findBySlug(args.productSlug)
-    }
+    const options = await this.getOptionsAndCheck(wage);
+    return this.createResponseModel(wage, options, product);
   }
 
   /**
@@ -73,9 +74,12 @@ export class WageService {
    * Находит запись о должностной позиции по ID
    */
   async findById(id: TModelID): Promise<IWage> {
-    return this.store.findById(id, {
+    const wage = await this.store.findById(id, {
       relations: this.relations,
     });
+    const options = await this.getOptionsAndCheck(wage);
+    const product = await this.productStore.findBySlug(wage.productSlug);
+    return this.createResponseModel(wage, options, product);
   }
 
   /**
@@ -86,5 +90,33 @@ export class WageService {
       ...args,
       relations: this.relations,
     });
+  }
+
+  private async createResponseModel(wage: IWage, options: {[key: string]: IOption}, product: IProduct) {
+    return {
+      ...wage,
+      grades: wage.grades.map(grade => ({
+        ...grade,
+        compensations: grade.compensations.map(compensation => ({
+          ...compensation,
+          option: options[compensation.optionSlug]
+        }))
+      })),
+      product: product || await this.productStore.findBySlug(wage.productSlug)
+    }
+  }
+
+  private async getOptionsAndCheck(args: Partial<IWage>) {
+    const optionsSlugs = [
+      ...new Set<string>([].concat.apply([], args.grades.map(grade => 
+          [].concat.apply([], grade.compensations.map(compensation => compensation.optionSlug))
+        ))
+      )];
+    const options = await this.optionsStore.findAllBySlugs(optionsSlugs);
+    let difference = optionsSlugs.filter(x => !Object.keys(options).includes(x));
+    if (difference.length) {
+      throw new InvalidArgumentException(`options ${difference.join(',')} don't exist`);
+    }
+    return options;
   }
 }

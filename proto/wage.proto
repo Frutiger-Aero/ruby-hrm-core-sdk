@@ -20,7 +20,7 @@ message WageCreateRequest {
     string name = 1;
     string productSlug = 2;
     SpecializationRelation specialization = 3;
-    repeated Grade grades = 4;
+    repeated GradeCreateRequest grades = 4;
     string regionId = 5;
     string type = 6;
 }
@@ -30,7 +30,7 @@ message WageUpdateRequest {
     string name = 2;
     string productSlug = 3;
     SpecializationRelation specialization = 4;
-    repeated Grade grades = 5;
+    repeated GradeCreateRequest grades = 5;
     string regionId = 6;
     string type = 7;
 }

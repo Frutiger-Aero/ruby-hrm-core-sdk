@@ -4,7 +4,7 @@ export class productChanges1613132875753 implements MigrationInterface {
     name = 'productChanges1613132875753'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`ALTER TABLE "public"."wages" ADD "product_slug" character varying NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "public"."wages" ADD "product_slug" character varying`);
         await queryRunner.query(`UPDATE "public"."wages" SET "product_slug" = CASE
         WHEN "product_id" = '72b378c3-49f4-459e-a4d3-5ea1b0d014a0' THEN 'cleaning_flat_standard'
         WHEN "product_id" = 'f3200011-0deb-4beb-8c9b-a1038d57377f' THEN 'cleaning_flat_windows'
@@ -14,7 +14,8 @@ export class productChanges1613132875753 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "public"."wages" DROP CONSTRAINT "FK_d3f5cd53af26c6e5314128ddf1e"`);
         await queryRunner.query(`ALTER TABLE "public"."wages" DROP COLUMN "product_id"`);
 
-        await queryRunner.query(`ALTER TABLE "public"."contracts" ADD "product_slug" character varying NOT NULL`);
+
+        await queryRunner.query(`ALTER TABLE "public"."contracts" ADD "product_slug" character varying`);
         await queryRunner.query(`UPDATE "public"."contracts" SET "product_slug" = CASE
         WHEN "product_id" = '72b378c3-49f4-459e-a4d3-5ea1b0d014a0' THEN 'cleaning_flat_standard'
         WHEN "product_id" = 'f3200011-0deb-4beb-8c9b-a1038d57377f' THEN 'cleaning_flat_windows'

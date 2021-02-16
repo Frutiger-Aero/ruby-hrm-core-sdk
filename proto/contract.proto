@@ -6,6 +6,7 @@ import "./specialization.proto";
 import "./reason.proto";
 import "./common.proto";
 import "./skill.proto";
+import "./wage.proto";
 
 service ContractService {
     rpc Create (ContractCreateRequest) returns (ContractResponse) {}

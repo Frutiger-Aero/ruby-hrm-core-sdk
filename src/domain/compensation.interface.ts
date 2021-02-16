@@ -1,5 +1,6 @@
 import { TModelID } from '@qlean/nestjs-typeorm-persistence-search';
 import { AMOUNT_TYPE } from './amount-type.enum';
+import { IOption } from './option.interface';
 
 /**
  * @description Надбавка за выполнение опции
@@ -23,5 +24,7 @@ export interface ICompensation {
   /**
    * @description Ссылка на уникальное имя опции
    */
-  readonly option: string;
+  readonly optionSlug: string;
+
+  readonly option?: IOption;
 }

@@ -6,6 +6,7 @@ import { grpcClientOptions } from '../src/grpc-client.options';
 import { cleanup } from './utils';
 import { getConnection, Repository } from 'typeorm';
 import { 
+  badOptionWageFixture1,
   positionFixtureForBase1,
   positionFixtureForBase2,
   specializationFixtureForBase1,
@@ -78,7 +79,7 @@ describe('Wage (e2e)', () => {
       expect(result.data?.id).not.toBeNull();
       expect(result.data.grades[0].compensations[0].amount).toEqual(wageFixture1.grades[0].compensations[0].amount);
       expect(result.data.grades[0].compensations[0].type).toEqual(wageFixture1.grades[0].compensations[0].type);
-      expect(result.data.grades[0].compensations[0].option).toEqual(wageFixture1.grades[0].compensations[0].option);
+      expect(result.data.grades[0].compensations[0].option.name).toEqual(wageFixture1.grades[0].compensations[0].optionSlug);
 
       expect(result.data.grades[0].rate.amount).toEqual(wageFixture1.grades[0].rate.amount);
       expect(result.data.grades[0].rate.type).toEqual(wageFixture1.grades[0].rate.type);
@@ -107,6 +108,16 @@ describe('Wage (e2e)', () => {
       }
       expect(error.message).toMatch(`400: INVALID_ARGUMENT - Product ${notExistedProductSlug} doesn't exist`);
     });
+
+    it('Должен отдать ошибку отсутствия опции', async () => {
+      let error;
+      try {
+        await wageApi.create(badOptionWageFixture1);
+      } catch (err) {
+        error = err;
+      }
+      expect(error.message).toMatch(/400: INVALID_ARGUMENT - options/);
+    });
   });
 
   describe('Update wage', () => {
@@ -118,7 +129,7 @@ describe('Wage (e2e)', () => {
       expect(result.data?.id).not.toBeNull();
       expect(result.data.grades[0].compensations[0].amount).toEqual(wageFixture2.grades[0].compensations[0].amount);
       expect(result.data.grades[0].compensations[0].type).toEqual(wageFixture2.grades[0].compensations[0].type);
-      expect(result.data.grades[0].compensations[0].option).toEqual(wageFixture2.grades[0].compensations[0].option);
+      expect(result.data.grades[0].compensations[0].option.name).toEqual(wageFixture2.grades[0].compensations[0].optionSlug);
       expect(result.data.grades[0].position.id).toEqual(wageFixture2.grades[0].position.id);
 
       expect(result.data.grades[0].rate.amount).toEqual(wageFixture2.grades[0].rate.amount);
@@ -141,7 +152,19 @@ describe('Wage (e2e)', () => {
         error = err;
       }
       expect(error.message).toMatch(`400: INVALID_ARGUMENT - Product ${notExistedProductSlug} doesn't exist`);
-    })
+    });
+    it('Должен отдать ошибку отсутствия опции', async () => {
+      let error;
+      try {
+        await wageApi.update({
+          ...badOptionWageFixture1,
+          id
+        });
+      } catch (err) {
+        error = err;
+      }
+      expect(error.message).toMatch(/400: INVALID_ARGUMENT - options/);
+    });
   });
 
   describe('Remove wage', () => {

@@ -7,7 +7,7 @@ export const wageFixture2: IWageUpdateRequest = {
       compensations: [
         {
           amount: 37,
-          option: 'honor',
+          optionSlug: 'clean_furniture',
           type: 'PERCENT'
         }
       ],
@@ -34,7 +34,36 @@ export const wageFixture1: IWageCreateRequest = {
       compensations: [
         {
           amount: 32,
-          option: 'honor',
+          optionSlug: 'clean_furniture',
+          type: 'FIXED'
+        }
+      ],
+      position: {
+        id: positionFixtureForBase1.id
+      },
+      rate: {
+        amount: 33,
+        type: 'FIXED',
+        unit: 'MONTH'
+      }
+    }
+  ],
+  name: 'тариф1',
+  productSlug: 'cleaning_flat_standard',
+  regionId: '24601ff4-36d9-45f3-8f81-0d3d79262e63',
+  specialization: {
+    id: specializationFixtureForBase1.id
+  },
+  type: 'INDIVIDUAL'
+}
+
+export const badOptionWageFixture1: IWageCreateRequest = {
+  grades: [
+    {
+      compensations: [
+        {
+          amount: 32,
+          optionSlug: 'badOption',
           type: 'FIXED'
         }
       ],

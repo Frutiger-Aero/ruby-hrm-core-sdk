@@ -38,5 +38,5 @@ export interface IWage extends IBaseModel {
 }
 
 export interface IWageResponse extends IWage {
-  readonly product: IProduct
+  readonly product: IProduct,
 }
