@@ -6,4 +6,4 @@ import { ProductStoreModule } from "./product";
   imports: [ProductStoreModule, OptionStoreModule],
   exports: [ProductStoreModule, OptionStoreModule]
 })
-export class PltCoreModule {}
+export class PlatformCoreModule {}

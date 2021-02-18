@@ -5,14 +5,14 @@ import { IBaseModel } from '@qlean/nestjs-typeorm-persistence-search';
  *
  */
 export interface IProduct {
-  id: string;
+  id?: string;
   /**
    * @description Человекочитаемое название продукта
    */
-  title: string;
+  title?: string;
 
   /**
    * @description Уникальный слаг продукта.
    */
-  name: string;
+  name?: string;
 }

@@ -1,11 +1,12 @@
 import {Injectable} from '@nestjs/common';
 import {Logger} from '@qlean/nestjs-logger';
 import { IOption } from '../../../domain';
+import { PltCoreOptionApiAdapter, IOptionSearchRequest, IOption as PltOption } from '@qlean/plt-core-sdk';
 
 @Injectable()
 export class OptionStore {
   protected readonly logger = new Logger(OptionStore.name);
-  private store: IOption[] = [
+  private storeMock: IOption[] = [
     {
       id: '5d2857b9-07dc-430a-8fa5-c8800952d156',
       name: 'rooms',
@@ -33,19 +34,46 @@ export class OptionStore {
     }
   ];
   constructor(
+    private store: PltCoreOptionApiAdapter
   ) {
   }
 
-  findBySlug(slug: string) {
-    return this.store.find(option => option.name === slug);
+  async findBySlug(slug: string) {
+    const request: IOptionSearchRequest = {
+      limit: 1,
+      page: 1,
+      where: [
+        {
+          name: {
+            eq: slug
+          }
+        }
+      ]
+    }
+    const res = await this.store.search(request);
+    return res.data[0];
   }
 
-  findAllBySlugs(slugs: string[]) {
-    const options = this.store.filter(option => slugs.find(slug => slug === option.name));
+  async findAllBySlugs(slugs: string[]) {
+    const request: IOptionSearchRequest = {
+      limit: 100,
+      page: 1,
+      where: [
+        {
+          name: {
+            in: slugs
+          }
+        }
+      ]
+    }
+  
+    const options = await this.store.search(request);
 
-    return options.reduce(function(map, obj) {
+    const obj = options.data.reduce<{[key: string]: IOption}>((map, obj) => {
       map[obj.name] = obj;
       return map;
-  }, {});
+    }, {});
+
+    return obj;
   }
 }

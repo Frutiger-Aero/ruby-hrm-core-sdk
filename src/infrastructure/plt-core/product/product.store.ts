@@ -1,11 +1,12 @@
 import {Injectable} from '@nestjs/common';
 import {Logger} from '@qlean/nestjs-logger';
 import { IProduct } from '../../../domain';
+import { PltCoreRegulationsApiAdapter, IRegulationsSearchRequest } from '@qlean/plt-core-sdk';
 
 @Injectable()
 export class ProductStore {
   protected readonly logger = new Logger(ProductStore.name);
-  private store: IProduct[] = [
+  private mockStore: IProduct[] = [
     {
       id: '72b378c3-49f4-459e-a4d3-5ea1b0d014a0',
       name: 'cleaning_flat_standard',
@@ -23,17 +24,41 @@ export class ProductStore {
     }
   ];
   constructor(
+    private store: PltCoreRegulationsApiAdapter
   ) {
   }
 
-  findBySlug(slug: string) {
-    return this.store.find(product => product.name === slug);
+  async findBySlug(slug: string) {
+    const request: IRegulationsSearchRequest = {
+      limit: 1,
+      page: 1,
+      where: [
+        {
+          name: {
+            eq: slug
+          }
+        }
+      ]
+    }
+    const res = await this.store.search(request);
+    return res.data[0];
   }
 
-  findAllBySlugs(slugs: string[]) {
-    const products = this.store.filter(product => slugs.find(slug => slug === product.name));
+  async findAllBySlugs(slugs: string[]) {
+    const request: IRegulationsSearchRequest = {
+      limit: 1,
+      page: 1,
+      where: [
+        {
+          name: {
+            in: slugs
+          }
+        }
+      ]
+    }
+    const res = await this.store.search(request);
 
-    return products.reduce(function(map, obj) {
+    return res.data.reduce(function(map, obj) {
       map[obj.name] = obj;
       return map;
   }, {});

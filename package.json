@@ -38,6 +38,7 @@
     "@qlean/nestjs-sentry": "^0.1.2",
     "@qlean/nestjs-stats": "0.9.1",
     "@qlean/nestjs-typeorm-persistence-search": "^1.2.1",
+    "@qlean/plt-core-sdk": "0.0.4",
     "@qlean/sso-sdk": "^0.2.1",
     "@qlean/sso-utils-sdk": "^0.1.5",
     "class-transformer": "^0.2.3",

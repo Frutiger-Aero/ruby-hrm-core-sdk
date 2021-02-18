@@ -103,15 +103,15 @@ export class SkillService {
    * Возвращает все должностные позиции в виде пагинативного списка
    */
   async findPaginate(args: IFindPaginateCriteria<ISkill>): Promise<IFindAndTotalResponse<ISkillResponse>> {
-    const storaged = await this.store.findAndTotalByCriteria({
+    const stored = await this.store.findAndTotalByCriteria({
       ...args,
       relations: this.relations,
     });
-    const optionsSlugs = [...new Set<string>([].concat.apply([], storaged.data.map(skill => skill.optionsSlugs)))]
-    const options = this.optionsStore.findAllBySlugs(optionsSlugs);
+    const optionsSlugs = [...new Set<string>([].concat.apply([], stored.data.map(skill => skill.optionsSlugs)))]
+    const options = await this.optionsStore.findAllBySlugs(optionsSlugs);
     return {
-      ...storaged,
-      data: storaged.data.map(skill => ({
+      ...stored,
+      data: stored.data.map(skill => ({
         ...skill,
         options: skill.optionsSlugs.map(strOpt => options[strOpt])
       }))

@@ -92,7 +92,7 @@ export class WageService {
     });
   }
 
-  private async createResponseModel(wage: IWage, options: {[key: string]: IOption}, product: IProduct) {
+  private async createResponseModel(wage: IWage, options: {[key: string]: Partial<IOption>}, product: IProduct) {
     return {
       ...wage,
       grades: wage.grades.map(grade => ({

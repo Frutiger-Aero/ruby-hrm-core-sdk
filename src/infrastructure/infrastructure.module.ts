@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { EventBusModule } from './event-bus';
 import { PersistenceModule } from './persistence';
-import { PltCoreModule } from './plt-core';
+import { PlatformCoreModule } from './plt-core';
 
 @Module({
-  imports: [PersistenceModule, EventBusModule, PltCoreModule],
-  exports: [PersistenceModule, EventBusModule, PltCoreModule],
+  imports: [PersistenceModule, EventBusModule, PlatformCoreModule],
+  exports: [PersistenceModule, EventBusModule, PlatformCoreModule],
   providers: [],
 })
 export class InfrastructureModule {}
