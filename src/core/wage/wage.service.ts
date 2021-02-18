@@ -91,7 +91,6 @@ export class WageService {
       relations: this.relations,
     });
     const products = await this.productStore.findAllBySlugs(wages.data.map(contract => contract.productSlug));
-    console.log(products)
     return {
       ...wages,
       data: wages.data.map(contract => ({

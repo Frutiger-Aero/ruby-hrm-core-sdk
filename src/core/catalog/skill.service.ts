@@ -107,13 +107,13 @@ export class SkillService {
       ...args,
       relations: this.relations,
     });
-    const optionsSlugs = [...new Set<string>([].concat.apply([], stored.data.map(skill => skill.optionsSlugs)))]
+    const optionsSlugs = [...new Set<string>([].concat.apply([], stored.data.map(skill => skill.optionsSlugs)))];
     const options = await this.optionsStore.findAllBySlugs(optionsSlugs);
     return {
       ...stored,
       data: stored.data.map(skill => ({
         ...skill,
-        options: skill.optionsSlugs.map(strOpt => options[strOpt])
+        options: skill.optionsSlugs.map(strOpt => options[strOpt]).filter(item => !!item)
       }))
     }
   }

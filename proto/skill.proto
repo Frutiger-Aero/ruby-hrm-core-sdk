@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package hrm.core;
 import "node_modules/@qlean/nestjs-typeorm-persistence-search/proto/common-search.proto";
-import "./common";
+import "./common.proto";
 
 service SkillService {
     rpc Create (SkillCreateRequest) returns (SkillResponse) {}
