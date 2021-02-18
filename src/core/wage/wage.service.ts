@@ -86,10 +86,19 @@ export class WageService {
    * Возвращает все должностные позиции в виде пагинативного списка
    */
   async findPaginate(args: IFindPaginateCriteria<IWage>): Promise<IFindAndTotalResponse<IWage>> {
-    return this.store.findAndTotalByCriteria({
+    const wages = await this.store.findAndTotalByCriteria({
       ...args,
       relations: this.relations,
     });
+    const products = await this.productStore.findAllBySlugs(wages.data.map(contract => contract.productSlug));
+    console.log(products)
+    return {
+      ...wages,
+      data: wages.data.map(contract => ({
+        ...contract,
+        product: products[contract.productSlug]
+      }))
+    }
   }
 
   private async createResponseModel(wage: IWage, options: {[key: string]: Partial<IOption>}, product: IProduct) {

@@ -118,7 +118,7 @@ export class ContractService {
       relations: this.relations,
     });
 
-    const products = this.productStore.findAllBySlugs(contracts.data.map(contract => contract.productSlug));
+    const products = await this.productStore.findAllBySlugs(contracts.data.map(contract => contract.productSlug));
 
     return {
       ...contracts,

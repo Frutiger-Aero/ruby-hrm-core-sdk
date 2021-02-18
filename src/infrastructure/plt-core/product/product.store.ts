@@ -46,7 +46,7 @@ export class ProductStore {
 
   async findAllBySlugs(slugs: string[]) {
     const request: IRegulationsSearchRequest = {
-      limit: 1,
+      limit: 100,
       page: 1,
       where: [
         {
@@ -57,7 +57,7 @@ export class ProductStore {
       ]
     }
     const res = await this.store.search(request);
-
+    console.log(request);
     return res.data.reduce(function(map, obj) {
       map[obj.name] = obj;
       return map;
