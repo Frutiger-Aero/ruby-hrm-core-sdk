@@ -2,11 +2,11 @@ syntax = "proto3";
 
 package hrm.core;
 import "node_modules/@qlean/nestjs-typeorm-persistence-search/proto/common-search.proto";
-import "./specialization.proto";
-import "./reason.proto";
-import "./common.proto";
-import "./skill.proto";
-import "./wage.proto";
+import "proto/specialization.proto";
+import "proto/reason.proto";
+import "proto/common.proto";
+import "proto/skill.proto";
+import "proto/wage.proto";
 
 service ContractService {
     rpc Create (ContractCreateRequest) returns (ContractResponse) {}

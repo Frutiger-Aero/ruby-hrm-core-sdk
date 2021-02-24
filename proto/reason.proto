@@ -1,7 +1,8 @@
 syntax = "proto3";
 
 package hrm.core;
-import "./reason-group.proto";
+import "node_modules/@qlean/nestjs-typeorm-persistence-search/proto/common-search.proto";
+import "proto/reason-group.proto";
 
 service BlockingReasonService {
   rpc Create (BlockingReasonCreateRequest) returns (BlockingReasonResponse) {}
